@@ -8,7 +8,7 @@ Github repository of team **MangaVision** for the CCNY Senior Design 59866 cours
 
 ## Project Description
 
-Introducing MangaVision, a impactful project with a lot of potentials designed with manga enthusiasts, and individuals with visual impairments in mind. Our passion for reading manga drives us to create a solution that enhances accessibility and enjoyment for all.
+Introducing MangaVision, a impactful project with a lot of potentials, designed with manga enthusiasts. Our passion for reading manga drives us to create a solution that enhances accessibility and enjoyment for all especially individuals with visual impairments in mind.
 
 MangaVision aims to provide a comprehensive experience by describing visual events within manga pages to the reader. Through innovative technology, we enable users to have image speech bubbles read aloud and offer the convenience of summarizing the overall plot of chapters/volumes, enhancing understanding and engagement.
 
