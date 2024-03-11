@@ -57,3 +57,7 @@ link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4Tgf
 [Detecting speech bubbles, japanese text, translating](https://www.kaggle.com/datasets/aasimsani/ampd-base)
 
 [Image Classifier](https://www.kaggle.com/datasets/ibrahimserouis99/one-piece-image-classifier)
+
+### Outline and Ideas
+
+[SD Outline](https://docs.google.com/document/d/1Q3Uw8UuIPxLry2x__Ho96tgG0YmFKRJOzUxRCji3SqQ/edit)
