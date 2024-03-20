@@ -35,6 +35,10 @@ link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4Tgf
 </details>
 
 [Building a Manga Dataset ”Manga109” with Annotations for Multimedia Applications](https://arxiv.org/pdf/2005.04425.pdf)
+<details>
+  <summary>Summary (click to expand)</summary>
+  <p> The article introduce Manga109, consisting of 109 Japanese comic books with annotations for frames, speech texts, character faces, and bodies, totaling over 500k annotations, facilitating machine learning algorithms and evaluation. Additionally, a subset is available for industrial use. Text detection using a Single Shot Multibox Detector (SSD) achieved high accuracy, with an AP of 0.918 for SSD512. Sketch-based manga retrieval compared edge orientation histograms (EOHs) and deep features, with deep features outperforming significantly. Character face generation using Progressive Growing of GANs (PGGAN) produced high-quality results, demonstrating the utility of Manga109 for various multimedia applications. </p>
+</details>
 
 [Manga109 Dataset and Creation of Metadata](https://dl.acm.org/doi/pdf/10.1145/3011549.3011551)
 
