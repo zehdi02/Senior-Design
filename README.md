@@ -7,10 +7,9 @@ Github repository of team **MangaVision** for the CCNY Senior Design 59866 cours
 [Ayon Kumar Das (Quality Assurance)](https://github.com/lastMinuteGuy)
 
 ## Project Description
+MangaVision is made by passionate manga readers whose aim is to spread their love for manga and make it accessible for people with visually disabilties or impairments.
 
-Introducing MangaVision, a impactful project with a lot of potentials, designed with manga enthusiasts. Our passion for reading manga drives us to create a solution that enhances accessibility and enjoyment for all especially individuals with visual impairments in mind.
-
-MangaVision aims to provide a comprehensive experience by describing visual events within manga pages to the reader. Through innovative technology, we enable users to have image speech bubbles read aloud and offer the convenience of summarizing the overall plot of chapters/volumes, enhancing understanding and engagement.
+MangaVision's main feature is to audibly describe the drawn visual events depicted on the manga pages, empowering the user to enjoy manga just like every other manga lovers out there. MangaVision also enables users to have image speech bubbles read aloud and offer the convenience of summarizing the overall plot of chapters/volumes enhancing understanding and engagement, as well as language translation.
 
 Potential Key features of MangaVision include leveraging OCR technology to seamlessly scan and edit texts within image speech bubbles. This capability opens up new possibilities for accessibility and customization. Furthermore, our platform facilitates the translation of native manga texts from Japanese to English, broadening the reach and appeal of manga content.
 
@@ -21,7 +20,7 @@ link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4Tgf
 
 ## Resources Exploration (Ideas Collection)
 
-### Documentations
+<!-- ### Documentations
 [Object Detection for Comics using Manga109 Annotations:](https://arxiv.org/pdf/1803.08670.pdf)
 <details>
   <summary>Summary (click to expand)</summary>
@@ -68,63 +67,47 @@ link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4Tgf
 <details>
   <summary>Summary (click to expand)</summary>
   <p> The article explores the application of deep learning techniques, particularly the You Only Look Once (YOLO) algorithm, for object detection within digital comic books. It addresses the challenge of character-based search in these comics, which differ significantly from real-life objects, presenting complex visual structures that make detection more challenging. Through experiments conducted on the Manga109 dataset, comprising over 10,000 annotated images, the study demonstrates high accuracy in detecting text, frames, faces, and bodies using YOLOv3, achieving notable average precision values. However, when tested on the eBDtheque dataset, which features more diverse and complex characters, detection accuracy slightly decreases. The paper concludes by highlighting the need for larger datasets encompassing various character types to develop a more robust information retrieval system for comics, envisioning the potential for advanced search functionalities based on character-related input, which could significantly enhance user experience in navigating digital comic books. </p>
-</details>
+</details> -->
 
 ### Tools
+---
 [Optical character recognition for Japanese text for Manga](https://github.com/kha-white/manga-ocr)
-<details>
-  <summary>Summary (click to expand)</summary>
-  <p> The github outlines the development of an Optical Character Recognition (OCR) model designed specifically for Japanese manga text recognition, utilizing a custom end-to-end approach built on the Transformers' Vision Encoder Decoder framework. This manga OCR model boasts features tailored to the unique characteristics of manga, including support for both vertical and horizontal text, furigana annotations, text overlaid on images, various fonts and styles, and low-quality images. Notably, it enables multi-line text recognition in a single forward pass, enhancing efficiency by processing entire text bubbles without line splitting. The document also references accompanying tools such as Poricom, a GUI reader, and Mokuro, a tool generating HTML overlays for manga, along with a comprehensive guide for workflow setup. </p>
-</details>
+<p> The github outlines the development of an Optical Character Recognition (OCR) model designed specifically for Japanese manga text recognition, utilizing a custom end-to-end approach built on the Transformers' Vision Encoder Decoder framework. This manga OCR model boasts features tailored to the unique characteristics of manga, including support for both vertical and horizontal text, furigana annotations, text overlaid on images, various fonts and styles, and low-quality images. Notably, it enables multi-line text recognition in a single forward pass, enhancing efficiency by processing entire text bubbles without line splitting. The document also references accompanying tools such as Poricom, a GUI reader, and Mokuro, a tool generating HTML overlays for manga, along with a comprehensive guide for workflow setup. </p>
+---
 
 [Text detection](https://github.com/dmMaze/comic-text-detector)
-<details>
-  <summary>Summary (click to expand)</summary>
-  <p> The github contains training scripts for a text detector designed for manga or comic images, which can identify bounding-boxes, text lines, and text segmentation to aid in various translation tasks such as text removal, recognition, and lettering. It aims to integrate existing projects like manga-image-translator, manga_ocr, and SickZil-Machine into a comprehensive computer-aided comic/manga translation software called BallonsTranslator. The current model was trained on approximately 13 thousand anime and comic-style images, utilizing data from Manga109-s, DCM, and synthetic data generated with weak supervision methods due to limited high-quality annotations. The text detection model from manga-image-translator was used for text line annotations, while Manga-Text-Segmentation and post-processing were employed for mask generation. Synthetic data were created using text-free anime-girls pictures, text-rendering, Unet, and DBNet training scripts. </p>
-</details>
+<p> The github contains training scripts for a text detector designed for manga or comic images, which can identify bounding-boxes, text lines, and text segmentation to aid in various translation tasks such as text removal, recognition, and lettering. It aims to integrate existing projects like manga-image-translator, manga_ocr, and SickZil-Machine into a comprehensive computer-aided comic/manga translation software called BallonsTranslator. The current model was trained on approximately 13 thousand anime and comic-style images, utilizing data from Manga109-s, DCM, and synthetic data generated with weak supervision methods due to limited high-quality annotations. The text detection model from manga-image-translator was used for text line annotations, while Manga-Text-Segmentation and post-processing were employed for mask generation. Synthetic data were created using text-free anime-girls pictures, text-rendering, Unet, and DBNet training scripts. </p>
+---
 
 [Text-To-Speech](https://github.com/mozilla/TTS)
-<details>
-  <summary>Summary (click to expand)</summary>
-  <p> The github provides an overview of TTS (Text-to-Speech), a library focused on advanced Text-to-Speech generation, balancing ease of training, speed, and quality. TTS offers pretrained models, tools for dataset quality measurement, and supports over 20 languages for products and research projects. Its features include high-performance Deep Learning models for Text2Speech tasks, such as Tacotron, Tacotron2, and various Vocoder models like MelGAN and ParallelWaveGAN. Installation via PyPI is supported, with CLI interfaces for synthesizing speech using pretrained models. The library provides generic data loaders for custom datasets and supports various public datasets like LJ Speech and LibriTTS. </p>
-</details>
+<p> The github provides an overview of TTS (Text-to-Speech), a library focused on advanced Text-to-Speech generation, balancing ease of training, speed, and quality. TTS offers pretrained models, tools for dataset quality measurement, and supports over 20 languages for products and research projects. Its features include high-performance Deep Learning models for Text2Speech tasks, such as Tacotron, Tacotron2, and various Vocoder models like MelGAN and ParallelWaveGAN. Installation via PyPI is supported, with CLI interfaces for synthesizing speech using pretrained models. The library provides generic data loaders for custom datasets and supports various public datasets like LJ Speech and LibriTTS. </p>
+---
 
 [Mokuro - Perform text detection and OCR for each page and generate HTML file](https://github.com/kha-white/mokuro)
-<details>
-  <summary>Summary (click to expand)</summary>
-  <p> The github outlines Mokuro, a tool tailored for Japanese learners aiming to read manga in Japanese with the aid of a pop-up dictionary akin to Yomichan. Mokuro functions by conducting text detection and optical character recognition (OCR) for each page of the manga. Once a complete volume is processed, Mokuro generates an HTML file that users can open in a browser. Crucially, all processing occurs offline, facilitating convenience for users who can transfer the resulting HTML file alongside manga images to alternative devices like mobile phones for reading purposes. </p>
-</details>
+<p> The github outlines Mokuro, a tool tailored for Japanese learners aiming to read manga in Japanese with the aid of a pop-up dictionary akin to Yomichan. Mokuro functions by conducting text detection and optical character recognition (OCR) for each page of the manga. Once a complete volume is processed, Mokuro generates an HTML file that users can open in a browser. Crucially, all processing occurs offline, facilitating convenience for users who can transfer the resulting HTML file alongside manga images to alternative devices like mobile phones for reading purposes. </p>
+---
 
 [Downloading manga pages as images](https://github.com/manga-download/hakuneko)
-<details>
-  <summary>Summary (click to expand)</summary>
-  <p> This github introduces HakuNeko, a cross-platform downloader designed for manga and anime enthusiasts to obtain content from various websites. Its primary purpose is to assist users in downloading media for situations where offline access is needed. The philosophy behind HakuNeko is focused on ad-hoc consumption, meaning users download content only when they intend to read or watch it, rather than mass downloading thousands of chapters that may never be consumed. </p>
-</details>
+<p> This github introduces HakuNeko, a cross-platform downloader designed for manga and anime enthusiasts to obtain content from various websites. Its primary purpose is to assist users in downloading media for situations where offline access is needed. The philosophy behind HakuNeko is focused on ad-hoc consumption, meaning users download content only when they intend to read or watch it, rather than mass downloading thousands of chapters that may never be consumed. </p>
+---
 
 ### Datasets
 [Manga Facial Expressions](https://www.kaggle.com/datasets/mertkkl/manga-facial-expressions)
-<details>
-  <summary>Summary (click to expand)</summary>
-  <p> The dataset comprises various emotions depicted in manga (Japanese comics). Unlike human facial expression datasets, which are abundant, there is currently a lack of such datasets specifically for manga. This dataset aims to fill that gap and serve as a starting point to showcase how manga faces can effectively convey emotions. </p>
-</details>
+<p> The dataset comprises various emotions depicted in manga (Japanese comics). Unlike human facial expression datasets, which are abundant, there is currently a lack of such datasets specifically for manga. This dataset aims to fill that gap and serve as a starting point to showcase how manga faces can effectively convey emotions. </p>
+---
 
 [Manga Faces Dataset](https://www.kaggle.com/datasets/davidgamalielarcos/manga-faces-dataset)
-<details>
-  <summary>Summary (click to expand)</summary>
-  <p> The dataset is centered around manga face generation utilizing architectures such as Generative Adversarial Networks (GANs). It serves as an expansion of the original Manga Facial Expressions dataset, incorporating additional classes and images. The dataset now consists of 670 manga face images categorized into 11 distinct classes. </p>
-</details>
+<p> The dataset is centered around manga face generation utilizing architectures such as Generative Adversarial Networks (GANs). It serves as an expansion of the original Manga Facial Expressions dataset, incorporating additional classes and images. The dataset now consists of 670 manga face images categorized into 11 distinct classes. </p>
+---
 
 [Detecting speech bubbles, japanese text, translating](https://www.kaggle.com/datasets/aasimsani/ampd-base)
-<details>
-  <summary>Summary (click to expand)</summary>
-  <p> The tool outlines the creation of an artificial manga panel dataset to aid in the translation of Japanese manga into English. It addresses the challenges faced by individuals who love manga but cannot read Japanese, as existing translation tools like Google Translate often struggle with Japanese text localization. The dataset creation process involves gathering Japanese dialogue datasets, sourcing manga-style fonts, identifying various speech bubble types, and obtaining manga or black-and-white images for panel filling. Key steps include compiling sentence pairs in Japanese and English from the JESC dataset, converting images to black and white, creating speech bubbles, generating manga page layouts with panels, applying affine transforms, and rendering manga panels. The repository offers detailed instructions for utilizing the dataset, either through pre-generated data or by modifying the code for custom datasets. </p>
-</details>
+<p> The tool outlines the creation of an artificial manga panel dataset to aid in the translation of Japanese manga into English. It addresses the challenges faced by individuals who love manga but cannot read Japanese, as existing translation tools like Google Translate often struggle with Japanese text localization. The dataset creation process involves gathering Japanese dialogue datasets, sourcing manga-style fonts, identifying various speech bubble types, and obtaining manga or black-and-white images for panel filling. Key steps include compiling sentence pairs in Japanese and English from the JESC dataset, converting images to black and white, creating speech bubbles, generating manga page layouts with panels, applying affine transforms, and rendering manga panels. The repository offers detailed instructions for utilizing the dataset, either through pre-generated data or by modifying the code for custom datasets. </p>
+---
+
 
 [Image Classifier](https://www.kaggle.com/datasets/ibrahimserouis99/one-piece-image-classifier)
-<details>
-  <summary>Summary (click to expand)</summary>
-  <p> Their goal is to develop a One Piece character detector following the design of an image classification model. Data collection involves sourcing images from Google and Bing searches. The dataset comprises transformed images using various techniques, with some manually cropped to eliminate extraneous noise. This dataset serves as the foundation for training the character detector, which will utilize the image classification model for classification tasks related to One Piece characters. </p>
-</details>
+<p> Their goal is to develop a One Piece character detector following the design of an image classification model. Data collection involves sourcing images from Google and Bing searches. The dataset comprises transformed images using various techniques, with some manually cropped to eliminate extraneous noise. This dataset serves as the foundation for training the character detector, which will utilize the image classification model for classification tasks related to One Piece characters. </p>
+---
 
 ### Outline and Ideas
 
