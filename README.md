@@ -103,6 +103,10 @@ link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4Tgf
 
 ### Datasets
 [Manga Facial Expressions](https://www.kaggle.com/datasets/mertkkl/manga-facial-expressions)
+<details>
+  <summary>Summary (click to expand)</summary>
+  <p> The article show the dataset which comprises various emotions depicted in manga (Japanese comics). Unlike human facial expression datasets, which are abundant, there is currently a lack of such datasets specifically for manga. This dataset aims to fill that gap and serve as a starting point to showcase how manga faces can effectively convey emotions. </p>
+</details>
 
 [Manga Faces Dataset](https://www.kaggle.com/datasets/davidgamalielarcos/manga-faces-dataset)
 
