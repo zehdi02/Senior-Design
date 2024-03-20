@@ -47,6 +47,10 @@ link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4Tgf
 </details>
 
 [Manga109Dialog: A Large-scale Dialogue Dataset for Comics Speaker Detection](https://arxiv.org/pdf/2306.17469.pdf)
+<details>
+  <summary>Summary (click to expand)</summary>
+  <p> The paper introduces Manga109Dialog, the largest dialogue dataset for comics speaker detection, addressing the growing need for automated methods to analyze e-comics. Recognizing the limitations of existing annotations, the dataset is meticulously constructed, linking text to character bounding boxes and categorizing annotations based on prediction difficulty. The proposed approach leverages deep learning and scene graph generation models, enhanced by considering frame information to capture the unique structure of comics. Experimental results demonstrate significant improvements over rule-based methods, with qualitative examples showcasing the effectiveness of the proposed approach. Challenges and future directions, including the potential incorporation of natural language processing, are highlighted, emphasizing the dataset's reliability and the method's superiority in comics speaker detection, laying the groundwork for future research in this field. </p>
+</details>
 
 [A Method to Annotate Who Speaks a Text Line in Manga and Speaker-Line Dataset for Manga109](https://dl.nkmr-lab.org/papers/403/paper.pdf)
 
