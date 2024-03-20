@@ -74,10 +74,14 @@ link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4Tgf
 [Optical character recognition for Japanese text for Manga](https://github.com/kha-white/manga-ocr)
 <details>
   <summary>Summary (click to expand)</summary>
-  <p> The github outlines the development of an Optical Character Recognition (OCR) model designed specifically for Japanese manga text recognition, utilizing a custom end-to-end approach built on the Transformers' Vision Encoder Decoder framework. This manga OCR model boasts features tailored to the unique characteristics of manga, including support for both vertical and horizontal text, furigana annotations, text overlaid on images, various fonts and styles, and low-quality images. Notably, it enables multi-line text recognition in a single forward pass, enhancing efficiency by processing entire text bubbles without line splitting. The document also references accompanying tools such as Poricom, a GUI reader, and Mokuro, a tool generating HTML overlays for manga, along with a comprehensive guide for workflow setup. 
+  <p> The github outlines the development of an Optical Character Recognition (OCR) model designed specifically for Japanese manga text recognition, utilizing a custom end-to-end approach built on the Transformers' Vision Encoder Decoder framework. This manga OCR model boasts features tailored to the unique characteristics of manga, including support for both vertical and horizontal text, furigana annotations, text overlaid on images, various fonts and styles, and low-quality images. Notably, it enables multi-line text recognition in a single forward pass, enhancing efficiency by processing entire text bubbles without line splitting. The document also references accompanying tools such as Poricom, a GUI reader, and Mokuro, a tool generating HTML overlays for manga, along with a comprehensive guide for workflow setup. </p>
 </details>
 
 [Text detection](https://github.com/dmMaze/comic-text-detector)
+<details>
+  <summary>Summary (click to expand)</summary>
+  <p> The github contains training scripts for a text detector designed for manga or comic images, which can identify bounding-boxes, text lines, and text segmentation to aid in various translation tasks such as text removal, recognition, and lettering. It aims to integrate existing projects like manga-image-translator, manga_ocr, and SickZil-Machine into a comprehensive computer-aided comic/manga translation software called BallonsTranslator. The current model was trained on approximately 13 thousand anime and comic-style images, utilizing data from Manga109-s, DCM, and synthetic data generated with weak supervision methods due to limited high-quality annotations. The text detection model from manga-image-translator was used for text line annotations, while Manga-Text-Segmentation and post-processing were employed for mask generation. Synthetic data were created using text-free anime-girls pictures, text-rendering, Unet, and DBNet training scripts. </p>
+</details>
 
 [Text-To-Speech](https://github.com/mozilla/TTS)
 
