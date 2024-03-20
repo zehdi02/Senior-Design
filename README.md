@@ -121,6 +121,10 @@ link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4Tgf
 </details>
 
 [Image Classifier](https://www.kaggle.com/datasets/ibrahimserouis99/one-piece-image-classifier)
+<details>
+  <summary>Summary (click to expand)</summary>
+  <p> Their goal is to develop a One Piece character detector following the design of an image classification model. Data collection involves sourcing images from Google and Bing searches. The dataset comprises transformed images using various techniques, with some manually cropped to eliminate extraneous noise. This dataset serves as the foundation for training the character detector, which will utilize the image classification model for classification tasks related to One Piece characters. </p>
+</details>
 
 ### Outline and Ideas
 
