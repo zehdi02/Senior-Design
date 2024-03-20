@@ -19,7 +19,7 @@ With MangaVision, we strive to break barriers and foster inclusivity within the 
 ## Team Introduction Slides (Assignment 0)
 link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4TgfdswozQwrA/edit?usp=sharing
 
-## Resources Exploration
+## Resources Exploration (Ideas Collection)
 
 ### Documentations
 [Object Detection for Comics using Manga109 Annotations:](https://arxiv.org/pdf/1803.08670.pdf)
