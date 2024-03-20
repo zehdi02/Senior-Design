@@ -115,6 +115,10 @@ link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4Tgf
 </details>
 
 [Detecting speech bubbles, japanese text, translating](https://www.kaggle.com/datasets/aasimsani/ampd-base)
+<details>
+  <summary>Summary (click to expand)</summary>
+  <p> The tool outlines the creation of an artificial manga panel dataset to aid in the translation of Japanese manga into English. It addresses the challenges faced by individuals who love manga but cannot read Japanese, as existing translation tools like Google Translate often struggle with Japanese text localization. The dataset creation process involves gathering Japanese dialogue datasets, sourcing manga-style fonts, identifying various speech bubble types, and obtaining manga or black-and-white images for panel filling. Key steps include compiling sentence pairs in Japanese and English from the JESC dataset, converting images to black and white, creating speech bubbles, generating manga page layouts with panels, applying affine transforms, and rendering manga panels. The repository offers detailed instructions for utilizing the dataset, either through pre-generated data or by modifying the code for custom datasets. </p>
+</details>
 
 [Image Classifier](https://www.kaggle.com/datasets/ibrahimserouis99/one-piece-image-classifier)
 
