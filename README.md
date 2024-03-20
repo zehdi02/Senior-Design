@@ -84,6 +84,10 @@ link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4Tgf
 </details>
 
 [Text-To-Speech](https://github.com/mozilla/TTS)
+<details>
+  <summary>Summary (click to expand)</summary>
+  <p> The github provides an overview of TTS (Text-to-Speech), a library focused on advanced Text-to-Speech generation, balancing ease of training, speed, and quality. TTS offers pretrained models, tools for dataset quality measurement, and supports over 20 languages for products and research projects. Its features include high-performance Deep Learning models for Text2Speech tasks, such as Tacotron, Tacotron2, and various Vocoder models like MelGAN and ParallelWaveGAN. Installation via PyPI is supported, with CLI interfaces for synthesizing speech using pretrained models. The library provides generic data loaders for custom datasets and supports various public datasets like LJ Speech and LibriTTS. </p>
+</details>
 
 [Mokuro - Perform text detection and OCR for each page and generate HTML file](https://github.com/kha-white/mokuro)
 
