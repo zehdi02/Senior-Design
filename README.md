@@ -41,6 +41,10 @@ link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4Tgf
 </details>
 
 [Manga109 Dataset and Creation of Metadata](https://dl.acm.org/doi/pdf/10.1145/3011549.3011551)
+<details>
+  <summary>Summary (click to expand)</summary>
+  <p> The PDF discusses the creation of the Manga109 dataset, which comprises 109 Japanese comic books available for academic use, addressing the need for publicly available datasets with detailed annotations for comic image processing. The authors present an ongoing project aimed at constructing metadata for Manga109, defining metadata elements such as frames, texts, and characters, along with guidelines to enhance annotation quality. They introduce a web-based annotation tool designed for efficient metadata creation and evaluate its effectiveness through user studies. The dataset covers a wide range of genres and publication years, spanning from the 1970s to the 2010s, with permissions obtained from creators for research purposes. The paper emphasizes the importance of such datasets for machine learning algorithms and method evaluations in comic image processing, providing valuable insights into the annotation process and software design. </p>
+</details>
 
 [Manga109Dialog: A Large-scale Dialogue Dataset for Comics Speaker Detection](https://arxiv.org/pdf/2306.17469.pdf)
 
