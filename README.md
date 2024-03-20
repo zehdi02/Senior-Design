@@ -53,6 +53,10 @@ link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4Tgf
 </details>
 
 [A Method to Annotate Who Speaks a Text Line in Manga and Speaker-Line Dataset for Manga109](https://dl.nkmr-lab.org/papers/403/paper.pdf)
+<details>
+  <summary>Summary (click to expand)</summary>
+  <p> The article outlines a method for annotating speakers in manga text lines and presents a corresponding dataset for Manga109. It introduces challenges in accurately recognizing speakers and highlights the importance of annotated datasets for research. The proposed method involves dragging text lines onto character faces to assign speakers, with a prototype system developed for implementation. The dataset, constructed with contributions from 56 annotators, facilitates speaker-line mapping. Analysis reveals a decreasing perfect match rate with increasing annotators and introduces Evaluation Consistency Indicators (ECI) to assess speaker mapping quality. Results show variation in difficulty across comics, particularly in scenes like battles and dark settings. The document suggests strategies for annotator allocation based on scene complexity and proposes future directions for automatic speaker judgment and dynamic annotation requirements. </p>
+</details>
 
 [The Manga Whisperer: Automatically Generating Transcriptions for Comics](https://arxiv.org/pdf/2401.10224.pdf)
 
