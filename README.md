@@ -65,6 +65,10 @@ link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4Tgf
 </details>
 
 [Complex Character Retrieval from Comics using Deep Learning](https://www.ams.giti.waseda.ac.jp/data/pdf-files/2019_IEICE_GC_bs_04_018.pdf)
+<details>
+  <summary>Summary (click to expand)</summary>
+  <p> The article explores the application of deep learning techniques, particularly the You Only Look Once (YOLO) algorithm, for object detection within digital comic books. It addresses the challenge of character-based search in these comics, which differ significantly from real-life objects, presenting complex visual structures that make detection more challenging. Through experiments conducted on the Manga109 dataset, comprising over 10,000 annotated images, the study demonstrates high accuracy in detecting text, frames, faces, and bodies using YOLOv3, achieving notable average precision values. However, when tested on the eBDtheque dataset, which features more diverse and complex characters, detection accuracy slightly decreases. The paper concludes by highlighting the need for larger datasets encompassing various character types to develop a more robust information retrieval system for comics, envisioning the potential for advanced search functionalities based on character-related input, which could significantly enhance user experience in navigating digital comic books. </p>
+</details>
 
 ### Tools
 [Optical character recognition for Japanese text for Manga](https://github.com/kha-white/manga-ocr)
