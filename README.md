@@ -96,6 +96,10 @@ link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4Tgf
 </details>
 
 [Downloading manga pages as images](https://github.com/manga-download/hakuneko)
+<details>
+  <summary>Summary (click to expand)</summary>
+  <p> This github introduces HakuNeko, a cross-platform downloader designed for manga and anime enthusiasts to obtain content from various websites. Its primary purpose is to assist users in downloading media for situations where offline access is needed. The philosophy behind HakuNeko is focused on ad-hoc consumption, meaning users download content only when they intend to read or watch it, rather than mass downloading thousands of chapters that may never be consumed. </p>
+</details>
 
 ### Datasets
 [Manga Facial Expressions](https://www.kaggle.com/datasets/mertkkl/manga-facial-expressions)
