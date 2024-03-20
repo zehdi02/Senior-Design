@@ -29,6 +29,10 @@ link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4Tgf
 </details>
 
 [Sketch-based manga retrieval using manga109 dataset](https://link.springer.com/content/pdf/10.1007/s11042-016-4020-z.pdf)
+<details>
+  <summary>Summary (click to expand)</summary>
+  <p> The article presents a comprehensive sketch-based manga retrieval system along with novel query methodologies, featuring margin area labeling, EOH feature description with screen tone removal, and approximate nearest-neighbor search using product quantization. It introduces the Manga109 dataset, comprising 21,142 manga images drawn by 94 professional artists, making it the largest manga image dataset available for research. Experimental results demonstrate the system's efficiency and scalability, achieving rapid retrieval from a vast number of pages. Notably, the system captures author characteristics through edge histogram features, enabling retrieval of characters drawn by the same artist. Furthermore, query interactions like relevance feedback facilitate content-based searches, retrieving specific character expressions across various manga titles. The paper suggests future directions involving the integration of sketch and keyword-based searches, promising further advancements in manga retrieval technology. </p>
+</details>
 
 [Building a Manga Dataset ”Manga109” with Annotations for Multimedia Applications](https://arxiv.org/pdf/2005.04425.pdf)
 
