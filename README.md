@@ -90,6 +90,10 @@ link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4Tgf
 </details>
 
 [Mokuro - Perform text detection and OCR for each page and generate HTML file](https://github.com/kha-white/mokuro)
+<details>
+  <summary>Summary (click to expand)</summary>
+  <p> The github outlines Mokuro, a tool tailored for Japanese learners aiming to read manga in Japanese with the aid of a pop-up dictionary akin to Yomichan. Mokuro functions by conducting text detection and optical character recognition (OCR) for each page of the manga. Once a complete volume is processed, Mokuro generates an HTML file that users can open in a browser. Crucially, all processing occurs offline, facilitating convenience for users who can transfer the resulting HTML file alongside manga images to alternative devices like mobile phones for reading purposes. </p>
+</details>
 
 [Downloading manga pages as images](https://github.com/manga-download/hakuneko)
 
