@@ -13,7 +13,7 @@ Github repository of team **MangaVision** for the CCNY Senior Design 59866 cours
 |--------|
 |https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4TgfdswozQwrA/edit?usp=sharing|
 
-<div style="display: flex;">
+<div style="display: inline;">
   <table style="margin-right: 20px;">
     <tr>
       <th>Table 1 Header</th>
