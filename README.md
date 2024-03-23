@@ -20,9 +20,6 @@ Potential Key features of MangaVision include leveraging OCR technology to seaml
 
 With MangaVision, we strive to break barriers and foster inclusivity within the manga community and expanding outward. 
 
-## Team Introduction Slides (Assignment 0)
-link: https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4TgfdswozQwrA/edit?usp=sharing
-
 ## Resources Exploration (Ideas Collection)
 
 ## Tools
