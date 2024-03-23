@@ -1,5 +1,6 @@
 # Senior-Design
 Github repository of team **MangaVision** for the CCNY Senior Design 59866 course.
+
 ## Team Members:
 | Name | Role | Github |
 |----------|----------|----------|
@@ -8,7 +9,7 @@ Github repository of team **MangaVision** for the CCNY Senior Design 59866 cours
 | Mahmud Hasan   | Techsmith   | https://github.com/QuodFinis   |
 | Ayon Kumar Das   | Quality Assurance   | https://github.com/lastMinuteGuy  |
 
-## Project Description
+## Project Description:
 MangaVision is made by passionate manga readers whose aim is to spread their love for manga and make it accessible for people with visually disabilties or impairments.
 
 MangaVision's main feature is to audibly describe the drawn visual events depicted on the manga pages, empowering the user to enjoy manga just like every other manga lovers out there. MangaVision also enables users to have image speech bubbles read aloud and offer the convenience of summarizing the overall plot of chapters/volumes enhancing understanding and engagement, as well as language translation.
