@@ -2,12 +2,12 @@
 Github repository of team **MangaVision** for the CCNY Senior Design 59866 course.
 
 ## Team Members:
-| Name | Role | Github |
-|----------|----------|----------|
-| Melchizedek De Castro   | Leader   | https://github.com/zehdi02   |
-| Johnson Chen   | Systems Savvy   | https://github.com/JohnsonChen22002   |
-| Mahmud Hasan   | Techsmith   | https://github.com/QuodFinis   |
-| Ayon Kumar Das   | Quality Assurance   | https://github.com/lastMinuteGuy  |
+| Name | Role | Github | Team Introduction Slide |
+|----------|----------|----------|----------|
+| Melchizedek De Castro   | Leader   | https://github.com/zehdi02   | <td rowspan="4">Box 1<br>Box 2<br>Box 3<br>Box 4</td> |
+| Johnson Chen   | Systems Savvy   | https://github.com/JohnsonChen22002   |   |
+| Mahmud Hasan   | Techsmith   | https://github.com/QuodFinis   |  |
+| Ayon Kumar Das   | Quality Assurance   | https://github.com/lastMinuteGuy  |  |
 
 ## Project Description:
 MangaVision is made by passionate manga readers whose aim is to spread their love for manga and make it accessible for people with visually disabilties or impairments.
