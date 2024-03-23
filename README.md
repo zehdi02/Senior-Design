@@ -27,7 +27,7 @@ With MangaVision, we strive to break barriers and foster inclusivity within the 
 ## Tools
 | Link | Summary |
 |------|--------|
-| [Optical character recognition for Japanese text for Manga](https://github.com/kha-white/manga-ocr) | Outlined the development of an OCR model designed for Japanese manga text recognition, utilizing a custom end-to-end approach built on the Transformers' Vision Encoder Decoder framework. This OCR model support for both vertical and horizontal text, furigana annotations, text overlaid on images, various fonts and styles, low-quality images and enables multi-line text recognition in a single forward pass, enhancing efficiency by processing entire text bubbles without line splitting. It also references tools such as Poricom (GUI reader) and Mokuro (Generate HTML overlays for manga). |
+| [Optical character recognition for Japanese text for Manga](https://github.com/kha-white/manga-ocr) | Outlined the development of an OCR model designed for Japanese manga text recognition, utilizing a custom end-to-end approach built on the Transformers' Vision Encoder Decoder framework. This OCR model support for both vertical and horizontal text, furigana annotations, text overlaid on images, various fonts and styles, low-quality images and enables multi-line text recognition in a single forward pass, enhancing efficiency by processing entire text bubbles without line splitting. |
 
 ---
 
