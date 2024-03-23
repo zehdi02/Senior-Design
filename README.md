@@ -3,7 +3,7 @@ Github repository of team **MangaVision** for the CCNY Senior Design 59866 cours
 
 ## Team Members:
 | Name | Role | Github |
-|------|------|--------|------------------------|
+|------|------|--------|
 | Melchizedek De Castro   | Leader   | [zehdi02](https://github.com/zehdi02)   | 
 | Johnson Chen   | Systems Savvy   | [JohnsonChen22002](https://github.com/JohnsonChen22002)   |   
 | Mahmud Hasan   | Techsmith   | [QuodFinis](https://github.com/QuodFinis)   |  
