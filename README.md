@@ -9,9 +9,7 @@ Github repository of team **MangaVision** for the CCNY Senior Design 59866 cours
 | Mahmud Hasan   | Techsmith   | [QuodFinis](https://github.com/QuodFinis)   |  
 | Ayon Kumar Das   | Quality Assurance   | [lastMinuteGuy](https://github.com/lastMinuteGuy)  |
 
-| Team Introduction Slide |
-|--------|
-|[Link](https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4TgfdswozQwrA/edit?usp=sharing)|
+Team Introduction Slide: [Link](https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4TgfdswozQwrA/edit?usp=sharing)|
 
 ## Project Description:
 MangaVision is made by passionate manga readers whose aim is to spread their love for manga and make it accessible for people with visually disabilties or impairments.
