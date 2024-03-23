@@ -10,6 +10,7 @@ Github repository of team **MangaVision** for the CCNY Senior Design 59866 cours
 | Ayon Kumar Das   | Quality Assurance   | [lastMinuteGuy](https://github.com/lastMinuteGuy)  |
 
 Team Introduction Slide: [Link](https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4TgfdswozQwrA/edit?usp=sharing)
+Outline and Ideas: [Link](https://docs.google.com/document/d/1Q3Uw8UuIPxLry2x__Ho96tgG0YmFKRJOzUxRCji3SqQ/edit)
 
 ## Project Description:
 MangaVision is made by passionate manga readers whose aim is to spread their love for manga and make it accessible for people with visually disabilties or impairments.
@@ -70,9 +71,6 @@ With MangaVision, we strive to break barriers and foster inclusivity within the 
 
 ---
 
-## Outline and Ideas
-
-### [SD Outline](https://docs.google.com/document/d/1Q3Uw8UuIPxLry2x__Ho96tgG0YmFKRJOzUxRCji3SqQ/edit)
 
 <!-- ### Documentations
 [Object Detection for Comics using Manga109 Annotations:](https://arxiv.org/pdf/1803.08670.pdf)
