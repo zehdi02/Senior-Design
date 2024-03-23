@@ -5,12 +5,8 @@ Github repository of team **MangaVision** for the CCNY Senior Design 59866 cours
 |----------|----------|----------|
 | Melchizedek De Castro   | Leader   | https://github.com/zehdi02   |
 | Johnson Chen   | Systems Savvy   | https://github.com/JohnsonChen22002   |
-| Mahmud Hasan   | Techsmith   | [https://github.com/QuodFinis   |
+| Mahmud Hasan   | Techsmith   | https://github.com/QuodFinis   |
 | Ayon Kumar Das   | Quality Assurance   | https://github.com/lastMinuteGuy  |
-[Melchizedek De Castro (Leader)](https://github.com/zehdi02)\
-[Johnson Chen (Systems Savvy)](https://github.com/JohnsonChen22002)\
-[Mahmud Hasan (Techsmith)](https://github.com/QuodFinis)\
-[Ayon Kumar Das (Quality Assurance)](https://github.com/lastMinuteGuy)
 
 ## Project Description
 MangaVision is made by passionate manga readers whose aim is to spread their love for manga and make it accessible for people with visually disabilties or impairments.
