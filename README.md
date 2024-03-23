@@ -29,23 +29,9 @@ With MangaVision, we strive to break barriers and foster inclusivity within the 
 |------|--------|
 | [Optical character recognition for Japanese text for Manga](https://github.com/kha-white/manga-ocr) | Outlined the development of an OCR model designed for Japanese manga text recognition, utilizing a custom end-to-end approach built on the Transformers' Vision Encoder Decoder framework. This OCR model support for both vertical and horizontal text, furigana annotations, text overlaid on images, various fonts and styles, low-quality images and enables multi-line text recognition in a single forward pass, enhancing efficiency by processing entire text bubbles without line splitting. |
 | [Text detection](https://github.com/dmMaze/comic-text-detector) | Contained training scripts for a text detector designed for manga which can identify bounding-boxes, text lines, and text segmentation to aid in various translation tasks such as text removal, recognition, and lettering. The current model was trained on approximately 13 thousand anime and comic-style images, utilizing data from Manga109-s, DCM, and synthetic data generated. |
-
----
-
-### [Text-To-Speech](https://github.com/mozilla/TTS)
-<p> The github provides an overview of TTS (Text-to-Speech), a library focused on advanced Text-to-Speech generation, balancing ease of training, speed, and quality. TTS offers pretrained models, tools for dataset quality measurement, and supports over 20 languages for products and research projects. Its features include high-performance Deep Learning models for Text2Speech tasks, such as Tacotron, Tacotron2, and various Vocoder models like MelGAN and ParallelWaveGAN. Installation via PyPI is supported, with CLI interfaces for synthesizing speech using pretrained models. The library provides generic data loaders for custom datasets and supports various public datasets like LJ Speech and LibriTTS. </p>
-
----
-
-### [Mokuro - Perform text detection and OCR for each page and generate HTML file](https://github.com/kha-white/mokuro)
-<p> The github outlines Mokuro, a tool tailored for Japanese learners aiming to read manga in Japanese with the aid of a pop-up dictionary akin to Yomichan. Mokuro functions by conducting text detection and optical character recognition (OCR) for each page of the manga. Once a complete volume is processed, Mokuro generates an HTML file that users can open in a browser. Crucially, all processing occurs offline, facilitating convenience for users who can transfer the resulting HTML file alongside manga images to alternative devices like mobile phones for reading purposes. </p>
-
----
-
-### [Downloading manga pages as images](https://github.com/manga-download/hakuneko)
-<p> This github introduces HakuNeko, a cross-platform downloader designed for manga and anime enthusiasts to obtain content from various websites. Its primary purpose is to assist users in downloading media for situations where offline access is needed. The philosophy behind HakuNeko is focused on ad-hoc consumption, meaning users download content only when they intend to read or watch it, rather than mass downloading thousands of chapters that may never be consumed. </p>
-
----
+| [Text-To-Speech](https://github.com/mozilla/TTS) | Provides Text-to-Speech (TTS) library which focused on advanced TTS generation, balancing ease of training, speed, and quality. TTS offers pretrained models, tools for dataset quality measurement, and supports over 20 languages for products and research projects. Its features include high-performance Deep Learning models for Text2Speech tasks, such as Tacotron, Tacotron2, and various Vocoder models like MelGAN and ParallelWaveGAN. |
+| [Mokuro - Perform text detection and OCR for each page and generate HTML file](https://github.com/kha-white/mokuro) | Outlined Mokuro, a tool tailored for Japanese learners aiming to read manga in Japanese with the aid of a pop-up dictionary akin to Yomichan. Mokuro functions by conducting text detection and optical character recognition (OCR) for each page of the manga. Once a complete volume is processed, Mokuro generates an HTML file that users can open in a browser. Crucially, all processing occurs offline, facilitating convenience for users who can transfer the resulting HTML file alongside manga images to alternative devices like mobile phones for reading purposes. |
+| [Downloading manga pages as images](https://github.com/manga-download/hakuneko) | Introduced HakuNeko, a cross-platform downloader designed for manga and anime enthusiasts to obtain content from various websites. Its primary purpose is to assist users in downloading media for situations where offline access is needed. The philosophy behind HakuNeko is focused on ad-hoc consumption, meaning users download content only when they intend to read or watch it, rather than mass downloading thousands of chapters that may never be consumed. |
 
 ## Datasets
 ### [Manga Facial Expressions](https://www.kaggle.com/datasets/mertkkl/manga-facial-expressions)
