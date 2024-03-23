@@ -11,13 +11,7 @@ Github repository of team **MangaVision** for the CCNY Senior Design 59866 cours
 
 | Team Introduction Slide |
 |--------|
-|https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4TgfdswozQwrA/edit?usp=sharing|
-
-| Left Table Header |      | Right Table Header |
-|-------------------|      |--------------------|
-| Left Table Data   |      | Right Table Data   |
-| Left Table Data   |      | Right Table Data   |
-| Left Table Data   |      | Right Table Data   |
+|[Link](https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4TgfdswozQwrA/edit?usp=sharing)|
 
 ## Project Description:
 MangaVision is made by passionate manga readers whose aim is to spread their love for manga and make it accessible for people with visually disabilties or impairments.
