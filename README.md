@@ -22,12 +22,12 @@ Potential Key features of MangaVision include leveraging OCR technology to seaml
 
 With MangaVision, we strive to break barriers and foster inclusivity within the manga community and expanding outward. 
 
-## Resources Exploration (Ideas Collection)
+## Resources Exploration (Ideas Collection):
 
 ## Tools
----
-### [Optical character recognition for Japanese text for Manga](https://github.com/kha-white/manga-ocr)
-<p> The github outlines the development of an Optical Character Recognition (OCR) model designed specifically for Japanese manga text recognition, utilizing a custom end-to-end approach built on the Transformers' Vision Encoder Decoder framework. This manga OCR model boasts features tailored to the unique characteristics of manga, including support for both vertical and horizontal text, furigana annotations, text overlaid on images, various fonts and styles, and low-quality images. Notably, it enables multi-line text recognition in a single forward pass, enhancing efficiency by processing entire text bubbles without line splitting. The document also references accompanying tools such as Poricom, a GUI reader, and Mokuro, a tool generating HTML overlays for manga, along with a comprehensive guide for workflow setup. </p>
+| Link | Summary |
+|------|--------|
+| [Optical character recognition for Japanese text for Manga](https://github.com/kha-white/manga-ocr) | The github outlines the development of an Optical Character Recognition (OCR) model designed specifically for Japanese manga text recognition, utilizing a custom end-to-end approach built on the Transformers' Vision Encoder Decoder framework. This manga OCR model boasts features tailored to the unique characteristics of manga, including support for both vertical and horizontal text, furigana annotations, text overlaid on images, various fonts and styles, and low-quality images. Notably, it enables multi-line text recognition in a single forward pass, enhancing efficiency by processing entire text bubbles without line splitting. The document also references accompanying tools such as Poricom, a GUI reader, and Mokuro, a tool generating HTML overlays for manga, along with a comprehensive guide for workflow setup. |
 
 ---
 
