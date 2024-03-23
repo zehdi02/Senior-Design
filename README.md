@@ -1,6 +1,6 @@
 # Senior-Design
 Github repository of team **MangaVision** for the CCNY Senior Design 59866 course.
-## Members:
+## Team Members:
 | Name | Role | Github |
 |----------|----------|----------|
 | Melchizedek De Castro   | Leader   | https://github.com/zehdi02   |
