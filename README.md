@@ -34,27 +34,14 @@ With MangaVision, we strive to break barriers and foster inclusivity within the 
 | [Downloading manga pages as images](https://github.com/manga-download/hakuneko) | Introduced HakuNeko, a cross-platform downloader designed for manga and anime enthusiasts to obtain content from various websites. Its primary purpose is to assist users in downloading media for situations where offline access is needed. The philosophy behind HakuNeko is focused on ad-hoc consumption, meaning users download content only when they intend to read or watch it, rather than mass downloading thousands of chapters that may never be consumed. |
 
 ## Datasets
-### [Manga Facial Expressions](https://www.kaggle.com/datasets/mertkkl/manga-facial-expressions)
-<p> The dataset comprises various emotions depicted in manga (Japanese comics). Unlike human facial expression datasets, which are abundant, there is currently a lack of such datasets specifically for manga. This dataset aims to fill that gap and serve as a starting point to showcase how manga faces can effectively convey emotions. </p>
+| Link | Summary |
+|------|--------|
+| [Manga Facial Expressions](https://www.kaggle.com/datasets/mertkkl/manga-facial-expressions) | The dataset comprises various emotions depicted in manga (Japanese comics). Unlike human facial expression datasets, which are abundant, there is currently a lack of such datasets specifically for manga. This dataset aims to fill that gap and serve as a starting point to showcase how manga faces can effectively convey emotions. |
+| [Manga Faces Dataset](https://www.kaggle.com/datasets/davidgamalielarcos/manga-faces-dataset) | The dataset is centered around manga face generation utilizing architectures such as Generative Adversarial Networks (GANs). It serves as an expansion of the original Manga Facial Expressions dataset, incorporating additional classes and images. The dataset now consists of 670 manga face images categorized into 11 distinct classes. |
+| [Detecting speech bubbles, japanese text, translating](https://www.kaggle.com/datasets/aasimsani/ampd-base) | The tool outlines the creation of an artificial manga panel dataset to aid in the translation of Japanese manga into English. It addresses the challenges faced by individuals who love manga but cannot read Japanese, as existing translation tools like Google Translate often struggle with Japanese text localization. The dataset creation process involves gathering Japanese dialogue datasets, sourcing manga-style fonts, identifying various speech bubble types, and obtaining manga or black-and-white images for panel filling. Key steps include compiling sentence pairs in Japanese and English from the JESC dataset, converting images to black and white, creating speech bubbles, generating manga page layouts with panels, applying affine transforms, and rendering manga panels. The repository offers detailed instructions for utilizing the dataset, either through pre-generated data or by modifying the code for custom datasets. |
+| [Image Classifier](https://www.kaggle.com/datasets/ibrahimserouis99/one-piece-image-classifier) | Their goal is to develop a One Piece character detector following the design of an image classification model. Data collection involves sourcing images from Google and Bing searches. The dataset comprises transformed images using various techniques, with some manually cropped to eliminate extraneous noise. This dataset serves as the foundation for training the character detector, which will utilize the image classification model for classification tasks related to One Piece characters. |
 
----
-
-### [Manga Faces Dataset](https://www.kaggle.com/datasets/davidgamalielarcos/manga-faces-dataset)
-<p> The dataset is centered around manga face generation utilizing architectures such as Generative Adversarial Networks (GANs). It serves as an expansion of the original Manga Facial Expressions dataset, incorporating additional classes and images. The dataset now consists of 670 manga face images categorized into 11 distinct classes. </p>
-
----
-
-### [Detecting speech bubbles, japanese text, translating](https://www.kaggle.com/datasets/aasimsani/ampd-base)
-<p> The tool outlines the creation of an artificial manga panel dataset to aid in the translation of Japanese manga into English. It addresses the challenges faced by individuals who love manga but cannot read Japanese, as existing translation tools like Google Translate often struggle with Japanese text localization. The dataset creation process involves gathering Japanese dialogue datasets, sourcing manga-style fonts, identifying various speech bubble types, and obtaining manga or black-and-white images for panel filling. Key steps include compiling sentence pairs in Japanese and English from the JESC dataset, converting images to black and white, creating speech bubbles, generating manga page layouts with panels, applying affine transforms, and rendering manga panels. The repository offers detailed instructions for utilizing the dataset, either through pre-generated data or by modifying the code for custom datasets. </p>
-
----
-
-### [Image Classifier](https://www.kaggle.com/datasets/ibrahimserouis99/one-piece-image-classifier)
-<p> Their goal is to develop a One Piece character detector following the design of an image classification model. Data collection involves sourcing images from Google and Bing searches. The dataset comprises transformed images using various techniques, with some manually cropped to eliminate extraneous noise. This dataset serves as the foundation for training the character detector, which will utilize the image classification model for classification tasks related to One Piece characters. </p>
-
----
-
-
+<!-- ARCHIVED --!>
 <!-- ### Documentations
 [Object Detection for Comics using Manga109 Annotations:](https://arxiv.org/pdf/1803.08670.pdf)
 <details>
