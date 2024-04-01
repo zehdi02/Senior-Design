@@ -14,7 +14,7 @@ Team Introduction Slide: [Link](https://docs.google.com/presentation/d/1WNn4oexd
 Outline and Ideas: [Link](https://docs.google.com/document/d/1Q3Uw8UuIPxLry2x__Ho96tgG0YmFKRJOzUxRCji3SqQ/edit)
 
 ## Project Description:
-MangaVision is made by passionate manga readers whose aim is to spread their love for manga and make it accessible for people with visually disabilties or impairments.
+MangaVision is made by passionate manga readers whose aim is to spread their love for manga and make it accessible for people with visual disabilties or impairments.
 
 MangaVision's main feature is to audibly describe the drawn visual events depicted on the manga pages, empowering the user to enjoy manga just like every other manga lovers out there. MangaVision also enables users to have image speech bubbles read aloud and offer the convenience of summarizing the overall plot of chapters/volumes enhancing understanding and engagement, as well as language translation.
 
@@ -36,6 +36,7 @@ With MangaVision, we strive to break barriers and foster inclusivity within the 
 ## Datasets
 | Link | Summary |
 |------|--------|
+| [Manga109 Dataset](http://www.manga109.org/en/) |                                      <li> Compiled by the Aizawa Yamasaki Matsui Laboratory at the University of Tokyo, consists of 109 manga volumes created by professional Japanese manga artists between the 1970s and 2010s. </li> <li> Intended for academic research on media processing of Japanese manga. Most of the manga are available at the Manga Library Z and were made commercially available to the public. Permission for use is granted by the authors for academic purposes at non-profit organizations and for research-related uses, with a subset of 87 works also allowing commercial use. </li>|
 | [Manga Facial Expressions](https://www.kaggle.com/datasets/mertkkl/manga-facial-expressions) |                                      <li> This dataset aims to fill the lack of human facial expression datasets for manga and serve as a starting point to showcase how manga faces can effectively convey emotions. </li> |
 | [Manga Faces Dataset](https://www.kaggle.com/datasets/davidgamalielarcos/manga-faces-dataset) |                                     <li> The dataset is centered around manga face generation utilizing architectures such as Generative Adversarial Networks (GANs). </li> <li> It serves as an expansion of the original Manga Facial Expressions dataset, incorporating additional classes and images which now consists of 670 manga face images categorized into 11 distinct classes. </li> |
 | [Detecting speech bubbles, japanese text, translating](https://www.kaggle.com/datasets/aasimsani/ampd-base) |                       <li> Outlined the creation of an artificial manga panel dataset to aid in the translation of Japanese manga into English. </li>       <li> The dataset creation process gather Japanese dialogue datasets, sourcing manga-style fonts, identifying speech bubble types, and obtaining manga or black-and-white images for panel filling. </li>                                                                    <li> Compiles sentence pairs in Japanese and English from the JESC dataset, converting images to black and white, creating speech bubbles, generating manga page layouts with panels, applying affine transforms, and rendering manga panels. </li> |
