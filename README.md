@@ -22,6 +22,39 @@ Potential Key features of MangaVision include leveraging OCR technology to seaml
 
 With MangaVision, we strive to break barriers and foster inclusivity within the manga community and expanding outward. 
 
+## Key Features:
+0) Simple Text-To-Speech:
+1. A button that the reader activates to start reading the manga for them
+2. Describing drawings and what’s happening in it in order (top to bottom, right to left)
+3. Reads the speech bubbles in order (top to bottom, right to left)
+
+A) Manga Panel Drawing/Event Teller - Drawing recognizer:
+1. To describe the drawings on each manga panel as an event (must follow manga reading convention of top-right to bottom-left)
+2. Such events could be facial expressions, recognizing the subject/character and call their names, actions/verbs being done by a subject, settings or scenes
+3. The event would then be transcribed and spoken to the reader through a Text-To-Speech program
+
+B) Plot Summarizer:
+1. A button that allows the reader to summarize the current manga chapter
+2. Once the button is pressed, extract all of the text embedded in the speech bubbles using OCR or other text extractor tools
+3. Visual events must also be taken into account using our Drawing Recognizer (A)
+4. Collect and transcribe every speech and event
+5. Put the collection of speech and events in a plot summarizer model
+7. The output from the model is then read aloud to the reader with TTS (0)
+
+C) Language Translator:
+1. A button that can toggle the current manga chapter into English or to its original language
+2. Once the button is pressed, do the same thing as at (B) steps 2-3. (step 3 would already be in english since there would be no original language texts, just images)
+3. Collect and transcribe every speech and event in the manga chapter
+4. Translate the text from whatever native language it was to English
+5. Replace the original text with the translated text while still allowing toggle language swap function
+
+D) Text Extractor
+1. With Mokuro, speech bubble detection has already been done for us
+2. We just need to extract all the text in the speech bubbles in order (top to bottom, right to left).
+3. Perhaps put the extracted text in a separate text file which can be fed onto our Plot Summarizer and Translator models.
+
+
+
 ## Resources Exploration (Ideas Collection):
 
 ## Tools
