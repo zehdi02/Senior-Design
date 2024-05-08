@@ -344,7 +344,7 @@ def main():
     test_loader = DataLoader(test_dataset, batch_size=8, shuffle=True, num_workers=4, pin_memory=True)
 
 
-    logging.basicConfig(filename='training.log', level=logging.INFO)
+    logging.basicConfig(filename='logs/training.log', level=logging.INFO)
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     model = CustomYOLO().to(device).float()
     criterion = YOLOLoss()
