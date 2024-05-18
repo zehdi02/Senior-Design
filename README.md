@@ -13,6 +13,8 @@ Team Introduction Slide: [Link](https://docs.google.com/presentation/d/1WNn4oexd
 
 Outline and Ideas: [Link](https://docs.google.com/document/d/1Q3Uw8UuIPxLry2x__Ho96tgG0YmFKRJOzUxRCji3SqQ/edit)
 
+[Proposal Report (May 18, 2024)](https://docs.google.com/document/d/1QfcjTj-ExAPZTSlLyOmJJY3YGCVtEkN1_HLgqfZvfNk/edit)
+
 ## Project Description:
 MangaVision is made by passionate manga readers whose aim is to spread their love for manga and make it accessible for people with visual disabilties or impairments.
 
