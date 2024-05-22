@@ -93,6 +93,7 @@ class Manga109Dataset(Dataset):
 
         return image, y_true
 
+
 class CustomYOLO(nn.Module):
     def __init__(self):
         super(CustomYOLO, self).__init__()
@@ -174,7 +175,7 @@ class CustomYOLO(nn.Module):
 
 
 class YOLOLoss(nn.Module):
-    def __init__(self, l_center=4, l_dim=4, l_iou=8, l_noobj=0):
+    def __init__(self, l_center=2, l_dim=10, l_iou=10, l_noobj=0):
         super(YOLOLoss, self).__init__()
         self.l_center = l_center
         self.l_dim = l_dim
@@ -226,7 +227,7 @@ class YOLOLoss(nn.Module):
         return box_iou(box1, box2)
 
 
-def train_model(model, criterion, optimizer, train_loader, scheduler, num_epochs=10, patience=16, model_name='PanelDetector', writer=None):
+def train_model(model, criterion, optimizer, train_loader, num_epochs=10, patience=16, model_name='PanelDetector', writer=None):
     try:
         model.load_state_dict(torch.load(f'models/{model_name}.pth'))
         print(f'Loaded {model_name}.pth')
@@ -236,12 +237,14 @@ def train_model(model, criterion, optimizer, train_loader, scheduler, num_epochs
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     model.to(device)
 
-    running_loss = 0.0
     best_loss = float('inf')
+    batches_without_improvement = 0
+
     for epoch in range(num_epochs):
         model.train()
-
+        running_loss = 0.0
         start_time = time.time()
+
         for batch_idx, (inputs, labels) in enumerate(train_loader):
             inputs, labels = inputs.to(device), labels.to(device)
 
@@ -252,35 +255,35 @@ def train_model(model, criterion, optimizer, train_loader, scheduler, num_epochs
             torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=2, norm_type=1)
             optimizer.step()
 
+            running_loss += loss.item()
+
             if loss.item() < best_loss:
                 best_loss = loss.item()
                 batches_without_improvement = 0
+                torch.save(model.state_dict(), f'models/{model_name}.pth')
             else:
                 batches_without_improvement += 1
 
-            if batches_without_improvement >= patience:
-                print('Early stopping due to loss stagnation')
-                writer.close()
-                return
-
-            running_loss += loss.item()
-
             logging.info(f'Epoch {epoch + 1}, Batch: {batch_idx + 1}, Loss: {loss.item()}')
             print(f'Epoch {epoch + 1}, Batch: {batch_idx + 1}, Loss: {loss.item()}')
-            writer.add_scalar('training loss', loss.item(), epoch * len(train_loader) + batch_idx)
-            torch.save(model.state_dict(), f'models/{model_name}.pth')
+            if writer:
+                writer.add_scalar('training loss', loss.item(), epoch * len(train_loader) + batch_idx)
+
+            if batches_without_improvement >= patience:
+                print('Early stopping due to loss stagnation')
+                if writer:
+                    writer.close()
+                return
 
         running_loss /= len(train_loader)
-
         end_time = time.time()
         elapsed_time = end_time - start_time
+
         logging.info(f'Epoch {epoch + 1}, Loss: {running_loss}, Time: {elapsed_time:.2f}s')
+        print(f'Epoch {epoch + 1}, Loss: {running_loss}, Time: {elapsed_time:.2f}s')
 
-        scheduler.step()
-
-        print(f'Epoch {epoch + 1}, Loss: {running_loss}')
-
-    writer.close()
+    if writer:
+        writer.close()
 
 
 def set_seed(seed_value=42):
@@ -292,29 +295,10 @@ def set_seed(seed_value=42):
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
-def evaluate_model(model, criterion, test_loader):
-    model.eval()
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    model.to(device)
-
-    running_loss = 0.0
-    for batch_idx, (inputs, labels) in enumerate(test_loader):
-        inputs, labels = inputs.to(device), labels.to(device)
-
-        with torch.no_grad():
-            outputs = model(inputs)
-            loss = criterion(outputs, labels)
-
-        running_loss += loss.item()
-
-        print(f'Batch: {batch_idx + 1}, Loss: {loss.item()}')
-
-    running_loss /= len(test_loader)
-    print(f'Loss: {running_loss}')
 
 def main():
     print('Starting')
-    # set_seed(99)
+    set_seed(99)
 
     root_dir = 'Manga109'
     dataset = Manga109Dataset(root_dir)
@@ -324,9 +308,9 @@ def main():
     train_dataset, test_dataset = random_split(dataset, [train_size, test_size])
 
     train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True, num_workers=4, pin_memory=True)
-    test_loader = DataLoader(test_dataset, batch_size=8, shuffle=True, num_workers=4, pin_memory=True)
+    # test_loader = DataLoader(test_dataset, batch_size=8, shuffle=True, num_workers=4, pin_memory=True)
 
-    model_name = 'PanelDetector_v2'
+    model_name = 'PanelDetector_v2.1'
     logging.basicConfig(filename=f'logs/{model_name}.log', level=logging.INFO)
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     model = CustomYOLO().to(device).float()
@@ -337,8 +321,7 @@ def main():
 
     criterion = YOLOLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.0001)
-    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[2, 3], gamma=0.1)
-    train_model(model, criterion, optimizer, train_loader, scheduler, num_epochs=3, model_name=model_name, writer=writer)
+    train_model(model, criterion, optimizer, train_loader, num_epochs=1, model_name=model_name, writer=writer)
 
     return 0
 
