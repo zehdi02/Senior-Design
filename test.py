@@ -99,6 +99,9 @@ def main():
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     model = CustomYOLO().to(device).float()
 
+    x = torch.randn(1, 1, 1024, 1024).to(device)
+    make_dot
+
     for i in range(3,4):
         model.load_state_dict(torch.load(f'models/PanelDetector_v{i+1}.pth'))
 

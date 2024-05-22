@@ -1,15 +1,17 @@
-import logging
 import os
-import random
 import time
+import random
+import logging
+
+import cv2
+import numpy as np
+from PIL import Image
 import xml.etree.ElementTree as ET
 
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from PIL import Image
 from torch.utils.data import Dataset, DataLoader, random_split
 from torchvision.ops import box_iou
 from torchvision.transforms import Compose, Grayscale, ToTensor, Resize, Normalize
@@ -64,10 +66,16 @@ class Manga109Dataset(Dataset):
     def __getitem__(self, idx):
         image_path, bboxes = self.samples[idx]
         image = Image.open(image_path).convert('L')
+        image_np = np.array(image)
+        edges = cv2.Canny(image_np, 100, 200)
+        kernel = np.ones((5, 5), np.uint8)
+        dilated_edges = cv2.dilate(edges, kernel, iterations=1)
+        filled_edges = cv2.morphologyEx(dilated_edges, cv2.MORPH_CLOSE, kernel)
+        image = Image.fromarray(filled_edges)
         image = self.transform(image)
 
         GRID_SIZE = 8
-        y_true = torch.zeros((GRID_SIZE, GRID_SIZE, 5))
+        y_true = torch.zeros((GRID_SIZE, GRID_SIZE, 4)) # 5 if conf
 
         for bbox in bboxes:
             xmin, ymin, xmax, ymax = bbox
@@ -81,7 +89,7 @@ class Manga109Dataset(Dataset):
             center_col = int(x_center * GRID_SIZE)
             center_row = int(y_center * GRID_SIZE)
 
-            y_true[center_col, center_row, :] = torch.tensor([x_center, y_center, width, height, 1])
+            y_true[center_col, center_row, :] = torch.tensor([x_center, y_center, width, height]) # , 1]) # if conf
 
         return image, y_true
 
@@ -91,35 +99,6 @@ class CustomYOLO(nn.Module):
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.to(self.device)
 
-        # self.reduce = nn.Sequential(
-        #     nn.Conv2d(in_channels=1, out_channels=2, kernel_size=1),
-        #
-        #     nn.Conv2d(in_channels=2, out_channels=4, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(4),
-        #     nn.MaxPool2d(2, stride=1),
-        #
-        #     nn.Conv2d(in_channels=4, out_channels=8, kernel_size=3, stride=2),
-        #     nn.BatchNorm2d(8),
-        #     nn.MaxPool2d(2, stride=1),
-        #
-        #     nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3, padding=1),
-        #     nn.LeakyReLU(),
-        #     nn.MaxPool2d(2, stride=1),
-        #
-        #     nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=2, padding=1),
-        #     nn.LeakyReLU(),
-        #     nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(32),
-        #     nn.MaxPool2d(2, stride=2),
-        #
-        #     nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, padding=1),
-        #     nn.BatchNorm2d(64),
-        #     nn.MaxPool2d(2),
-        #
-        #     nn.Upsample((448, 448), mode='bilinear', align_corners=False),
-        #
-        #     nn.Conv2d(in_channels=64, out_channels=3, kernel_size=1)
-        # )
         self.reduce = nn.Sequential(
             nn.Conv2d(in_channels=1, out_channels=2, kernel_size=1),
             nn.Conv2d(in_channels=2, out_channels=1, kernel_size=3),
@@ -170,7 +149,7 @@ class CustomYOLO(nn.Module):
         self.adaptive_pool = nn.AdaptiveAvgPool2d((8, 8))
 
         self.fc1 = nn.Linear(8 * 8 * 1024, 4096)
-        self.fc2 = nn.Linear(4096, 8 * 8 * 5)
+        self.fc2 = nn.Linear(4096, 8 * 8 * 4) # 5 if confidence score is included
 
     def forward(self, x):
         x = self.reduce(x)
@@ -188,7 +167,7 @@ class CustomYOLO(nn.Module):
         x = F.leaky_relu(self.fc1(x))
         x = self.fc2(x)
 
-        x = x.view(-1, 8, 8, 5)
+        x = x.view(-1, 8, 8, 4) # 5 if conf
         x = torch.sigmoid(x)
 
         return x
@@ -204,8 +183,8 @@ class YOLOLoss(nn.Module):
 
     def forward(self, predictions, target):
         # Masks where target boxes are present or absent
-        obj_mask = target[..., 4] > 0
-        noobj_mask = target[..., 4] == 0
+        obj_mask = target[..., 3] > 0 #  4 if conf
+        # noobj_mask = target[..., 4] == 0
 
         # Compute losses for the bounding box coordinates (only for object-containing cells)
         box_predictions = predictions[..., :4][obj_mask]
@@ -220,17 +199,16 @@ class YOLOLoss(nn.Module):
         box_loss = F.mse_loss(torch.sqrt(box_predictions[..., 2:4]), torch.sqrt(box_targets[..., 2:4]), reduction='sum')
         center_loss = F.mse_loss(box_predictions[..., :2], box_targets[..., :2], reduction='sum')
 
-        # Compute the loss for confidence scores
-        obj_confidence_loss = F.mse_loss(predictions[..., 4][obj_mask], target[..., 4][obj_mask], reduction='sum')
-        noobj_confidence_loss = F.mse_loss(predictions[..., 4][noobj_mask], target[..., 4][noobj_mask], reduction='sum')
+        # # Compute the loss for confidence scores
+        # obj_confidence_loss = F.mse_loss(predictions[..., 4][obj_mask], target[..., 4][obj_mask], reduction='sum')
+        # noobj_confidence_loss = F.mse_loss(predictions[..., 4][noobj_mask], target[..., 4][noobj_mask], reduction='sum')
 
         # Calculate the total loss incorporating the differential weighting
         total_loss = (
                 (self.l_center * center_loss) +
                 (self.l_dim * box_loss) +
-                (self.l_iou * iou_loss) +
-                obj_confidence_loss + (self.l_noobj * noobj_confidence_loss)) \
-                     / predictions.size(0)
+                (self.l_iou * iou_loss) ) / predictions.size(0) #+
+                # obj_confidence_loss + (self.l_noobj * noobj_confidence_loss)) \ predictions.size(0)
 
         return total_loss
 
@@ -335,10 +313,8 @@ def evaluate_model(model, criterion, test_loader):
     print(f'Loss: {running_loss}')
 
 def main():
-    print('Starting training')
+    print('Starting')
     # set_seed(99)
-
-    # train_loader = DataLoader(Manga109Dataset('Test'), batch_size=1)
 
     root_dir = 'Manga109'
     dataset = Manga109Dataset(root_dir)
@@ -350,7 +326,7 @@ def main():
     train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True, num_workers=4, pin_memory=True)
     test_loader = DataLoader(test_dataset, batch_size=8, shuffle=True, num_workers=4, pin_memory=True)
 
-    model_name = 'PanelDetector_v1'
+    model_name = 'PanelDetector_v2'
     logging.basicConfig(filename=f'logs/{model_name}.log', level=logging.INFO)
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     model = CustomYOLO().to(device).float()
