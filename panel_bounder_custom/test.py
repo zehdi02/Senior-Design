@@ -129,7 +129,7 @@ def main():
     total_f1_score = 0
     num_samples = 0
 
-    titles = os.listdir('Manga109/images')
+    titles = os.listdir('../Manga109/images')
     titles = titles[:10] # For testing purposes, only use the first 10 title
     for title in titles:
         print(title)

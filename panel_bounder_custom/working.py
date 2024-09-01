@@ -300,7 +300,7 @@ def main():
     print('Starting')
     set_seed(99)
 
-    root_dir = 'Manga109'
+    root_dir = '../Manga109'
     dataset = Manga109Dataset(root_dir)
 
     train_size = int(0.8 * len(dataset))

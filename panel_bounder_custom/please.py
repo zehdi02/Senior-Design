@@ -333,7 +333,7 @@ def main():
 
     # train_loader = DataLoader(Manga109Dataset('Test'), batch_size=1)
 
-    root_dir = 'Manga109'
+    root_dir = '../Manga109'
     dataset = Manga109Dataset(root_dir)
 
     train_size = int(0.8 * len(dataset))
