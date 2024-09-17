@@ -5,6 +5,7 @@ train: train
 val: val
 test: test
 
+nc: 4
 names:
   0: face
   1: body
