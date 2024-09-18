@@ -1,10 +1,9 @@
 from ultralytics import YOLO
-import matplotlib.pyplot as plt
 import cv2
 
 
 def main():
-    model = YOLO("yolov8n.pt").to('cuda')
+    model = YOLO("runs/detect/train/weights/best.pt").to('cuda')
 
     # result_grid = model.train(
     #     data='manga109.yaml',
