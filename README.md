@@ -19,16 +19,41 @@ Team Planning Builder: [Link](https://docs.google.com/spreadsheets/d/1_CTNEVaTbU
 
 Dataset, Goals, and Challenges Slide: [Link](https://docs.google.com/presentation/d/1xuqTP2Wi31BHHp3mqW-A4Ctthh78NiviNjwB4_1PLaQ/edit?usp=sharing)
 
-## Project Description:
-MangaVision is made by passionate manga readers whose aim is to spread their love for manga and make it accessible for people with visual disabilties or impairments.
+## Project Summary:
+Japanese comic books called Manga are enjoyed by many all around the world. Manga are made of panels with images in them where the reader would read from right to left in a traditional Japanese way. Their wide variety of genres and stories captures the attention and hearts of many readers. However, there are individuals who aren’t able to enjoy these graphic novels because of visual impairments. 
 
-MangaVision's main feature is to audibly describe the drawn visual events depicted on the manga pages, empowering the user to enjoy manga just like every other manga lovers out there. MangaVision also enables users to have image speech bubbles read aloud and offer the convenience of summarizing the overall plot of chapters/volumes enhancing understanding and engagement, as well as language translation.
+MangaVision was created by passionate manga readers with the goal of spreading their love for manga and making it more accessible, especially for people with visual impairments. We decided to shift our focus from implementing multiple features—such as the Event Drawing Recognizer (EDR), text-to-speech (TTS), and JP-to-EN translation—to concentrating on the EDR. We realized that delivering a strong, well-developed EDR would have the greatest impact and be a crucial milestone for the project.
 
-Potential Key features of MangaVision include leveraging OCR technology to seamlessly scan and edit texts within image speech bubbles. This capability opens up new possibilities for accessibility and customization. Furthermore, our platform facilitates the translation of native manga texts from Japanese to English, broadening the reach and appeal of manga content.
+With MangaVision, we strive to break barriers and foster inclusivity within the manga community and expand outward. 
 
-With MangaVision, we strive to break barriers and foster inclusivity within the manga community and expanding outward. 
+## Additional Project Information:
+Input: A folder consisting of images of each manga page.
 
-## Key Features:
+Output: An HTML file, which acts as an ereader, w/ buttons such as reading aloud the images and speech bubbles to the reader.
+
+| Dataset | Summary | Element |
+|---------|---------|---------|
+|Manga109|<li>Provides permission to access 109 manga books legally.</li><li>Provides annotations for character face & body, text boxes, and panel boxes.</li><li>Contains  21,142 pages (2 pages for every image) or 10,602 images</li>|<li>Manga Volumes</li><li>Character faces</li><li>Panel</li><li>Speech/Dialogue</li>|
+|KangaiSet|<li>A dataset to supplement Manga109 dataset for facial expression recognition</li><li>Properly annotated according to character’s face bounding boxes from Manga109</li><li>7 emotions: anger, disgust, fear, happiness, neutral, sadness, surprise.</li><li>Annotates 9,387 facial emotions out of the 118,593 faces annotated in Manga109</li>|<li>Character Facial Expression|
+|The Quick, Draw! Dataset|<li>A collection of 50 million drawings across 345 categories, contributed by players of the game Quick, Draw!.</li>|<li>Object Classficifation</li>|
+
+| Models/Techniques | Summary | Element |
+|---------|---------|---------|
+|YOLOv8|<li>Object detection technique used for identification (class recognition) and localization (bounding box) of objects</li><li>Fast and lightweight</li><li>Lower accuracy for smaller objects</li><li>Less precise localization</li><li>May not generalize on complex scene with overlapping objects</li>|<li>Object Detection</li>|
+|BLIP| <li>Understand and generate relationships between images and text, excelling in tasks like image captioning. <li>Leverages extensive pretraining on large datasets of image-text pairs</li> <li>Generate detailed, context-aware captions that describe key objects, actions, and relationships in an image|<li>Image Caption/Description</li>|
+|DINOv2|<li>Self supervised learning model to extract visual features from images without needing labeled date</li><li>Vision transformers to process images</li><li>Scales with large datasets and often better than CNNs</li><li>Can be used for classification, detection and segmentation</li>|<li>General unlabeled feature extraction for manga panels, characters, and objects</li>|
+
+
+Implementation:
+1) Event Drawing Recognizer (EDR) - for recognizing manga panel, characters, objects, etc.  (Main feature)
+  1.a) Must be able to recognize characters' names and facial expressions
+  1.b) Must be able to associate speech bubbles to the correct speaker
+  1.c) Order of panels must be read correctly (?)
+  1.d) Caption/Description generation for the panel as a whole
+2) TTS -  to translate extracted speech bubbles texts to audio                                    (Additional Optional Feature)
+3) JP to EN Translation - Manga109 dataset is in JP. we need to translate them to EN.             (Additional Optional Feature)
+
+## Features Summary:
 A) Simple Text-To-Speech:
 1. A button that the reader activates to start reading the manga for them
 2. Describing drawings and what’s happening in it in order (top to bottom, right to left)
