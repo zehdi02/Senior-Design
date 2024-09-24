@@ -36,7 +36,7 @@ Output: An HTML file, which acts as an ereader, w/ buttons such as reading aloud
 |BLIP| <li>Understand and generate relationships between images and text, excelling in tasks like image captioning. <li>Leverages extensive pretraining on large datasets of image-text pairs</li> <li>Generate detailed, context-aware captions that describe key objects, actions, and relationships in an image|<li>Image Caption/Description</li>|
 |DINOv2|<li>Self supervised learning model to extract visual features from images without needing labeled date</li><li>Vision transformers to process images</li><li>Scales with large datasets and often better than CNNs</li><li>Can be used for classification, detection and segmentation</li>|<li>General unlabeled feature extraction for manga panels, characters, and objects</li>|
 
-# Implementation:
+# Implementation Goals:
 1) Event Drawing Recognizer (Main feature)
 - [x] Detect the panel frames on a page
 - [x] Detect the text boxes on a page
