@@ -52,7 +52,7 @@ Output: An HTML file, which acts as an ereader, w/ buttons such as reading aloud
 - [ ] Recognize character facial expressions
 - [ ] Recognize character names 
 - [ ] Associate dialogues to the correct speaker
-- [ ]Establish panels’ correct reading order
+- [ ] Establish panels’ correct reading order
 - [ ] Caption/Description generation for the panel as a whole
 2) Text-To-Speech (Additional Optional Feature)
 - [ ] Translate extracted speech bubbles texts to audio                                    
