@@ -48,16 +48,16 @@ Output: An HTML file, which acts as an ereader, w/ buttons such as reading aloud
 - [x] Detect the panel frames on a page
 - [x] Detect the text boxes on a page
 - [x] Detect character faces/bodies on a page
-- [] Detect objects in a panel
-- [] Recognize character facial expressions
-- [] Recognize character names 
-- [] Associate dialogues to the correct speaker
-- []Establish panels’ correct reading order
-- [] Caption/Description generation for the panel as a whole
+- [ ] Detect objects in a panel
+- [ ] Recognize character facial expressions
+- [ ] Recognize character names 
+- [ ] Associate dialogues to the correct speaker
+- [ ]Establish panels’ correct reading order
+- [ ] Caption/Description generation for the panel as a whole
 2) Text-To-Speech (Additional Optional Feature)
-- [] Translate extracted speech bubbles texts to audio                                    
+- [ ] Translate extracted speech bubbles texts to audio                                    
 3) JP to EN Translation (Additional Optional Feature)
-- [] Manga109 dataset is in JP. we need to translate them to EN.
+- [ ] Manga109 dataset is in JP. we need to translate them to EN.
 
 # Challenges:
 - Developing zero-shot face recognition model
