@@ -43,48 +43,27 @@ Output: An HTML file, which acts as an ereader, w/ buttons such as reading aloud
 |BLIP| <li>Understand and generate relationships between images and text, excelling in tasks like image captioning. <li>Leverages extensive pretraining on large datasets of image-text pairs</li> <li>Generate detailed, context-aware captions that describe key objects, actions, and relationships in an image|<li>Image Caption/Description</li>|
 |DINOv2|<li>Self supervised learning model to extract visual features from images without needing labeled date</li><li>Vision transformers to process images</li><li>Scales with large datasets and often better than CNNs</li><li>Can be used for classification, detection and segmentation</li>|<li>General unlabeled feature extraction for manga panels, characters, and objects</li>|
 
+# Implementation:
+1) Event Drawing Recognizer (Main feature)
+- [x] Detect the panel frames on a page
+- [x] Detect the text boxes on a page
+- [x] Detect character faces/bodies on a page
+- [] Detect objects in a panel
+- [] Recognize character facial expressions
+- [] Recognize character names 
+- [] Associate dialogues to the correct speaker
+- []Establish panels’ correct reading order
+- [] Caption/Description generation for the panel as a whole
+2) Text-To-Speech (Additional Optional Feature)
+- [] Translate extracted speech bubbles texts to audio                                    
+3) JP to EN Translation (Additional Optional Feature)
+- [] Manga109 dataset is in JP. we need to translate them to EN.
 
-Implementation:
-1) Event Drawing Recognizer (EDR) - for recognizing manga panel, characters, objects, etc.  (Main feature)
-  1.a) Must be able to recognize characters' names and facial expressions
-  1.b) Must be able to associate speech bubbles to the correct speaker
-  1.c) Order of panels must be read correctly (?)
-  1.d) Caption/Description generation for the panel as a whole
-2) TTS -  to translate extracted speech bubbles texts to audio                                    (Additional Optional Feature)
-3) JP to EN Translation - Manga109 dataset is in JP. we need to translate them to EN.             (Additional Optional Feature)
-
-## Features Summary:
-A) Simple Text-To-Speech:
-1. A button that the reader activates to start reading the manga for them
-2. Describing drawings and what’s happening in it in order (top to bottom, right to left)
-3. Reads the speech bubbles in order (top to bottom, right to left)
-
-B) Manga Panel Drawing/Event Teller - Drawing recognizer:
-1. To describe the drawings on each manga panel as an event (must follow manga reading convention of top-right to bottom-left)
-2. Such events could be facial expressions, recognizing the subject/character and call their names, actions/verbs being done by a subject, settings or scenes
-3. The event would then be transcribed and spoken to the reader through a Text-To-Speech program
-
-C) Plot Summarizer:
-1. A button that allows the reader to summarize the current manga chapter
-2. Once the button is pressed, extract all of the text embedded in the speech bubbles using OCR or other text extractor tools
-3. Visual events must also be taken into account using our Drawing Recognizer (A)
-4. Collect and transcribe every speech and event
-5. Put the collection of speech and events in a plot summarizer model
-7. The output from the model is then read aloud to the reader with TTS (0)
-
-D) Language Translator:
-1. A button that can toggle the current manga chapter into English or to its original language
-2. Once the button is pressed, do the same thing as at (B) steps 2-3. (step 3 would already be in english since there would be no original language texts, just images)
-3. Collect and transcribe every speech and event in the manga chapter
-4. Translate the text from whatever native language it was to English
-5. Replace the original text with the translated text while still allowing toggle language swap function
-
-0) Text Extractor
-1. With Mokuro, speech bubble detection has already been done for us
-2. We just need to extract all the text in the speech bubbles in order (top to bottom, right to left).
-3. Perhaps put the extracted text in a separate text file which can be fed onto our Plot Summarizer and Translator models.
-
-
+# Challenges:
+- Developing zero-shot face recognition model
+- Associating dialogues to the correct speaker
+- Establishing panels’ correct reading order
+- Caption/Description generation for the panel as a whole
 
 ## Resources Exploration (Ideas Collection):
 
@@ -114,3 +93,37 @@ D) Language Translator:
 | [Automatic classification of manga characters using density-based clustering](https://www.spiedigitallibrary.org/conference-proceedings-of-spie/11515/115150F/Automatic-classification-of-manga-characters-using-density-based-clustering/10.1117/12.2566845.short#_=_) | To classify characters is to get image features from the character's faces and cluster them. To allocate metadata more efficiently, technology that automatically extracts elements such as character and speech is required. | 2020 | Dimension reduction, Communication engineering, Algorithm development, Computer engineering, Detection and tracking algorithms, Facial recognition systems, Feature extraction, Image classification, Computer science, Data conversion |
 | [A study on object detection method from manga images using CNN](https://ieeexplore.ieee.org/abstract/document/8369633) | Examines the effectiveness of manga object detection by comparing Fast R-CNN, Faster R-CNN, and SSD. Experimental results show that Fast R-CNN is effective for panel layout and speech balloon, whereas Faster R-CNN is effective for character face and text. | 2018 | Object Detection, Manga, CNN, Fast R-CNN, Faster R-CNN, SSD |
 | [DLP-GAN: learning to draw modern Chinese](https://arxiv.org/pdf/2403.03456.pdf) | Unlike previous methods that focus on modern photos to ancient ink paintings, this approach aims to create modern photos from landscape paintings. | 2021 | Unpaired Image Translation, Style Transfer, Asymmetric |
+
+
+<!-- ARCHIVED
+# Features Summary/Design:
+A) Manga Panel Drawing/Event Teller - Drawing recognizer:
+1. To describe the drawings on each manga panel as an event (must follow manga reading convention of top-right to bottom-left)
+2. Such events could be facial expressions, recognizing the subject/character and call their names, actions/verbs being done by a subject, settings or scenes
+3. The event would then be transcribed and spoken to the reader through a Text-To-Speech program
+
+B) Simple Text-To-Speech:
+1. A button that the reader activates to start reading the manga for them
+2. Describing drawings and what’s happening in it in order (top to bottom, right to left)
+3. Reads the speech bubbles in order (top to bottom, right to left)
+
+C) Plot Summarizer:
+1. A button that allows the reader to summarize the current manga chapter
+2. Once the button is pressed, extract all of the text embedded in the speech bubbles using OCR or other text extractor tools
+3. Visual events must also be taken into account using our Drawing Recognizer (A)
+4. Collect and transcribe every speech and event
+5. Put the collection of speech and events in a plot summarizer model
+7. The output from the model is then read aloud to the reader with TTS (0)
+
+D) Language Translator:
+1. A button that can toggle the current manga chapter into English or to its original language
+2. Once the button is pressed, do the same thing as at (B) steps 2-3. (step 3 would already be in english since there would be no original language texts, just images)
+3. Collect and transcribe every speech and event in the manga chapter
+4. Translate the text from whatever native language it was to English
+5. Replace the original text with the translated text while still allowing toggle language swap function
+
+0) Text Extractor
+1. With Mokuro, speech bubble detection has already been done for us
+2. We just need to extract all the text in the speech bubbles in order (top to bottom, right to left).
+3. Perhaps put the extracted text in a separate text file which can be fed onto our Plot Summarizer and Translator models.
+-->
