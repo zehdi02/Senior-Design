@@ -1,5 +1,5 @@
 ## Slides
-Go back to project summary. [click here](readme.md).
+Go back to project summary. [click here](README.md).
 
 ## Spring 2024:
 Team Introduction Slide: [Link](https://docs.google.com/presentation/d/1WNn4oexdCydlKBAyXx5dTc79Uo_LxP4TgfdswozQwrA/edit?usp=sharing)
