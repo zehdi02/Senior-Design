@@ -1,5 +1,5 @@
 # Senior-Design
-Github repository of team **MangaVision** for the CCNY Senior Design 59866 course.
+Github repository of team **MangaVision** for the CCNY Senior Design II (CSC 59867) course.
 
 ## Team Members:
 | Name | Role | Github |
@@ -13,7 +13,11 @@ Team Introduction Slide: [Link](https://docs.google.com/presentation/d/1WNn4oexd
 
 Outline and Ideas: [Link](https://docs.google.com/document/d/1Q3Uw8UuIPxLry2x__Ho96tgG0YmFKRJOzUxRCji3SqQ/edit)
 
-[Proposal Report (May 18, 2024)](https://docs.google.com/document/d/1QfcjTj-ExAPZTSlLyOmJJY3YGCVtEkN1_HLgqfZvfNk/edit)
+Proposal Report (1st Edition): [Link](https://docs.google.com/document/d/1QfcjTj-ExAPZTSlLyOmJJY3YGCVtEkN1_HLgqfZvfNk/edit)
+
+Team Planning Builder: [Link](https://docs.google.com/spreadsheets/d/1_CTNEVaTbUeiSTDD4i7zU3mf360-n2xHzTq5874sA4o/edit?gid=246428048#gid=246428048)
+
+Dataset, Goals, and Challenges slides: [Link](https://docs.google.com/presentation/d/1xuqTP2Wi31BHHp3mqW-A4Ctthh78NiviNjwB4_1PLaQ/edit?usp=sharing)
 
 ## Project Description:
 MangaVision is made by passionate manga readers whose aim is to spread their love for manga and make it accessible for people with visual disabilties or impairments.
