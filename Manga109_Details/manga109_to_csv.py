@@ -9,7 +9,7 @@ def parse_xml_to_csv(xml_folder, csv_file):
         with open(csv_file, mode='w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
             writer.writerow(['book', 'page_index', 'type', 'id', 'box_xmin', 'box_ymin',
-                             'box_xmax', 'box_ymax', 'x_center', 'y_center', 'frame_id', 'text'])
+                             'box_xmax', 'box_ymax', 'x_center', 'y_center', 'area', 'frame_id', 'text'])
 
     rows = []
     for xml_file in os.listdir(xml_folder):
@@ -32,9 +32,10 @@ def parse_xml_to_csv(xml_folder, csv_file):
                     frame_ymax = int(frame.get('ymax'))
                     x_center = (frame_xmin + frame_xmax) / 2
                     y_center = (frame_ymin + frame_ymax) / 2
+                    area = (frame_xmax - frame_xmin) * (frame_ymax - frame_ymin)
                     frames.append((frame_id, frame_xmin, frame_ymin, frame_xmax, frame_ymax))
                     rows.append([book_title, page_index, 'frame', frame_id, frame_xmin, frame_ymin,
-                                 frame_xmax, frame_ymax, x_center, y_center, None, None])
+                                 frame_xmax, frame_ymax, x_center, y_center, area, None, None])
 
                 for annotation_type in ['text', 'face', 'body']:
                     for annotation in page.findall(annotation_type):
@@ -45,6 +46,7 @@ def parse_xml_to_csv(xml_folder, csv_file):
                         ymax = int(annotation.get('ymax'))
                         x_center = (xmin + xmax) / 2
                         y_center = (ymin + ymax) / 2
+                        area = (xmax - xmin) * (ymax - ymin)
                         text = annotation.text if annotation_type == 'text' else None
 
                         # Determine which frame the center is in
@@ -52,7 +54,7 @@ def parse_xml_to_csv(xml_folder, csv_file):
                                          if frame_xmin <= x_center <= frame_xmax and frame_ymin <= y_center <= frame_ymax), None)
 
                         rows.append([book_title, page_index, annotation_type, annotation_id, xmin, ymin,
-                                     xmax, ymax, x_center, y_center, frame_id, text])
+                                     xmax, ymax, x_center, y_center, area, frame_id, text])
 
     # Write all rows to the CSV file at once
     with open(csv_file, mode='a', newline='', encoding='utf-8') as file:
