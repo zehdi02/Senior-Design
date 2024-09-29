@@ -4,6 +4,7 @@ train: train
 val: val
 test: test
 
+nc:7
 names:
   0: anger
   1: disgust
