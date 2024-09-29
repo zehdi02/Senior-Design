@@ -1,0 +1,5 @@
+id,type,xmin,ymin,xmax,ymax,character_id,character_name,page_number
+0005f206,body,71,338,1075,1165,0005ef6c,木田一朗,27
+0005f207,face,1181,281,1366,472,0005ef5c,木田草二朗,27
+0005f208,body,893,169,1553,1167,0005ef5c,木田草二朗,27
+0005f209,frame,44,0,1602,1169,,,27

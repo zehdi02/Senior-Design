@@ -1,0 +1,9 @@
+id,type,xmin,ymin,xmax,ymax,character_id,character_name,text_content,page_number
+00033efa,face,1380,170,1484,284,00033c93,堀ジュネ,,11
+00033efb,frame,7,1,1638,1167,,,,11
+00033efc,body,1018,73,1625,1163,00033c93,堀ジュネ,,11
+00033efd,face,415,20,634,233,00033eca,乃木速人,,11
+00033efe,text,963,795,1283,978,,,"第１話
+堀ジュネ１６歳
+「あの顔」に出会う",11
+00033eff,body,15,10,1080,1169,00033eca,乃木速人,,11

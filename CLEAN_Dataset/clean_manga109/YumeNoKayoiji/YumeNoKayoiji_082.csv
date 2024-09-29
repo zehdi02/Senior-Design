@@ -1,0 +1,5 @@
+id,type,xmin,ymin,xmax,ymax,text_content,character_id,character_name,page_number
+000805e4,frame,6,0,1640,1169,,,,82
+000805e5,text,476,436,570,561,ばいばいまたね,,,82
+000805e6,body,222,597,470,1168,,000805a4,子供,82
+000805e7,face,284,660,393,745,,000805a4,子供,82

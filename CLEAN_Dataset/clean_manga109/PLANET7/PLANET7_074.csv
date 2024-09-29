@@ -1,0 +1,7 @@
+id,type,xmin,ymin,xmax,ymax,character_id,character_name,text_content,page_number
+000511e6,face,150,493,419,1046,00050b49,連邦国王,,74
+000511e7,text,78,57,189,324,,,何考えてんだあいつら・・・,74
+000511e8,frame,0,0,423,1168,,,,74
+000511e9,body,0,257,417,1168,00050b49,連邦国王,,74
+000511ea,frame,827,0,1653,1169,,,,74
+000511eb,frame,439,1,821,1169,,,,74

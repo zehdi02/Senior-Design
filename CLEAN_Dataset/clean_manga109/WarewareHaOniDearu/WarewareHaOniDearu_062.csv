@@ -1,0 +1,5 @@
+id,type,xmin,ymin,xmax,ymax,text_content,character_id,character_name,page_number
+0007a240,frame,13,1,1604,1166,,,,62
+0007a241,text,308,321,479,561,今は庸ちゃんがいるから全然淋しくないよ！！,,,62
+0007a242,face,991,300,1408,681,,00079cf6,ウタ子,62
+0007a243,body,753,0,1595,1169,,00079cf6,ウタ子,62

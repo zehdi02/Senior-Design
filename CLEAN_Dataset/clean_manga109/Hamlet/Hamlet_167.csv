@@ -1,0 +1,4 @@
+id,type,xmin,ymin,xmax,ymax,character_id,character_name,page_number
+0001e4e3,frame,911,78,1589,1099,,,167
+0001e4e4,face,1037,351,1465,732,0001ded4,ドルシネア姫,167
+0001e4e5,body,911,78,1589,1097,0001ded4,ドルシネア姫,167

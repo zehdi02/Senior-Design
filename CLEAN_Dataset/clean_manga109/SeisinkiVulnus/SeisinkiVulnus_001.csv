@@ -1,0 +1,8 @@
+id,type,xmin,ymin,xmax,ymax,character_id,character_name,page_number
+00060aad,body,385,561,771,789,00060aae,グロス・パヒス,1
+00060aaf,frame,108,797,774,1093,,,1
+00060ab0,frame,109,69,771,539,,,1
+00060ab1,face,451,583,584,726,00060aae,グロス・パヒス,1
+00060ab2,body,246,587,593,788,00060ab3,ゾナ,1
+00060ab4,face,364,610,461,745,00060ab3,ゾナ,1
+00060ab5,frame,110,560,774,794,,,1

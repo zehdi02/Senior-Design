@@ -1,0 +1,7 @@
+id,type,xmin,ymin,xmax,ymax,character_id,character_name,text_content,page_number
+0005bf2e,frame,842,898,1638,1167,,,,40
+0005bf2f,face,979,325,1211,543,0005b82a,人見絹枝,,40
+0005bf30,body,908,280,1632,1005,0005b82a,人見絹枝,,40
+0005bf31,text,1481,379,1610,683,,,よしっやるぞっ！！,40
+0005bf32,frame,842,0,1637,366,,,,40
+0005bf33,frame,840,111,1639,1089,,,,40

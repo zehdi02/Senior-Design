@@ -1,0 +1,6 @@
+id,type,xmin,ymin,xmax,ymax,text_content,character_id,character_name,page_number
+0003f70c,text,1466,58,1592,714,ビーーム!!,,,56
+0003f70d,body,628,2,1650,1167,,0003ef84,山田メテオ,56
+0003f70e,face,1174,186,1466,521,,0003ef84,山田メテオ,56
+0003f70f,frame,1,1,1650,1168,,,,56
+0003f710,frame,3,793,813,1166,,,,56

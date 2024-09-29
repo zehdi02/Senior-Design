@@ -1,0 +1,8 @@
+id,type,xmin,ymin,xmax,ymax,text_content,character_id,character_name,page_number
+0003e2fa,text,513,170,533,259,あ……！,,,23
+0003e2fb,frame,82,671,578,1089,,,,23
+0003e2fc,face,216,748,514,1034,,0003dfb0,俊夫,23
+0003e2fd,body,84,669,575,1088,,0003dfb0,俊夫,23
+0003e2fe,body,1263,540,1409,837,,0003dfb0,俊夫,23
+0003e2ff,text,147,754,160,846,………!!,,,23
+0003e300,frame,254,62,1574,881,,,,23

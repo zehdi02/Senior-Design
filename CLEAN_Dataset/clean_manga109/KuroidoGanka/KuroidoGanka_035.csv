@@ -1,0 +1,6 @@
+id,type,xmin,ymin,xmax,ymax,character_id,character_name,text_content,page_number
+000331cb,body,1162,687,1577,1167,000331bd,郁文,,35
+000331cc,text,1009,703,1065,1002,,,誰か　助けて！！,35
+000331cd,frame,851,1,1629,1169,,,,35
+000331ce,text,1424,112,1520,340,,,僕はあいつに殺される！！,35
+000331cf,face,1276,869,1378,947,000331bd,郁文,,35

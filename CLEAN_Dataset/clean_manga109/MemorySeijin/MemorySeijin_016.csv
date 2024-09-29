@@ -1,0 +1,5 @@
+id,type,xmin,ymin,xmax,ymax,text_content,character_id,character_name,page_number
+0003e23e,text,311,251,340,311,！,,,16
+0003e23f,body,1344,36,1520,490,,0003dfb0,俊夫,16
+0003e240,face,1356,69,1444,153,,0003dfb0,俊夫,16
+0003e241,frame,36,27,1561,1121,,,,16
