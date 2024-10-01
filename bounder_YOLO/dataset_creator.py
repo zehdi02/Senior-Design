@@ -12,8 +12,8 @@ def create_dataset_yolo():
 
     # Create train, val, test directories
     for dataset_type in ['train', 'val', 'test']:
-        os.makedirs(f'../Manga109_YOLO/{dataset_type}/images', exist_ok=True)
-        os.makedirs(f'../Manga109_YOLO/{dataset_type}/labels', exist_ok=True)
+        os.makedirs(f'Manga109_YOLO/{dataset_type}/images', exist_ok=True)
+        os.makedirs(f'Manga109_YOLO/{dataset_type}/labels', exist_ok=True)
 
     for annotation_file in os.listdir(annotations_dir):
         tree = ET.parse(os.path.join(annotations_dir, annotation_file))
