@@ -24,3 +24,4 @@ logs
 /bounder_YOLO/runs/detect/train/val_batch1_pred.jpg
 /bounder_YOLO/runs/detect/train/val_batch2_labels.jpg
 /bounder_YOLO/runs/detect/train/val_batch2_pred.jpg
+/Manga109_Details/data_mining.pbix
