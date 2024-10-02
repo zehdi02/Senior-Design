@@ -29,7 +29,6 @@ def create_dataset_yolo():
             image_path = os.path.join(IMAGES_DIR, book_title, f'{int(page_index):03}.jpg')
 
             # Randomly assign dataset types ensuring they are all different but making it such that 85% of all images is in the train set which comprises 75% full images
-            # Randomly assign dataset types ensuring they are all different but making it such that 85% of all images is in the train set which comprises 75% full images
             random_number = random.random()
             if random_number < 0.85:
                 full_dataset_type = 'train'
