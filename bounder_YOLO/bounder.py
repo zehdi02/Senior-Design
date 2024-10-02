@@ -1,21 +1,28 @@
-from ultralytics import YOLO
 import cv2
+from ultralytics import YOLO
 
 
 def main():
     model = YOLO("runs/detect/train/weights/best.pt").to('cuda')
 
-    # result_grid = model.train(
-    #     data='manga109.yaml',
-    #     epochs=50,
-    #     batch=16,
-    #     device='cuda',
-    #     dropout=.05,
-    #     val=True,
-    #     save=True
-    # )
+    result_grid = model.train(
+        data='manga109.yaml',
+        epochs=100,
+        patience=5,
+        batch=8,
+        #nbs=64,
+        dropout=.05,
+        imgsz=1024,
+        augment=True,
+        val=True,
+        save=True,
+        plots=True,
+        verbose=True,
+        device='cuda'
+    )
 
-    img_path = "Manga109_YOLO/test/images/Arisa_063.jpg"
+
+    img_path = f"Manga109_YOLO/test/images/AisazuNihaIrarenai_017.jpg"
     # Predict and return the result
     results = model.predict(source=img_path, device='cuda')
 
@@ -29,9 +36,6 @@ def main():
     cv2.destroyAllWindows()
 
 
+
 if __name__ == '__main__':
     main()
-
-
-"""
-"""
