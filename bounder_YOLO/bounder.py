@@ -3,23 +3,23 @@ from ultralytics import YOLO
 
 
 def main():
-    model = YOLO("runs/detect/train/weights/best.pt").to('cuda')
+    model = YOLO("runs/detect/train3/weights/best.pt").to('cuda')
 
-    result_grid = model.train(
-        data='manga109.yaml',
-        epochs=100,
-        patience=5,
-        batch=8,
-        #nbs=64,
-        dropout=.05,
-        imgsz=1024,
-        augment=True,
-        val=True,
-        save=True,
-        plots=True,
-        verbose=True,
-        device='cuda'
-    )
+    # result_grid = model.train(
+    #     data='manga109.yaml',
+    #     epochs=100,
+    #     patience=5,
+    #     batch=8,
+    #     #nbs=64,
+    #     dropout=.05,
+    #     imgsz=1024,
+    #     augment=True,
+    #     val=True,
+    #     save=True,
+    #     plots=True,
+    #     verbose=True,
+    #     device='cuda'
+    # )
 
 
     img_path = f"Manga109_YOLO/test/images/AisazuNihaIrarenai_017.jpg"
