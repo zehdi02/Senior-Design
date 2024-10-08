@@ -3,7 +3,7 @@ from ultralytics import YOLO
 
 
 def main():
-    model = YOLO("runs/detect/train/weights/best.pt").to('cuda')
+    model = YOLO("runs/detect/train3/weights/best.pt").to('cuda')
 
     result_grid = model.train(
         data='manga109.yaml',
