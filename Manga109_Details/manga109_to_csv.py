@@ -15,6 +15,7 @@ def extract_details(annotation):
 
     return id, xmin, ymin, xmax, ymax, x_center, y_center, area
 
+
 def determine_frame_id(x_center, y_center, frames):
     for frame in frames:
         frame_id, frame_xmin, frame_ymin, frame_xmax, frame_ymax = frame
@@ -27,7 +28,9 @@ def parse_xml_to_csv(xml_folder, csv_file):
     if not os.path.exists(csv_file):
         with open(csv_file, mode='w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
-            writer.writerow(['book', 'page_index', 'type', 'id', 'box_xmin', 'box_ymin', 'box_xmax', 'box_ymax', 'x_center', 'y_center', 'area', 'frame_id', 'text'])
+            writer.writerow(
+                ['book', 'page_index', 'type', 'id', 'box_xmin', 'box_ymin', 'box_xmax', 'box_ymax', 'x_center',
+                 'y_center', 'area', 'frame_id', 'text'])
 
     rows = []
     for xml_file in os.listdir(xml_folder):
@@ -39,18 +42,31 @@ def parse_xml_to_csv(xml_folder, csv_file):
 
             for page in root.findall('pages/page'):
                 page_index = page.get('index')
+                page_has_annotations = False
                 frames = []
+
                 for frame in page.findall('frame'):
-                    frame_id, frame_xmin, frame_ymin, frame_xmax, frame_ymax, x_center, y_center, area = extract_details(frame)
+                    page_has_annotations = True
+                    frame_id, frame_xmin, frame_ymin, frame_xmax, frame_ymax, x_center, y_center, area = extract_details(
+                        frame)
                     frames.append((frame_id, frame_xmin, frame_ymin, frame_xmax, frame_ymax))
-                    rows.append([book_title, page_index, 'frame', frame_id, frame_xmin, frame_ymin, frame_xmax, frame_ymax, x_center, y_center, area, None, None])
+                    rows.append(
+                        [book_title, page_index, 'frame', frame_id, frame_xmin, frame_ymin, frame_xmax, frame_ymax,
+                         x_center, y_center, area, None, None])
 
                 for annotation_type in ['text', 'face', 'body']:
                     for annotation in page.findall(annotation_type):
+                        page_has_annotations = True
                         annotation_id, xmin, ymin, xmax, ymax, x_center, y_center, area = extract_details(annotation)
                         text = annotation.text if annotation_type == 'text' else None
                         frame_id = determine_frame_id(x_center, y_center, frames)
-                        rows.append([book_title, page_index, annotation_type, annotation_id, xmin, ymin, xmax, ymax, x_center, y_center, area, frame_id, text])
+                        rows.append(
+                            [book_title, page_index, annotation_type, annotation_id, xmin, ymin, xmax, ymax, x_center,
+                             y_center, area, frame_id, text])
+
+                if not page_has_annotations:
+                    rows.append(
+                        [book_title, page_index, None, None, None, None, None, None, None, None, None, None, None])
 
     with open(csv_file, mode='a', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
@@ -61,6 +77,7 @@ def main():
     xml_folder = '../Manga109/annotations'
     csv_file_xml = '../Manga109/Manga109.csv'
     parse_xml_to_csv(xml_folder, csv_file_xml)
+
 
 if __name__ == "__main__":
     main()
