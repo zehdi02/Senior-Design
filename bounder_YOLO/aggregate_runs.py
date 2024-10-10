@@ -24,7 +24,7 @@ def aggregate_run_results():
 
     # Concatenate all results into a single DataFrame
     all_results = pd.concat(results)
-    results.to_csv('results.csv', index=False)
+    all_results.to_csv('results.csv', index=False)
 
     plot_results(all_results)
 
