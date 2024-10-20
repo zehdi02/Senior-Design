@@ -59,6 +59,9 @@ Output: An HTML file, which acts as an ereader, w/ buttons such as reading aloud
 - Associating dialogues to the correct speaker
 - Establishing panels’ correct reading order
 - Caption/Description generation for the panel as a whole
+- In Yolov8, we want to augment our data to match real life scenarios better
+- Difficulties in running and evaluating Magi model
+- Long runtime training data for Mangavision
 
 ## Resources Exploration (Ideas Collection):
 
