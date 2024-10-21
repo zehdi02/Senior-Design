@@ -1,0 +1,16 @@
+# hyp.yaml
+
+# Basic augmentation settings
+augment: True
+hsv_h: 0.015  # Hue augmentation
+hsv_s: 0.7    # Saturation augmentation
+hsv_v: 0.4    # Value augmentation
+degrees: 5.0   # Rotation
+translate: 0.1 # Translation
+scale: 0.5     # Scaling
+shear: 2.0    # Shear
+perspective: 0.0 # Perspective
+flipud: 0.0   # Vertical flip
+fliplr: 0.5   # Horizontal flip
+mosaic: 1.0   # Mosaic augmentation
+mixup: 0.0    # Mixup augmentation
