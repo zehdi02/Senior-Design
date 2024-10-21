@@ -30,9 +30,9 @@ def create_dataset_yolo():
 
             # Randomly assign dataset types ensuring they are all different but making it such that 70% of images in the train set are full images
             random_number = random.random()
-            if random_number < 0.70:
+            if random_number < 0.80:
                 full_dataset_type = 'train'
-                if random.random() < 0.75:
+                if random.random() < 0.50:
                     right_dataset_type = 'val'
                     left_dataset_type = 'test'
                 else:
