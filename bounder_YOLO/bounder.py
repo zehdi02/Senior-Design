@@ -1,6 +1,11 @@
 import os
+from venv import create
+
 import cv2
+from ray import tune
+from sympy.physics.units import momentum
 from ultralytics import YOLO
+from dataset_creator import create_dataset_yolo
 from aggregate_runs import aggregate_run_results
 
 
@@ -21,16 +26,16 @@ def test(model, image_path):
 
 
 def main():
-    model = YOLO("runs/detect/train3/weights/best.pt").to('cuda')
+    model = YOLO("runs/detect/train4/weights/best.pt").to('cuda')
 
     result_grid = model.train(
         data='manga109.yaml',
-        epochs=30,
+        epochs=15,
         patience=5,
         batch=12,
-        #nbs=64,
-        dropout=.05,
+        nbs=64,
         imgsz=1024,
+        dropout=.05,
         augment=True,
         val=True,
         save=True,
@@ -39,11 +44,12 @@ def main():
         device='cuda'
     )
 
+
     # aggregate runs
     aggregate_run_results()
 
-    test(model,"Manga109_YOLO/test/images/AisazuNihaIrarenai_017.jpg")
-    test(model, "Manga109_YOLO/test/images/AisazuNihaIrarenai_018_left.jpg")
+    # test(model,"Manga109_YOLO/test/images/AisazuNihaIrarenai_017.jpg")
+    # test(model, "Manga109_YOLO/test/images/AisazuNihaIrarenai_018_left.jpg")
 
 
 
