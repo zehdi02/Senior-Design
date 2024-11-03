@@ -2,7 +2,7 @@ task: detect
 mode: train
 model: runs/detect/train/weights/best.pt
 data: manga109.yaml
-epochs: 40
+epochs: 10
 time: null
 patience: 5
 batch: 8
@@ -13,7 +13,7 @@ cache: false
 device: cuda
 workers: 8
 project: null
-name: train2
+name: train3
 exist_ok: false
 pretrained: true
 optimizer: auto
@@ -47,7 +47,7 @@ source: null
 vid_stride: 1
 stream_buffer: false
 visualize: false
-augment: true
+augment: false
 agnostic_nms: false
 classes: null
 retina_masks: false
@@ -103,4 +103,4 @@ erasing: 0.4
 crop_fraction: 1.0
 cfg: null
 tracker: botsort.yaml
-save_dir: runs\detect\train2
+save_dir: runs\detect\train3

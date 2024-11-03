@@ -1,6 +1,5 @@
 import cv2
 
-
 # Function to display image with bounding boxes
 def display_image_with_bboxes_yolo(full_image_path, full_label_path):
     # Read the image
@@ -36,3 +35,11 @@ def display_image_with_bboxes_yolo(full_image_path, full_label_path):
     cv2.imshow("Image with Bounding Boxes", img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
+def main():
+    image_path = "../bounder_YOLO/Manga109_YOLO/train/images/AisazuNihaIrarenai_003_left.jpg"
+    label_path = "../bounder_YOLO/Manga109_YOLO/train/labels/AisazuNihaIrarenai_003_left.txt"
+    display_image_with_bboxes_yolo(image_path, label_path)
+
+if __name__ == "__main__":
+    main()
