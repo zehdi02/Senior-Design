@@ -218,11 +218,16 @@ def save_sorted_annotations(file_path, sorted_indices, annotations):
             width = bbox[2] - bbox[0]
             height = bbox[3] - bbox[1]
             f.write(f"{class_id} {x_center} {y_center} {width} {height}\n")
+    start_index = file_path.find("annotation")
+    file_name = file_path[start_index :]
+    print(f'Finished sorting for {file_name}')
 
-def main():
-    manga_file_name = 'LancelotFullThrottle_036_left'
-    
+def sorting_pipeline(manga_file_name):
+    """
+        !! CHANGE PATH !!
+    """
     detected_panels_folder = "C:/Users/Zed/Desktop/CCNY Classes/2024 FALL/CSC 59867 Senior Project II/Project/Senior-Design/detected_panels/"
+    
     panels_path = os.path.join(detected_panels_folder, f"panels/{manga_file_name}_panels_annotations.txt")
     text_boxes_path = os.path.join(detected_panels_folder, f"text_boxes/{manga_file_name}_textboxes_annotations.txt")
 
@@ -243,5 +248,10 @@ def main():
     save_sorted_annotations(os.path.join(detected_panels_folder, "annotation_sorted_panel.txt"), sorted_panel_indices, panel_annotations)
     save_sorted_annotations(os.path.join(detected_panels_folder, "annotation_sorted_textboxes.txt"), sorted_text_indices, text_annotations)
 
+
+def main():
+    manga_file_name = 'UnbalanceTokyo_061_right'
+    sorting_pipeline(manga_file_name)
+    
 if __name__ == "__main__":
     main()

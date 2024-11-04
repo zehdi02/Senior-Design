@@ -2,7 +2,13 @@ import cv2
 import os
 
 # function to crop and save bounding boxes & annotations for panels and text boxes
-def crop_and_save_bboxes_by_class(full_image_path, full_label_path):
+def crop_and_save_bboxes_by_class(manga_file_name):
+    """
+        !! CHANGE PATH !!
+    """
+    full_image_path = f"C:/Users/Zed/Desktop/CCNY Classes/2024 FALL/CSC 59867 Senior Project II/Project/Senior-Design/Manga109_YOLO/train/images/{manga_file_name}.jpg"
+    full_label_path = f"C:/Users/Zed/Desktop/CCNY Classes/2024 FALL/CSC 59867 Senior Project II/Project/Senior-Design/Manga109_YOLO/train/labels/{manga_file_name}.txt"
+    
     main_output_dir = "./detected_panels"
     panels_dir = os.path.join(main_output_dir, "panels")
     text_boxes_dir = os.path.join(main_output_dir, "text_boxes")
@@ -52,15 +58,11 @@ def crop_and_save_bboxes_by_class(full_image_path, full_label_path):
                 cv2.imwrite(output_image_path, cropped_img)
                 text_boxes_file.write(f"{class_id} {data[1]} {data[2]} {data[3]} {data[4]}\n")
 
-    print(f"Cropped images and annotations saved for {full_image_path}.")
+    print(f"Cropped images and annotations saved at {full_image_path}.")
 
 def main():
-    manga_file_name = 'LancelotFullThrottle_036_left'
-
-    image_path = f"C:/Users/Zed/Desktop/CCNY Classes/2024 FALL/CSC 59867 Senior Project II/Project/Senior-Design/Manga109_YOLO/train/images/{manga_file_name}.jpg"
-    label_path = f"C:/Users/Zed/Desktop/CCNY Classes/2024 FALL/CSC 59867 Senior Project II/Project/Senior-Design/Manga109_YOLO/train/labels/{manga_file_name}.txt"
-    
-    crop_and_save_bboxes_by_class(image_path, label_path)
+    manga_file_name = 'UnbalanceTokyo_061_right'
+    crop_and_save_bboxes_by_class(manga_file_name)
 
 if __name__ == "__main__":
     main()
