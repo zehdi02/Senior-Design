@@ -7,7 +7,7 @@ from dataset_creator import create_dataset_yolo
 from aggregate_runs import aggregate_run_results
 
 
-def get_predict_boxes(model, image_path, classes=None, display=False):
+def get_predict_boxes(model, image_path, display=False):
     """
     Detect and display bounding boxes for specified classes in an image using a YOLO model.
 
@@ -25,9 +25,7 @@ def get_predict_boxes(model, image_path, classes=None, display=False):
     class_name_to_index = {"face": 0, "body": 1, "text": 2, "frame": 3}
     index_to_class_name = {v: k for k, v in class_name_to_index.items()}
 
-    # Convert class names to indices for filtering if specific classes are requested
-    if classes is None:
-        classes = list(class_name_to_index.keys())  # Default to all classes
+    classes = list(class_name_to_index.keys())  # Default to all classes
     class_indices_to_display = [class_name_to_index[name] for name in classes]
 
     # Perform prediction
@@ -107,7 +105,7 @@ def main():
     image_path = "Manga109_YOLO/test/images/AisazuNihaIrarenai_012_right.jpg"
 
     # Get bounding boxes for only "text" class (index 2)
-    bounding_boxes = get_predict_boxes(model, image_path, classes=['text'], display=True)
+    bounding_boxes = get_predict_boxes(model, image_path, display=True)
     print("Bounding boxes for text:", bounding_boxes['text'])
 
 
