@@ -7,14 +7,14 @@ from dataset_creator import create_dataset_yolo
 from aggregate_runs import aggregate_run_results
 
 
-def display_and_get_bounding_boxes(model, image_path, classes_to_display=None):
+def get_predict_boxes(model, image_path, classes=None, display=False):
     """
     Detect and display bounding boxes for specified classes in an image using a YOLO model.
 
     Args:
         model: YOLO model for prediction.
         image_path (str): Path to the image file.
-        classes_to_display (list, optional): List of class names to display bounding boxes for.
+        classes (list, optional): List of class names to display bounding boxes for.
                                              Defaults to None, which displays all classes.
 
     Returns:
@@ -26,9 +26,9 @@ def display_and_get_bounding_boxes(model, image_path, classes_to_display=None):
     index_to_class_name = {v: k for k, v in class_name_to_index.items()}
 
     # Convert class names to indices for filtering if specific classes are requested
-    if classes_to_display is None:
-        classes_to_display = list(class_name_to_index.keys())  # Default to all classes
-    class_indices_to_display = [class_name_to_index[name] for name in classes_to_display]
+    if classes is None:
+        classes = list(class_name_to_index.keys())  # Default to all classes
+    class_indices_to_display = [class_name_to_index[name] for name in classes]
 
     # Perform prediction
     results = model.predict(source=image_path, device='cuda')
@@ -52,26 +52,28 @@ def display_and_get_bounding_boxes(model, image_path, classes_to_display=None):
             # Extract the center coordinates, width, and height
             x_center, y_center, width, height = box
 
-            # Convert xywh to xyxy format for drawing
-            x_min = int(x_center - width / 2)
-            y_min = int(y_center - height / 2)
-            x_max = int(x_center + width / 2)
-            y_max = int(y_center + height / 2)
+            if display:
+                # Convert xywh to xyxy format for drawing
+                x_min = int(x_center - width / 2)
+                y_min = int(y_center - height / 2)
+                x_max = int(x_center + width / 2)
+                y_max = int(y_center + height / 2)
 
-            # Define colors for each class
-            colors = {"face": (255, 0, 0), "body": (0, 255, 0), "text": (0, 0, 255), "frame": (255, 255, 0)}
+                # Define colors for each class
+                colors = {"face": (255, 0, 0), "body": (0, 255, 0), "text": (0, 0, 255), "frame": (255, 255, 0)}
 
-            # Draw the box on the image with label
-            cv2.rectangle(image, (x_min, y_min), (x_max, y_max), colors[class_name], 2)
-            cv2.putText(image, class_name, (x_min, y_min - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, colors[class_name], 2)
+                # Draw the box on the image with label
+                cv2.rectangle(image, (x_min, y_min), (x_max, y_max), colors[class_name], 2)
+                cv2.putText(image, class_name, (x_min, y_min - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, colors[class_name], 2)
 
-    # Display the image using OpenCV
-    window_name = "YOLOv8 Class Detection"
-    cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
-    cv2.resizeWindow(window_name, image.shape[1], image.shape[0])
-    cv2.imshow(window_name, image)
-    cv2.waitKey(0)  # Press any key to close
-    cv2.destroyAllWindows()
+    if display:
+        # Display the image using OpenCV
+        window_name = "YOLOv8 Class Detection"
+        cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+        cv2.resizeWindow(window_name, image.shape[1], image.shape[0])
+        cv2.imshow(window_name, image)
+        cv2.waitKey(0)  # Press any key to close
+        cv2.destroyAllWindows()
 
     return bounding_boxes
 
@@ -105,7 +107,7 @@ def main():
     image_path = "Manga109_YOLO/test/images/AisazuNihaIrarenai_012_right.jpg"
 
     # Get bounding boxes for only "text" class (index 2)
-    bounding_boxes = display_and_get_bounding_boxes(model, image_path, classes_to_display=['text'])
+    bounding_boxes = get_predict_boxes(model, image_path, classes=['text'], display=True)
     print("Bounding boxes for text:", bounding_boxes['text'])
 
 
