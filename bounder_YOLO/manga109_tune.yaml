@@ -1,11 +1,10 @@
-# Data configuration
 path: ../Manga109_YOLO  # Dataset root directory
 
-train: train  # Path to training images (relative to dataset root)
-val: val      # Path to validation images (relative to dataset root)
-test: test    # Path to test images (optional)
+train: train
+val: val
+test: test
 
-nc: 4  # Number of classes (update with actual number)
+nc: 4
 names:
   0: face
   1: body
