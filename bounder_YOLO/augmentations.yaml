@@ -1,10 +1,10 @@
-hsv_h: 0.015        # Hue augmentation
-hsv_s: 0.7          # Saturation augmentation
-hsv_v: 0.4          # Value augmentation
-degrees: 10.0       # Rotation
-translate: 0.2      # Translation
-scale: 0.5          # Scaling
-shear: 2.0          # Shear
-perspective: 0.0    # Perspective
-flipud: 0.0         # Vertical flip
-fliplr: 0.5         # Horizontal flip
+'hsv_v': 1,
+'hsv_h': 1,
+'hsv_s': 1,
+'degrees': 180.0,
+'translate': .2,
+'scale': 1,
+'shear': 2.0,
+'perspective': .1,
+'flipud': 1,
+'fliplr': 1
