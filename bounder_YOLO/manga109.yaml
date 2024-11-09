@@ -1,6 +1,5 @@
-# YOLO dataset config
-path: ../Manga109_YOLO # dataset root dir
-
+# Data configuration
+path: ../Manga109_YOLO  # Dataset root directory
 train: train
 val: val
 test: test
@@ -12,5 +11,34 @@ names:
   2: text
   3: frame
 
-# class weights
-class_weights: [2.0, 2.0, 1.0, 1.0]
+# Class weights for the loss function
+class_weights: [1.0, 1.0, 2.0, 2.0]  # Adjust according to the difficulty or importance of each class
+
+# Hyperparameters
+batch_size: 12   # Batch size
+epochs: 10       # Number of epochs
+img_size: 512    # Image size for training
+
+lr0: 0.01275
+lrf: 0.01
+momentum: 0.98
+weight_decay: 0.00046
+warmup_epochs: 2.40053
+warmup_momentum: 0.67347
+box: 2.0
+cls: 0.32459
+label_smoothing: 0.0
+
+# Optimizer settings
+optimizer: Adam  # Optimizer
+
+# Loss function adjustments
+cls_pw: 1.0   # Classification loss weight
+obj_pw: 1.0   # Objectness loss weight
+iou_t: 0.4    # Intersection over Union (IoU) threshold for loss
+
+# Non-Maximum Suppression (NMS) settings
+iou_thres: 0.4   # IoU threshold for NMS during inference
+conf_thres: 0.5  # Confidence threshold for detections
+
+# Class-specific settings (optional, already defined above)

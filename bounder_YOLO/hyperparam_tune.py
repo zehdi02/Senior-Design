@@ -3,11 +3,17 @@ import yaml
 import shutil
 from ultralytics import YOLO
 
-
 def tune_yolo_manga109():
+    """
+    Tunes the YOLOv8 model on the Manga109 dataset by performing hyperparameter search.
+    Saves the best-performing hyperparameters and reorganizes output directories for clarity.
+    """
+    # Load YOLO model
     model = YOLO("yolov8n.pt")
 
+    # Define hyperparameter search space for model tuning
     search_space = {
+        # Model hyperparameters
         'lr0': (1e-5, 1e-1),
         'lrf': (0.01, 0.5),
         'momentum': (0.6, 0.98),
@@ -18,6 +24,7 @@ def tune_yolo_manga109():
         'cls': (0.2, 4.0),
         'label_smoothing': (0.0, 0.1),
 
+        # Augmentation hyperparameters
         'hsv_v': (0.0, 1.0),
         'hsv_h': (0.0, 1.0),
         'hsv_s': (0.0, 1.0),
@@ -30,41 +37,43 @@ def tune_yolo_manga109():
         'fliplr': (0.0, 1.0)
     }
 
+    # Execute model tuning
     result_grid = model.tune(
         data="C:\\Users\\mehed\\Documents\\School\\MangaVision\\bounder_YOLO\\manga109_tune.yaml",
         epochs=8,
-        fraction=0.5, # inc speed
-        patience=4,
+        fraction=0.5,  # Fraction of dataset to speed up tuning
+        patience=4,  # Early stopping if no improvement
         batch=16,
-        nbs=64,
-        imgsz=256, # inc speed
+        nbs=64,  # Nominal batch size for larger datasets
+        imgsz=256,  # Reduced image size for faster processing
         device='cuda',
-        iterations=32,
+        iterations=32,  # Number of tuning iterations
         space=search_space
     )
+    print("Tuning completed. Result grid:", result_grid)
 
-    print(result_grid)
-
+    # Load and save the best hyperparameters
     best_hyperparameters_yaml_path = "runs/detect/tune/best_hyperparameters.yaml"
     with open(best_hyperparameters_yaml_path, 'r') as file:
         best_hyperparameters = yaml.safe_load(file)
 
-    # copy the best hyperparameters to the bounder_YOLO folder
-    best_hyperparameters_path = "best_hyperparameters.yaml"
-    with open(best_hyperparameters_path, 'w') as file:
+    # Save best hyperparameters to a specified location for easy access
+    best_hyperparameters_output_path = "best_hyperparameters.yaml"
+    with open(best_hyperparameters_output_path, 'w') as file:
         yaml.dump(best_hyperparameters, file)
 
-    os.rename("runs/detect/tune/", "runs/detect/best/")     # Rename tune folder to best
-    os.rename("runs/", "tune/")     # Rename runs folder to tune
+    # Rename output directories to improve organization
+    os.rename("runs/detect/tune/", "runs/detect/best/")  # Rename tuning output folder to 'best'
+    os.rename("runs/", "tune/")  # Rename main 'runs' folder to 'tune'
+
+    # Move all items from the 'tune/detect' directory up one level and clean up
     detect_path = "tune/detect/"
-    for item in os.listdir(detect_path):     # Move all folders inside detect up one level
+    for item in os.listdir(detect_path):
         shutil.move(os.path.join(detect_path, item), "tune/")
-    os.rmdir(detect_path)
-
-    return
-
+    os.rmdir(detect_path)  # Remove now-empty 'detect' directory
 
 def main():
+    """Main function to initiate YOLO model tuning on Manga109 dataset."""
     tune_yolo_manga109()
 
 if __name__ == '__main__':
