@@ -7,22 +7,46 @@ import xml.etree.ElementTree as ET
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
+def setup_directories():
+    """Setup train, val, and test directories for images and labels."""
+    for dataset_type in ['train', 'val', 'test']:
+        os.makedirs(f'{utils.OUTPUT_DIR}/{dataset_type}/images', exist_ok=True)
+        os.makedirs(f'{utils.OUTPUT_DIR}/{dataset_type}/labels', exist_ok=True)
+
+
+def add_bbox(annotation_dict, class_type, bbox):
+    """Add a bounding box to the annotations dictionary."""
+    if class_type not in annotation_dict:
+        annotation_dict[class_type] = []
+    annotation_dict[class_type].append(bbox)
+
+
+def split_bbox(bbox, mid, width, height):
+    """Split and adjust bounding box coordinates for left and right halves."""
+    xmin, ymin, xmax, ymax = bbox
+    left_bbox = right_bbox = None
+    box_area = (xmax - xmin) * (ymax - ymin)
+
+    left_area = max(0, min(xmax, mid) - max(xmin, 0)) * max(0, ymax - ymin)
+    right_area = box_area - left_area
+
+    if xmin <= mid <= xmax:
+        if left_area / box_area >= 0.4:
+            left_bbox = [xmin, ymin, min(xmax, mid), ymax]
+        if right_area / box_area >= 0.4:
+            right_bbox = [max(xmin - mid, 0), ymin, xmax - mid, ymax]
+    elif xmax < mid:
+        left_bbox = bbox
+    else:
+        right_bbox = [xmin - mid, ymin, xmax - mid, ymax]
+
+    return left_bbox, right_bbox
+
+
 def split_image(image, annotations):
     """
     Split the image and annotations into left and right halves
-
-    Args:
-        image: numpy array of the image
-        annotations: dictionary containing annotations for each class
-
-    Returns:
-        left_image: numpy array of the left half of the image
-        left_annotations: dictionary containing annotations for each class in the left half
-        right_image: numpy array of the right half of the image
-        right_annotations: dictionary containing annotations for each class in the right half
-
     """
-    # Split the image and annotations into left and right halves returns images and annotations for both halves in manga109 format
     width, height = image.shape[1], image.shape[0]
     left_image, right_image = image[:, :width // 2], image[:, width // 2:]
     mid = width // 2
@@ -30,98 +54,49 @@ def split_image(image, annotations):
 
     for class_type, class_annotations in annotations.items():
         for bbox in class_annotations:
-            xmin, ymin, xmax, ymax = bbox
-
-            # only if bounding box spans both halves
-            if xmin <= mid <= xmax:
-                # calculate total area of bounding box
-                box_area = (xmax - xmin) * (ymax - ymin)
-                left_area = max(0, min(xmax, width // 2) - max(xmin, 0)) * max(0, min(ymax, height) - max(ymin, 0))
-                right_area = box_area - left_area
-
-                if left_area / box_area >= 0.4:
-                    if class_type not in left_annotations:
-                        left_annotations[class_type] = []
-                    left_annotations[class_type].append(bbox)
-                if right_area / box_area >= 0.4:
-                    if class_type not in right_annotations:
-                        right_annotations[class_type] = []
-                    right_annotations[class_type].append(bbox)
-
-            elif xmax < mid:
-                if class_type not in left_annotations:
-                    left_annotations[class_type] = []
-                left_annotations[class_type].append(bbox)
-            else:
-                if class_type not in right_annotations:
-                    right_annotations[class_type] = []
-                right_annotations[class_type].append(bbox)
+            left_bbox, right_bbox = split_bbox(bbox, mid, width, height)
+            if left_bbox:
+                add_bbox(left_annotations, class_type, left_bbox)
+            if right_bbox:
+                add_bbox(right_annotations, class_type, right_bbox)
 
     return left_image, left_annotations, right_image, right_annotations
 
 
 def process_page(book, page):
     """
-    Process a page from the manga109 dataset by splitting it into left and right halves and saving the images and labels
-
-    Args:
-        book: name of the book
-        page: xml element of the page
-
+    Process a page by splitting into left and right halves and saving images and labels
     """
-    # Get the image path
     page_index = page.get('index')
     image_path = os.path.join(utils.IMAGES_DIR, book, f'{int(page_index):03}.jpg')
-
-    # Read the image and annotations
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-    annotations = {}
-    for object in utils.CLASSES:
-        for frame in page.findall(object):
-            xmin = int(frame.get('xmin'))
-            xmax = int(frame.get('xmax'))
-            ymin = int(frame.get('ymin'))
-            ymax = int(frame.get('ymax'))
+    annotations = {cls: [[int(frame.get(coord)) for coord in ['xmin', 'ymin', 'xmax', 'ymax']]
+                  for frame in page.findall(cls)] for cls in utils.CLASSES}
 
-            if object not in annotations:
-                annotations[object] = []
-            annotations[object].append([xmin, ymin, xmax, ymax])
-
-    # split the image and annotations into left and right halves
+    # Split image and annotations
     left_image, left_annotations, right_image, right_annotations = split_image(image, annotations)
-    # normalize the annotations
-    left_annotations = utils.manga109_to_yolo(left_annotations, int(left_image.shape[1]), int(left_image.shape[0]))
-    right_annotations = utils.manga109_to_yolo(right_annotations, int(right_image.shape[1]), int(right_image.shape[0]))
 
-    # Randomly assign dataset type for left and right images
-    left_dataset_type = random.choices(['train', 'val', 'test'], weights=[0.9, 0.05, 0.05])[0]
-    left_image_output_path = f'{utils.OUTPUT_DIR}/{left_dataset_type}/images/{book}_{int(page_index):03}_left.jpg'
-    left_label_file_path = f'{utils.OUTPUT_DIR}/{left_dataset_type}/labels/{book}_{int(page_index):03}_left.txt'
+    # Normalize annotations
+    left_annotations = utils.manga109_to_yolo(left_annotations, left_image.shape[1], left_image.shape[0])
+    right_annotations = utils.manga109_to_yolo(right_annotations, right_image.shape[1], right_image.shape[0])
 
-    right_dataset_type = random.choices(['train', 'val', 'test'], weights=[0.9, 0.05, 0.05])[0]
-    right_image_output_path = f'{utils.OUTPUT_DIR}/{right_dataset_type}/images/{book}_{int(page_index):03}_right.jpg'
-    right_label_file_path = f'{utils.OUTPUT_DIR}/{right_dataset_type}/labels/{book}_{int(page_index):03}_right.txt'
+    # Randomly assign dataset type and paths
+    def save_split(image_part, annotations, side):
+        dataset_type = random.choices(['train', 'val', 'test'], weights=[0.9, 0.05, 0.05])[0]
+        image_output_path = f'{utils.OUTPUT_DIR}/{dataset_type}/images/{book}_{int(page_index):03}_{side}.jpg'
+        label_file_path = f'{utils.OUTPUT_DIR}/{dataset_type}/labels/{book}_{int(page_index):03}_{side}.txt'
+        utils.save_image_and_labels(image_part, annotations, image_output_path, label_file_path)
 
-    # Save the left and right images and labels in yolo text format
-    utils.save_image_and_labels(left_image, left_annotations, left_image_output_path, left_label_file_path)
-    utils.save_image_and_labels(right_image, right_annotations, right_image_output_path, right_label_file_path)
-
-    return
+    save_split(left_image, left_annotations, 'left')
+    save_split(right_image, right_annotations, 'right')
 
 
 def create_manga109_dataset_yolo():
-    """
-    Create the manga109 dataset in YOLO format, splitting the images and labels into left and right halves, concurrently for each book and page
-    """
-    # Create train, val, test directories if not already present
-    for dataset_type in ['train', 'val', 'test']:
-        os.makedirs(f'{utils.OUTPUT_DIR}/{dataset_type}/images', exist_ok=True)
-        os.makedirs(f'{utils.OUTPUT_DIR}/{dataset_type}/labels', exist_ok=True)
-
-    # Initialize a progress bar for books
+    """Create dataset by processing each book and page concurrently."""
+    setup_directories()
     annotation_files = os.listdir(utils.ANNOTATIONS_DIR)
+
     with tqdm(total=len(annotation_files), desc="Books Processed") as book_progress:
-        # Process each annotation file (each book) concurrently
         with ThreadPoolExecutor() as book_executor:
             book_futures = []
             for annotation_file in annotation_files:
@@ -129,26 +104,43 @@ def create_manga109_dataset_yolo():
                 root = tree.getroot()
                 book = root.get('title')
 
-                # Process pages within each book concurrently, with a progress bar for pages
-                page_futures = []
                 with ThreadPoolExecutor() as page_executor:
                     pages = root.findall('.//page')
-                    for page in pages:
-                        future = page_executor.submit(process_page, book, page)
-                        page_futures.append(future)
-
-                # Wait for all page processing to complete for the current book
+                    page_futures = [page_executor.submit(process_page, book, page) for page in pages]
                 book_futures.append(book_executor.submit(lambda: [f.result() for f in as_completed(page_futures)]))
-                book_progress.update(1)  # Update book progress
+                book_progress.update(1)
 
     print("Dataset creation completed.")
 
-    return
+
+def test_create_dataset():
+    """Test dataset creation with the first book"""
+    setup_directories()
+    annotation_file = os.listdir(utils.ANNOTATIONS_DIR)[0]
+    tree = ET.parse(os.path.join(utils.ANNOTATIONS_DIR, annotation_file))
+    root = tree.getroot()
+    book = root.get('title')
+    pages = root.findall('.//page')
+    for page in pages:
+        process_page(book, page)
 
 
 def main():
+    # uncomment to create sample dataset for first book
+    # test_create_dataset()
+
+    # uncomment after creating sample dataset to validate annotations remembering to update the imagea path
+    # image_path = "Manga109_YOLO/train/images/AisazuNihaIrarenai_045_left.jpg"
+    # image, label = utils.get_data_yolo(image_path)
+    # utils.show_annotated_img_yolo(image, label)
+    #
+    # image_path = "Manga109_YOLO/train/images/AisazuNihaIrarenai_045_right.jpg"
+    # image, label = utils.get_data_yolo(image_path)
+    # utils.show_annotated_img_yolo(image, label)
+
+
+    # uncomment to create full dataset
     create_manga109_dataset_yolo()
-    return
 
 if __name__ == '__main__':
     main()
