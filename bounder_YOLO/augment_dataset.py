@@ -63,7 +63,7 @@ def augment(image, annotations, augmentations):
             bboxes.append([x_center, y_center, width, height, class_id])
 
     # Transform image and bounding boxes
-    transform = A.Compose(augmentations, bbox_params=A.BboxParams(format='yolo', min_visibility=0.4))
+    transform = A.Compose(augmentations, bbox_params=A.BboxParams(format='yolo', min_visibility=0.5))
     transformed = transform(image=image, bboxes=bboxes)
     image, annotations_raw = transformed['image'], transformed['bboxes']
 
@@ -84,11 +84,11 @@ def main():
     # augmentation_settings = read_augmentation_settings(yaml_path)
 
     augmentation_settings = {
-        # 'hsv_h': 0.015,
-        # 'hsv_s': 0.7,
-        # 'hsv_v': 0.4,
-        # 'degrees': 10.0,
-        'translate': 0.1,
+        # 'hsv_h': 1,
+        # 'hsv_s': 1,
+        # 'hsv_v': 1,
+        'degrees': 180.0,
+        # 'translate': .2,
         # 'scale': 0.5,
         # 'shear': 2.0,
         # 'perspective': 1.0,
@@ -99,14 +99,9 @@ def main():
 
     image_path = "Manga109_YOLO/train/images/AisazuNihaIrarenai_020_left.jpg"
     image, labels = utils.get_data_yolo(image_path)
-    utils.show_annotated_img_yolo(image, labels)
+    # utils.show_annotated_img_yolo(image, labels)
     
     transformed_image, transformed_bboxes = augment(image, labels, transform)
-
-    # use cv2 to show the transformed imagee
-
-
-    print(labels)
     utils.show_annotated_img_yolo(transformed_image, transformed_bboxes)
 
 
