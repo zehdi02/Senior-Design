@@ -165,7 +165,7 @@ def augment_dataset(augmentation_settings, p=1):
         image_paths = [os.path.join(image_dir, img) for img in os.listdir(image_dir)]
 
         # Use ThreadPoolExecutor to apply augmentations concurrently, improving speed
-        with ThreadPoolExecutor() as image_executor, tqdm(total=len(image_paths), desc=f"Processing {dataset_type} images") as pbar:
+        with ThreadPoolExecutor(max_workers=2) as image_executor, tqdm(total=len(image_paths), desc=f"Processing {dataset_type} images") as pbar:
             futures = [image_executor.submit(augment_yolo, path, augmentation_settings, p) for path in image_paths]
 
             # Progress bar updates after each image completes augmentation
@@ -184,7 +184,7 @@ def main():
         'flipud': 1,
         'fliplr': 1
     }
-    # augment_dataset(augmentation_settings, p=1)
+    augment_dataset(augmentation_settings, p=1)
 
 
 if __name__ == '__main__':
