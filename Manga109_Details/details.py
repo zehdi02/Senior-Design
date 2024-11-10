@@ -58,9 +58,10 @@ def dataset_statistics(annotations):
     print(f'Total number of images: {num_images}')
     print(f'Total number of characters: {num_characters}')
     print(f'Total number of bounding boxes for frames: {num_frames}')
+    print(f'Total number of bounding boxes for texts: {num_texts}')
     print(f'Total number of bounding boxes for faces: {num_faces}')
     print(f'Total number of bounding boxes for bodies: {num_bodies}')
-    print(f'Total number of bounding boxes for texts: {num_texts}')
+
 
 # show number of pages/images per book in descending order with average/median/standard deviation
 def show_images_per_book(annotations):
@@ -501,21 +502,45 @@ def show_bounding_box_statistics(annotations):
     print(f'Standard deviation of area: {std_dev_area}')
 
 
-
+# Function to calculate statistics for a given DataFrame
+def calculate_statistics(df):
+    stats = {
+        'images_count': len(df),
+        'frames_count': df['type'].value_counts().get('frame', 0),
+        'text_count': df['type'].value_counts().get('text', 0),
+        'faces_count': df['type'].value_counts().get('face', 0),
+        'bodies_count': df['type'].value_counts().get('body', 0),
+        'min_width_frames': df['width'].min(),
+        'max_width_frames': df['width'].max(),
+        'avg_width_frames': df['width'].mean(),
+        'median_width_frames': df['width'].median(),
+        'std_width_frames': df['width'].std(),
+        'min_height_frames': df['height'].min(),
+        'max_height_frames': df['height'].max(),
+        'avg_height_frames': df['height'].mean(),
+        'median_height_frames': df['height'].median(),
+        'std_height_frames': df['height'].std(),
+        'min_area_frames': df['area'].min(),
+        'max_area_frames': df['area'].max(),
+        'avg_area_frames': df['area'].mean(),
+        'median_area_frames': df['area'].median(),
+        'std_area_frames': df['area'].std(),
+        'min_aspect_ratio_frames': df['aspect_ratio'].min(),
+        'max_aspect_ratio_frames': df['aspect_ratio'].max(),
+        'avg_aspect_ratio_frames': df['aspect_ratio'].mean(),
+        'median_aspect_ratio_frames': df['aspect_ratio'].median(),
+        'std_aspect_ratio_frames': df['aspect_ratio'].std()
+    }
+    return stats
 
 
 
 def main():
-    # Adjust the root_dir path as necessary
-    dataset = manga109api.Parser(root_dir='../Manga109')
-    books = dataset.books
-    annotations_file = 'annotations.json'
+    ROOT_DIR = '../Manga109'
+    IMAGES_DIR = os.path.join(ROOT_DIR, 'images')
+    ANNOTATIONS_DIR = os.path.join(ROOT_DIR, 'annotations')
+    ANNOTATIONS_CSV = os.path.join(ROOT_DIR, 'Manga109.csv')
 
-    if os.path.exists(annotations_file):
-        annotations = load_annotations_from_file(annotations_file)
-    else:
-        annotations = load_annotations(parser=dataset, books=books)
-        save_annotations_to_file(annotations, annotations_file)
 
     dataset_statistics(annotations)
     show_images_per_book(annotations)
