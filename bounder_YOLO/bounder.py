@@ -1,7 +1,7 @@
 import os
 import cv2
 from ultralytics import YOLO
-from aggregate_runs import aggregate_run_results
+from utils import aggregate_run_results
 
 
 def get_predict_boxes(model, image_path, display=False):
