@@ -1,0 +1,8 @@
+lr0: 0.01275
+lrf: 0.01
+momentum: 1
+weight_decay: 0.0005
+warmup_epochs: 2.5
+warmup_momentum: 0.75
+box: 2.0
+cls: 0.5
