@@ -1,7 +1,7 @@
 path: ../Manga109_YOLO  # Dataset root directory
 
-train: train
-val: val
+train: train_aug
+val: val_aug
 test: test
 
 nc: 4
