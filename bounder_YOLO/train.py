@@ -1,94 +1,233 @@
-import yaml
 from ultralytics import YOLO
+from yaml import load, FullLoader
+from utils import aggregate_run_results
+from augment_dataset import augment_dataset
 
 
-# Function to evaluate the model and return performance metrics per class
-def evaluate_model(results):
-    # yolo models return precision, recall, val_loss, mAP50 and mAP50-95 as well as
-    metrics = results.results_dict
-    precision = metrics['metrics/precision(B)']
-    recall = metrics['metrics/recall(B)']
-    mAP50 = metrics['metrics/mAP50(B)']
-    mAP50_95 = metrics['metrics/mAP50_95(B)']
-    fitness = metrics['fitness']
+class manga109_YOLO_trainer:
+    def __init__(self):
+        self.hyperparameters = None
+        self.augmentations = None
+        self.p = None
 
-
-# Function to update class weights based on the error of each class
-def adjust_class_weights(class_metrics, current_weights):
-    error_threshold = 0.5  # Example threshold to adjust class weights
-
-    for i, metrics in class_metrics.items():
-        precision, recall = metrics['precision'], metrics['recall']
-
-        # Adjust weights based on precision or recall
-        if precision < error_threshold or recall < error_threshold:
-            current_weights[i] = min(current_weights[i] + 0.5, 4.0)  # Increment weight, max 4.0
-        else:
-            current_weights[i] = max(current_weights[i] - 0.5, 1.0)  # Decrement weight, min 1.0
-
-    return current_weights
-
-
-def train():
-
-    # Training loop
-    for i in range(10):  # Run for 10 iterations
-        # Load previous model weights
-        if i == 0:
-            model = YOLO("yolov8n.pt")
-        elif i == 1:
-            model = YOLO(f"runs/detect/train/weights/best.pt").to('cuda') if i > 0 else YOLO(
-                "yolov8n.pt").to('cuda')
-        else:
-            model = YOLO(f"runs/detect/train{i}/weights/best.pt").to('cuda') if i > 0 else YOLO(
-                "yolov8n.pt").to('cuda')
-
-        # Load the current YAML configuration file
-        with open('yolov8.yaml', 'r') as file:
-            config = yaml.safe_load(file)
-
-        # Adjust class weights in the YAML file based on the model's performance
-        if i > 0:  # Skip adjustment for the first loop
-            class_metrics = evaluate_model(model, "path/to/validation_data.yaml")
-            class_weights = adjust_class_weights(class_metrics)
-            config['class_weights'] = class_weights  # Update the class weights in the config
-
-            # Save the adjusted configuration back to the YAML file
-            with open('yolov8.yaml', 'w') as file:
-                yaml.dump(config, file)
-
-        # for first training using the pretrained model without any training, use tune to optimize hyperparams for the remaining
-
-        # Train the model using the adjusted class weights
-        results = model.train(
+    def __train0__(self):
+        # 16 epochs on clean dataset starting with high image using hyperparameters from tuning
+        model = YOLO("YOLOv8m.pt").to('cuda')
+        model.train(
             data='manga109.yaml',
-            epochs=10,
-            patience=5,
+            # epochs=16, # default
+            epochs=1,  # for testing
+            fraction=.0001,  # for testing
             batch=12,
             nbs=64,
-            imgsz=1024,
-            dropout=.05,
-            box=9,
-            cls=.25,
-            dfl=2,
-            close_mosiac=0,
-            amp=True,
-            rect=True,
-            augment=True,
-            val=True,
-            save=True,
-            plots=True,
-            verbose=True,
-            device='cuda'
+            # imgsz=1024, # default
+            imgsz=256,  # for testing
+            amp=True, val=True, save=True, plots=True, verbose=False, device='cuda', pretrained=True,
+            **self.hyperparameters
         )
 
-        # for training after 5th loop include param freeze = True
+    def __train1__(self):
+        # 16 epochs on clean dataset at lower image size
+        model = YOLO("runs/detect/train/weights/last.pt").to('cuda')
+        model.train(
+            data='manga109.yaml',
+            # epochs=16, # default
+            epochs=1,  # for testing
+            fraction=.0001,  # for testing
+            batch=16,
+            nbs=64,
+            # imgsz=512, # default
+            imgsz=256,  # for testing
+            amp=True, val=True, save=True, plots=True, verbose=False, device='cuda', pretrained=True,
+            **self.hyperparameters
+        )
 
-        # save the model after each iteration
-        model.save(f"runs/detect/train{i + 1}/weights/best.pt")
+    def __train2__(self):
+        # start augmentation params at 25% of value increasee every 2 epochs peak at 100% at epoch 8 after peak reduce by 25% every 2 epochs until 0% at epoch 16
+        # 8 epoch with progressive augmentation
+        for i in range(1, 5):  # start i at 1
+            self.p += .0625
+            # augment_dataset(augmentations, p)
 
-        # evaluate the model after training and print the results
-        results = model.val(data="path/to/validation_data.yaml")
-        print(f"Training loop {i + 1} results:", results.metrics)
+            # train model with new settings for 2 epochs
+            # get new model / update path to model
+            model = YOLO(f"runs/detect/train{i + 1}/weights/last.pt").to('cuda')
+            model.train(
+                data='manga109_aug.yaml',  # used augmented dataset
+                # epochs=2,  # default
+                epochs=1,  # for testing
+                fraction=.0001,  # for testing
+                batch=12,
+                nbs=64,
+                # imgsz=1024, # default
+                imgsz=256,  # for testing
+                amp=True, val=True, save=True, plots=True, verbose=False, device='cuda', pretrained=True,
+                **self.hyperparameters
+            )
+
+    def __train3__(self):
+        # start dropout at epoch 8 at 0.01 increase by 0.01 every epoch peak at 0.08 at epoch 16 and reduce by 0.01 every epoch until 0.01 at epoch 24
+        # 8 epoch with decreasing augmentation and increasing dropout
+        for i in range(8):
+            # decrease augmentation settings every 2 epochs
+            if i % 2 == 0:
+                self.p = self.p - .0625
+                # augment_dataset(augmentations, p)
+
+            # increase dropout every epoch
+            self.hyperparameters['dropout'] += .01
+
+            # train model with new settings for 2 epochs
+            # get new model / update path to model
+            model = YOLO(f"runs/detect/train{i + 5}/weights/last.pt").to('cuda')
+            model.train(
+                data='manga109_aug.yaml',  # used augmented dataset
+                # epochs=2, # default
+                epochs=1,  # for testing
+                fraction=.0001,  # for testing
+                batch=12,
+                nbs=64,
+                # imgsz=1024, # default
+                imgsz=256,  # for testing
+                amp=True, val=True, save=True, plots=True, verbose=False, device='cuda', pretrained=True,
+                **self.hyperparameters
+            )
+
+    def __train4__(self):
+        # start frozen layers increasing by 8 layer every epoch to peak at 16 layers on epoch 24 and reduce by 1 layer every epoch until 8 layers at epoch 32
+        # 8 epoch with decreasing dropout and increasing frozen layers
+        for i in range(8):
+            # decrease dropout every epoch
+            self.hyperparameters['dropout'] -= .01
+
+            # increase frozen layers every epoch
+            self.hyperparameters['freeze'] += 1
+
+            # train model with new settings for 2 epochs
+            # get new model / update path to model
+            model = YOLO(f"runs/detect/train{i + 13}/weights/last.pt").to('cuda')
+            model.train(
+                data='manga109.yaml',  # used clean dataset
+                # epochs=2, # default
+                epochs=1,  # for testing
+                fraction=.0001,  # for testing
+                batch=12,
+                nbs=64,
+                # imgsz=1024, # default
+                imgsz=256,  # for testing
+                amp=True, val=True, save=True, plots=True, verbose=False, device='cuda', pretrained=True,
+                **self.hyperparameters
+            )
+
+    def __train5__(self):
+        # desecnd pyramids
+        # 8 epoch with decreasing frozen layers
+        for i in range(8):
+            # decrease frozen layers every epoch
+            self.hyperparameters['freeze'] -= 1
+
+            # train model with new settings for 2 epochs
+            # get new model / update path to model
+            model = YOLO(f"runs/detect/train{i + 21}/weights/last.pt").to('cuda')
+            model.train(
+                data='manga109.yaml',  # used clean dataset
+                # epochs=2, # default
+                epochs=1,  # for testing
+                fraction=.0001,  # for testing
+                batch=12,
+                nbs=64,
+                # imgsz=1024, # default
+                imgsz=256,  # for testing
+                amp=True, val=True, save=True, plots=True, verbose=False, device='cuda', pretrained=True,
+                **self.hyperparameters
+            )
+
+    def __train6__(self):
+        # train model for 8 epochs using augmented dataset and manga109 best hyperparameters
+        model = YOLO("runs/detect/train29/weights/last.pt").to('cuda')
+        model.train(
+            data='manga109_aug.yaml',
+            # epochs=8, # default
+            epochs=1,  # for testing
+            fraction=.0001,  # for testing
+            batch=12,
+            nbs=64,
+            # imgsz=1024, # default
+            imgsz=256,  # for testing
+            amp=True, val=True, save=True, plots=True, verbose=False, device='cuda', pretrained=True,
+            **self.hyperparameters
+        )
+
+    def __train7__(self):
+        # train model with clean dataset for 8 epochs using default yolo
+        model = YOLO("runs/detect/train30/weights/last.pt").to('cuda')
+        model.train(
+            data='manga109.yaml',
+            # epochs=8, # default
+            epochs=1,  # for testing
+            fraction=.0001,  # for testing
+            batch=16,
+            nbs=64,
+            amp=True, val=True, save=True, plots=True, verbose=False, device='cuda'
+        )
+
+    def train(self):
+        """
+        Custom training loop for fine-tuning YOLOv8n model on manga109 dataset with class weight adjustment and pyramid scheduled dataset augmentation overlapping with pyramid scheduled incremental frozen layers and dropout starting at peak of dataset augmentation and ending with clean dataset training.
+        """
+
+        with open('hyperparameters.yaml') as file:
+            self.hyperparameters = load(file, Loader=FullLoader)
+        # self.__train0__()
+        # self.__train1__()
+
+        # augmentation settings
+        with open('augmentations.yaml') as file:
+            self.augmentations = load(file, Loader=FullLoader)
+        self.p = .25
+        # augment_dataset(self.augmentations, p)
+        # self.__train2__()
+
+        # dropout
+        self.hyperparameters['dropout'] = .01
+        self.__train3__()
+
+        # freeze
+        self.hyperparameters['freeze'] = 8
+        self.__train4__()
+
+        # descend
+        self.__train5__()
+
+        # best
+        with open('augmentations_best.yaml') as file:
+            self.augmentations = load(file, Loader=FullLoader)
+        p = .5
+        augment_dataset(self.augmentations, p)
+        with open('manga109_best.yaml') as file:
+            self.hyperparameters = load(file, Loader=FullLoader)
+        self.__train6__()
+
+        # yolo
+        self.__train7__()
+
+        # finally
+        aggregate_run_results()
+
+        return
+
+#TODO RATHER THAN AUGMENTING THE DATASET JUST USE YOLO AND HOPE IT WORKS AND KEEP THIS AS A BACKUP
+# FIND OUT HOW TO DO PROGRESSIVE AUGMENTATION USING YOLO
+# FIND OUT HOW TO DO PROGRESSIVE DROPOUT AND FREEZE USING YOLO (AS WELL AS REVERSE)
+# REMEBER TO CHAMGE TO S MODEL
+# FIGURE OUT HOW TO SAVE RAM WHEN RUNNING THIS (AGUMENT DATASET seems to be the main problem)
+
+def main():
+    trainer = manga109_YOLO_trainer()
+    trainer.train()
+
+    return
 
 
+if __name__ == "__main__":
+    main()
