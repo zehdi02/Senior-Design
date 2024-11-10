@@ -1,9 +1,6 @@
 import os
 import cv2
-from ray import tune
-from sympy.physics.units import momentum
 from ultralytics import YOLO
-from dataset_creator import create_dataset_yolo
 from aggregate_runs import aggregate_run_results
 
 
@@ -14,8 +11,7 @@ def get_predict_boxes(model, image_path, display=False):
     Args:
         model: YOLO model for prediction.
         image_path (str): Path to the image file.
-        classes (list, optional): List of class names to display bounding boxes for.
-                                             Defaults to None, which displays all classes.
+        display (bool): Whether to display the image with bounding boxes.
 
     Returns:
         dict: A dictionary where keys are class names and values are lists of bounding boxes in xywh format.
@@ -77,7 +73,7 @@ def get_predict_boxes(model, image_path, display=False):
 
 
 def main():
-    model = YOLO("runs/detect/train4/weights/best.pt").to('cuda')
+    model = YOLO("YOLOv8n.pt").to('cuda')
 
     # result_grid = model.train(
     #     data='manga109.yaml',
@@ -94,18 +90,12 @@ def main():
     #     verbose=True,
     #     device='cuda'
     # )
-    #
-    #
-    # # aggregate runs
     # aggregate_run_results()
 
-    # test(model,"Manga109_YOLO/test/images/AisazuNihaIrarenai_017.jpg")
-    # test(model, "Manga109_YOLO/test/images/AisazuNihaIrarenai_018_left.jpg")
-
-    image_path = "Manga109_YOLO/test/images/AisazuNihaIrarenai_012_right.jpg"
+    image_path = "Manga109_YOLO/train/images/AisazuNihaIrarenai_012_right.jpg"
 
     # Get bounding boxes for only "text" class (index 2)
-    bounding_boxes = get_predict_boxes(model, image_path, display=True)
+    bounding_boxes = get_predict_boxes(model=model, image_path=image_path, display=True)
     print("Bounding boxes for text:", bounding_boxes['text'])
 
 
