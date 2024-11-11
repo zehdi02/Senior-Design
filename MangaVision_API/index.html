@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>YOLOv8 Prediction</title>
+</head>
+
+<body>
+    <p>Upload an Image for Prediction</p>
+    <input type="file" id="file-input" accept="image/*">
+    <button onclick="predictImage()">Predict</button>
+
+    <p>Predictions:</p>
+    <ul id="class-counts-list"></ul>
+    <canvas id="image-canvas" style="width:100%"></canvas>
+
+    <script>
+        async function predictImage() {
+            const formData = new FormData();
+            const fileInput = document.getElementById('file-input');
+            const file = fileInput.files[0];
+            formData.append("file", file);
+
+            try {
+                const response = await fetch("http://localhost:8000/predict", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                console.log(data); 
+
+                // Ensure 'annotations' exists and is an array before processing
+                if (data && Array.isArray(data.annotations)) {
+                    const predictions = data.annotations;
+
+                    displayClassCounts(predictions);
+                    drawBoundingBoxes(predictions, file);
+                } else {
+                    console.error('Invalid response format, "annotations" is missing or not an array.');
+                }
+
+                // Display the uploaded image after predictions
+                const imgElement = document.getElementById('uploaded-image');
+                const fileURL = URL.createObjectURL(file);
+                imgElement.src = fileURL;
+                imgElement.style.display = 'block';  
+
+            } catch (error) {
+                console.error('Error during fetch:', error);
+            }
+        }
+
+        function displayClassCounts(predictions) {
+            const classCounts = {};
+            predictions.forEach(pred => {
+                const className = pred.class;
+                classCounts[className] = (classCounts[className] || 0) + 1;
+            });
+
+            const classCountsList = document.getElementById('class-counts-list');
+            classCountsList.innerHTML = '';  // Clear previous counts
+
+            for (const [className, count] of Object.entries(classCounts)) {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${className}: ${count} detected`;
+                classCountsList.appendChild(listItem);
+            }
+        }
+
+        function drawBoundingBoxes(predictions, imageFile) {
+            const canvas = document.getElementById('image-canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Create an image object to load the uploaded image
+            const img = new Image();
+            img.src = URL.createObjectURL(imageFile);
+            img.onload = function () {
+                // Set the canvas size to half the page size
+                const pageWidth = window.innerWidth; 
+                const pageHeight = window.innerHeight;  
+                const canvasWidth = pageWidth / 1.25;  
+                const canvasHeight = pageHeight / 1.25;  
+                canvas.width = canvasWidth;
+                canvas.height = canvasHeight;
+
+                // Scale image to fit the canvas while maintaining its aspect ratio
+                const imgAspectRatio = img.width / img.height;
+                let scaledWidth = canvasWidth;
+                let scaledHeight = canvasHeight;
+
+                // Scale the image based on aspect ratio
+                if (canvasWidth / imgAspectRatio <= canvasHeight) {
+                    scaledHeight = canvasWidth / imgAspectRatio;
+                } else {
+                    scaledWidth = canvasHeight * imgAspectRatio;
+                }
+
+                // Calculate offsets to center the image on the canvas
+                const offsetX = (canvasWidth - scaledWidth) / 2;
+                const offsetY = (canvasHeight - scaledHeight) / 2;
+
+                // Draw the image on the canvas
+                ctx.drawImage(img, offsetX, offsetY, scaledWidth, scaledHeight);
+
+                // Loop through the predictions and draw the bounding boxes
+                predictions.forEach(pred => {
+                    const { x_min, y_min, x_max, y_max, class: className, confidence } = pred;
+
+                    // Scale the coordinates based on the scaled image
+                    const scaleX = scaledWidth / img.width;
+                    const scaleY = scaledHeight / img.height;
+
+                    // Adjust the bounding box coordinates
+                    const scaledXMin = offsetX + (x_min * scaleX);
+                    const scaledYMin = offsetY + (y_min * scaleY);
+                    const scaledWidthBox = (x_max - x_min) * scaleX;
+                    const scaledHeightBox = (y_max - y_min) * scaleY;
+
+                    // Set styles for bounding box and text
+                    ctx.lineWidth = 3;
+                    ctx.strokeStyle = 'red';
+                    ctx.fillStyle = 'red';
+
+                    // Draw the bounding box
+                    ctx.strokeRect(scaledXMin, scaledYMin, scaledWidthBox, scaledHeightBox);
+
+                    // Display the class and confidence
+                    const label = `${className} (${Math.round(confidence * 100)}%)`;
+                    ctx.font = '16px Arial';
+                    ctx.fillText(label, scaledXMin, Math.max(scaledYMin - 5, 10)); // Avoid text from being drawn off-screen
+                });
+            };
+        }
+
+    </script>
+</body>
+
+</html>

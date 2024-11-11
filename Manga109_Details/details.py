@@ -4,37 +4,11 @@ import logging
 import manga109api
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.spatial import distance
-from collections import defaultdict
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-PROCESSED_BOOKS_FILE = "processed_books.json"
-
-def load_processed_books():
-    """Load the list of processed books from file."""
-    if os.path.exists(PROCESSED_BOOKS_FILE):
-        with open(PROCESSED_BOOKS_FILE, 'r') as f:
-            return json.load(f)
-    return []
-
-def save_processed_books(processed_books):
-    """Save the list of processed books to file."""
-    with open(PROCESSED_BOOKS_FILE, 'w') as f:
-        json.dump(processed_books, f, indent=4)
-
-def convert_numpy_to_serializable(obj):
-    """Helper function to convert NumPy objects to JSON serializable types."""
-    if isinstance(obj, np.ndarray):
-        return obj.tolist()
-    if isinstance(obj, np.integer):  # Convert NumPy integer
-        return int(obj)
-    if isinstance(obj, np.floating):  # Convert NumPy float
-        return float(obj)
-    return obj
-
-
+# Load annotations for all books
 def load_annotations(parser, books):
     logging.info("Loading annotations for books...")
     annotations = {}
@@ -44,350 +18,514 @@ def load_annotations(parser, books):
     logging.info("Finished loading annotations.")
     return annotations
 
+# Save annotations to a JSON file
+def save_annotations_to_file(annotations, file_path):
+    with open(file_path, 'w', encoding='utf-8') as f:
+        json.dump(annotations, f, ensure_ascii=False, indent=4)
 
-def calculate_statistics(annotations, processed_books):
-    logging.info("Calculating statistics...")
-    stats = defaultdict(lambda: defaultdict(list))
-    occurrence_stats = defaultdict(lambda: defaultdict(list))
-    density_stats = defaultdict(list)
-    inter_object_distances = defaultdict(lambda: defaultdict(list))
-    frame_content_analysis = defaultdict(lambda: defaultdict(list))
+# Load annotations from a JSON file
+def load_annotations_from_file(file_path):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+def calc_avg_median_std_dev(data):
+    avg = np.mean(data)
+    median = np.median(data)
+    std_dev = np.std(data)
+    return avg, median, std_dev
+
+
+# Dataset statistics: total number of books, images, characters, and bounding boxes for frames, faces, bodies, texts
+def dataset_statistics(annotations):
+    num_books = len(annotations)
+    num_images = 0
+    num_characters = 0
+    num_frames = 0
+    num_faces = 0
+    num_bodies = 0
+    num_texts = 0
 
     for book, annotation in annotations.items():
-        # Skip books that have already been processed
-        if book in processed_books:
-            logging.info(f"Skipping already processed book: {book}")
-            continue
+        num_images += len(annotation['page'])
+        num_characters += len(annotation['character'])
+        for page in annotation['page']:
+            num_frames += len(page.get('frame', []))
+            num_faces += len(page.get('face', []))
+            num_bodies += len(page.get('body', []))
+            num_texts += len(page.get('text', []))
 
-        logging.info(f"Processing book: {book}")
-        for page_idx, page in enumerate(annotation['page']):
-            width = int(page['@width'])
-            height = int(page['@height'])
+    print(f'Total number of books: {num_books}')
+    print(f'Total number of images: {num_images}')
+    print(f'Total number of characters: {num_characters}')
+    print(f'Total number of bounding boxes for frames: {num_frames}')
+    print(f'Total number of bounding boxes for faces: {num_faces}')
+    print(f'Total number of bounding boxes for bodies: {num_bodies}')
+    print(f'Total number of bounding boxes for texts: {num_texts}')
 
-            occurrence_per_page = {'body': 0, 'face': 0, 'frame': 0, 'text': 0}
-            objects_per_frame = []
+# show number of pages/images per book in descending order with average/median/standard deviation
+def show_images_per_book(annotations):
+    images_per_book = []
 
-            for annotation_type in ['body', 'face', 'frame', 'text']:
-                if annotation_type in page:
-                    for roi in page[annotation_type]:
-                        xmin = int(roi['@xmin'])
-                        ymin = int(roi['@ymin'])
-                        xmax = int(roi['@xmax'])
-                        ymax = int(roi['@ymax'])
+    for annotation in annotations.values():
+        num_images = len(annotation['page'])
+        images_per_book.append(num_images)
 
-                        bbox_width = xmax - xmin
-                        bbox_height = ymax - ymin
-                        aspect_ratio = bbox_width / bbox_height
+    # Calculate statistics
+    images_per_book = np.array(images_per_book)
+    avg, median, std_dev = calc_avg_median_std_dev(images_per_book)
 
-                        # Collect statistics on spatial features
-                        stats['all']['min_x'].append(xmin)
-                        stats['all']['min_y'].append(ymin)
-                        stats['all']['width'].append(bbox_width)
-                        stats['all']['height'].append(bbox_height)
-                        stats['all']['aspect_ratio'].append(aspect_ratio)
+    # Plot bar graph descending order and show average, median, and standard deviation on the graph as horizontal dotted lines
+    sorted_indices = np.argsort(images_per_book)[::-1]
+    sorted_images_per_book = images_per_book[sorted_indices]
+    book_titles = list(annotations.keys())
+    sorted_book_titles = [book_titles[i] for i in sorted_indices]
 
-                        stats[book]['min_x'].append(xmin)
-                        stats[book]['min_y'].append(ymin)
-                        stats[book]['width'].append(bbox_width)
-                        stats[book]['height'].append(bbox_height)
-                        stats[book]['aspect_ratio'].append(aspect_ratio)
-
-                        occurrence_per_page[annotation_type] += 1
-                        objects_per_frame.append((xmin, ymin, annotation_type))
-
-                        # Bounding Box Size Distribution
-                        stats[annotation_type]['bounding_box_size'].append(bbox_width * bbox_height)
-
-            page_area = width * height
-            density_stats[book].append({
-                'body_density': occurrence_per_page['body'] / page_area,
-                'face_density': occurrence_per_page['face'] / page_area,
-                'frame_density': occurrence_per_page['frame'] / page_area,
-                'text_density': occurrence_per_page['text'] / page_area,
-            })
-
-            # Calculate inter-object distances
-            for i in range(len(objects_per_frame)):
-                for j in range(i + 1, len(objects_per_frame)):
-                    obj1, obj2 = objects_per_frame[i], objects_per_frame[j]
-                    dist = distance.euclidean((obj1[0], obj1[1]), (obj2[0], obj2[1]))
-                    inter_object_distances[book][f"{obj1[2]}-{obj2[2]}"].append(dist)
-
-            frame_content_analysis[book][page_idx] = occurrence_per_page.copy()
-            occurrence_stats['page'][book].append(occurrence_per_page)
-            occurrence_stats['book'][book].append(occurrence_per_page)
-
-        # After processing the book, mark it as processed
-        processed_books.append(book)
-
-    logging.info("Finished calculating statistics.")
-    return stats, occurrence_stats, density_stats, inter_object_distances, frame_content_analysis
-
-
-def calculate_summary_statistics(stats):
-    summary = {'all': {}}
-
-    # Convert NumPy arrays to lists for JSON serialization
-    def convert_to_list(arr):
-        return arr.tolist() if isinstance(arr, np.ndarray) else arr
-
-    # Calculate for all books combined
-    for key, values in stats['all'].items():
-        summary['all'][key] = {
-            'mean': convert_to_list(np.mean(values)),
-            'median': convert_to_list(np.median(values)),
-            'std': convert_to_list(np.std(values)),
-            'distribution': [convert_to_list(x) for x in np.histogram(values, bins=50)]  # Convert histogram
-        }
-
-    # Calculate by individual book
-    for book, book_stats in stats.items():
-        if book == 'all':  # Skip aggregate statistics for individual books
-            continue
-        summary[book] = {}
-        for key, values in book_stats.items():
-            summary[book][key] = {
-                'mean': convert_to_list(np.mean(values)),
-                'median': convert_to_list(np.median(values)),
-                'std': convert_to_list(np.std(values)),
-                'distribution': [convert_to_list(x) for x in np.histogram(values, bins=50)]  # Convert histogram
-            }
-
-    return summary
-
-
-def calculate_occurrence_statistics(occurrence_stats):
-    logging.info("Calculating occurrence statistics...")
-    occurrence_summary = {'page': {}, 'book': {}}
-
-    for book, occurrences in occurrence_stats['page'].items():
-        total_occurrences = {'body': 0, 'face': 0, 'frame': 0, 'text': 0}
-        for page_stats in occurrences:
-            for key, value in page_stats.items():
-                total_occurrences[key] += value
-
-        occurrence_summary['page'][book] = {
-            'mean': {key: np.mean([p[key] for p in occurrences]) for key in total_occurrences},
-            'median': {key: np.median([p[key] for p in occurrences]) for key in total_occurrences},
-            'std': {key: np.std([p[key] for p in occurrences]) for key in total_occurrences}
-        }
-
-    logging.info("Finished calculating occurrence statistics.")
-    return occurrence_summary
-
-
-def calculate_density_statistics(density_stats):
-    logging.info("Calculating density statistics...")
-    density_summary = {}
-
-    for book, densities in density_stats.items():
-        density_summary[book] = {
-            'mean_body_density': np.mean([d['body_density'] for d in densities]),
-            'mean_face_density': np.mean([d['face_density'] for d in densities]),
-            'mean_frame_density': np.mean([d['frame_density'] for d in densities]),
-            'mean_text_density': np.mean([d['text_density'] for d in densities])
-        }
-
-    logging.info("Finished calculating density statistics.")
-    return density_summary
-
-
-def calculate_inter_object_distance(inter_object_distances):
-    logging.info("Calculating inter-object distances...")
-    distance_summary = {}
-
-    for book, distances in inter_object_distances.items():
-        distance_summary[book] = {}
-        for pair, dist_list in distances.items():
-            distance_summary[book][pair] = {
-                'mean': np.mean(dist_list),
-                'median': np.median(dist_list),
-                'std': np.std(dist_list)
-            }
-
-    logging.info("Finished calculating inter-object distances.")
-    return distance_summary
-
-
-def calculate_frame_content_analysis(frame_content_analysis):
-    logging.info("Calculating frame content analysis...")
-    content_summary = {}
-
-    for book, frame_data in frame_content_analysis.items():
-        content_summary[book] = {}
-        for frame, occurrences in frame_data.items():
-            total_objects = sum(occurrences.values())
-            content_summary[book][frame] = {
-                'total_objects': total_objects,
-                'object_breakdown': occurrences
-            }
-
-    logging.info("Finished calculating frame content analysis.")
-    return content_summary
-
-
-def analyze_object_area_distribution(output_folder):
-    with open(f"{output_folder}/summary_statistics.json", "r") as f:
-        summary_stats = json.load(f)
-
-    # Extract bounding box sizes from the summary statistics for each type
-    bbox_sizes = {
-        "text": summary_stats["text"]["bounding_box_size"]["distribution"][0],
-        "body": summary_stats["body"]["bounding_box_size"]["distribution"][0],
-        "face": summary_stats["face"]["bounding_box_size"]["distribution"][0],
-        "frame": summary_stats["frame"]["bounding_box_size"]["distribution"][0]
-    }
-
-    # Plot the distribution of bounding box sizes for each type
-    plt.figure(figsize=(10, 6))
-    for obj_type, sizes in bbox_sizes.items():
-        plt.hist(sizes, bins=50, alpha=0.5, label=f"{obj_type} area")
-
-    plt.title('Object Area Distribution')
-    plt.xlabel('Bounding Box Area (width * height)')
-    plt.ylabel('Frequency')
+    plt.figure(figsize=(10, 5))
+    plt.bar(sorted_book_titles, sorted_images_per_book)
+    plt.xticks(rotation=90)
+    plt.title('Number of Images per Book')
+    plt.xlabel('Book')
+    plt.ylabel('Number of Images')
+    plt.grid(axis='y')
+    plt.axhline(y=avg, color='r', linestyle='--', linewidth=2, label=f'Average: {avg:.2f}')
+    plt.axhline(y=median, color='g', linestyle='--', linewidth=2, label=f'Median: {median:.2f}')
+    plt.axhline(y=std_dev, color='b', linestyle='--', linewidth=2, label=f'Std Dev: {std_dev:.2f}')
     plt.legend()
     plt.show()
 
+    print(f'Average number of images per book: {avg}')
+    print(f'Median number of images per book: {median}')
+    print(f'Standard deviation of images per book: {std_dev}')
 
-def analyze_page_density(output_folder):
-    with open(f"{output_folder}/density_statistics.json", "r") as f:
-        density_stats = json.load(f)
+# Show number of characters per book, with average/median/standard deviation
+def show_characters_per_book(annotations):
+    characters_per_book = []
 
-    # Extract density values for different object types
-    body_densities = []
-    face_densities = []
-    frame_densities = []
-    text_densities = []
+    for annotation in annotations.values():
+        num_characters = len(annotation['character'])
+        characters_per_book.append(num_characters)
 
-    for book, density_list in density_stats.items():
-        logging.info(f"Processing density statistics for book: {book}")
-        # Check that each entry in the density list is a dictionary
-        for d in density_list:
-            if isinstance(d, dict):  # Make sure d is a dictionary
-                body_densities.append(d.get('mean_body_density', 0))
-                face_densities.append(d.get('mean_face_density', 0))
-                frame_densities.append(d.get('mean_frame_density', 0))
-                text_densities.append(d.get('mean_text_density', 0))
-            else:
-                logging.warning(f"Unexpected entry in density list for book {book}: {d}")
+    # Calculate statistics
+    characters_per_book = np.array(characters_per_book)
+    avg, median, std_dev = calc_avg_median_std_dev(characters_per_book)
 
+    # Plot bar graph descending order and show average, median, and standard deviation on the graph as horizontal dotted lines
+    sorted_indices = np.argsort(characters_per_book)[::-1]
+    sorted_characters_per_book = characters_per_book[sorted_indices]
+    book_titles = list(annotations.keys())
+    sorted_book_titles = [book_titles[i] for i in sorted_indices]
 
-    # Plot densities
-    plt.figure(figsize=(10, 6))
-    plt.hist(body_densities, bins=50, alpha=0.5, label="Body Density")
-    plt.hist(face_densities, bins=50, alpha=0.5, label="Face Density")
-    plt.hist(frame_densities, bins=50, alpha=0.5, label="Frame Density")
-    plt.hist(text_densities, bins=50, alpha=0.5, label="Text Density")
-
-    plt.title('Page Object Density Distribution')
-    plt.xlabel('Object Density (objects per unit area)')
-    plt.ylabel('Frequency')
+    plt.figure(figsize=(10, 5))
+    plt.bar(sorted_book_titles, sorted_characters_per_book)
+    plt.xticks(rotation=90)
+    plt.title('Number of Characters per Book')
+    plt.xlabel('Book')
+    plt.ylabel('Number of Characters')
+    plt.grid(axis='y')
+    plt.axhline(y=avg, color='r', linestyle='--', linewidth=2, label=f'Average: {avg:.2f}')
+    plt.axhline(y=median, color='g', linestyle='--', linewidth=2, label=f'Median: {median:.2f}')
+    plt.axhline(y=std_dev, color='b', linestyle='--', linewidth=2, label=f'Std Dev: {std_dev:.2f}')
     plt.legend()
     plt.show()
 
+    print(f'Average number of characters per book: {avg}')
+    print(f'Median number of characters per book: {median}')
+    print(f'Standard deviation of characters per book: {std_dev}')
 
-def analyze_object_inter_relationships(output_folder):
-    with open(f"{output_folder}/distance_statistics.json", "r") as f:
-        distance_stats = json.load(f)
+# Show number of frames per book, with average/median/standard deviation
+def show_frames_per_book(annotations):
+    frames_per_book = []
 
-    # Store all distances between different object pairs
-    distances = {
-        "text-body": [],
-        "text-face": [],
-        "text-frame": [],
-        "body-face": [],
-        "body-frame": [],
-        "face-frame": []
-    }
+    for annotation in annotations.values():
+        num_frames = sum([len(page.get('frame', [])) for page in annotation['page']])
+        frames_per_book.append(num_frames)
 
-    for book, distance_data in distance_stats.items():
-        for pair, dist_list in distance_data.items():
-            if pair in distances:
-                distances[pair].extend(dist_list['mean'])  # Collect all mean distances
+    # Calculate statistics
+    frames_per_book = np.array(frames_per_book)
+    avg, median, std_dev = calc_avg_median_std_dev(frames_per_book)
 
-    # Plot the distributions of distances
-    plt.figure(figsize=(10, 6))
-    for pair, dist_values in distances.items():
-        plt.hist(dist_values, bins=50, alpha=0.5, label=f"{pair} distance")
+    # Plot bar graph descending order and show average, median, and standard deviation on the graph as horizontal dotted lines
+    sorted_indices = np.argsort(frames_per_book)[::-1]
+    sorted_frames_per_book = frames_per_book[sorted_indices]
+    book_titles = list(annotations.keys())
+    sorted_book_titles = [book_titles[i] for i in sorted_indices]
 
-    plt.title('Inter-Object Distance Distribution')
-    plt.xlabel('Distance (pixels)')
-    plt.ylabel('Frequency')
+    plt.figure(figsize=(10, 5))
+    plt.bar(sorted_book_titles, sorted_frames_per_book)
+    plt.xticks(rotation=90)
+    plt.title('Number of Frames per Book')
+    plt.xlabel('Book')
+    plt.ylabel('Number of Frames')
+    plt.grid(axis='y')
+    plt.axhline(y=avg, color='r', linestyle='--', linewidth=2, label=f'Average: {avg:.2f}')
+    plt.axhline(y=median, color='g', linestyle='--', linewidth=2, label=f'Median: {median:.2f}')
+    plt.axhline(y=std_dev, color='b', linestyle='--', linewidth=2, label=f'Std Dev: {std_dev:.2f}')
     plt.legend()
     plt.show()
 
+    print(f'Average number of frames per book: {avg}')
+    print(f'Median number of frames per book: {median}')
+    print(f'Standard deviation of frames per book: {std_dev}')
 
-def analyze_aspect_ratio(output_folder):
-    with open(f"{output_folder}/summary_statistics.json", "r") as f:
-        summary_stats = json.load(f)
+# Show number of faces per book, with average/median/standard deviation
+def show_faces_per_book(annotations):
+    faces_per_book = []
 
-    # Extract aspect ratios from the summary statistics for each type
-    aspect_ratios = {
-        "text": summary_stats["text"]["aspect_ratio"]["distribution"][0],
-        "body": summary_stats["body"]["aspect_ratio"]["distribution"][0],
-        "face": summary_stats["face"]["aspect_ratio"]["distribution"][0],
-        "frame": summary_stats["frame"]["aspect_ratio"]["distribution"][0]
-    }
+    for annotation in annotations.values():
+        num_faces = sum([len(page.get('face', [])) for page in annotation['page']])
+        faces_per_book.append(num_faces)
 
-    # Plot the distribution of aspect ratios for each type
-    plt.figure(figsize=(10, 6))
-    for obj_type, ratios in aspect_ratios.items():
-        plt.hist(ratios, bins=50, alpha=0.5, label=f"{obj_type} aspect ratio")
+    # Calculate statistics
+    faces_per_book = np.array(faces_per_book)
+    avg, median, std_dev = calc_avg_median_std_dev(faces_per_book)
 
-    plt.title('Aspect Ratio Distribution')
-    plt.xlabel('Aspect Ratio (width / height)')
-    plt.ylabel('Frequency')
+    # Plot bar graph descending order and show average, median, and standard deviation on the graph as horizontal dotted lines
+    sorted_indices = np.argsort(faces_per_book)[::-1]
+    sorted_faces_per_book = faces_per_book[sorted_indices]
+    book_titles = list(annotations.keys())
+    sorted_book_titles = [book_titles[i] for i in sorted_indices]
+
+    plt.figure(figsize=(10, 5))
+    plt.bar(sorted_book_titles, sorted_faces_per_book)
+    plt.xticks(rotation=90)
+    plt.title('Number of Faces per Book')
+    plt.xlabel('Book')
+    plt.ylabel('Number of Faces')
+    plt.grid(axis='y')
+    plt.axhline(y=avg, color='r', linestyle='--', linewidth=2, label=f'Average: {avg:.2f}')
+    plt.axhline(y=median, color='g', linestyle='--', linewidth=2, label=f'Median: {median:.2f}')
+    plt.axhline(y=std_dev, color='b', linestyle='--', linewidth=2, label=f'Std Dev: {std_dev:.2f}')
     plt.legend()
     plt.show()
+
+    print(f'Average number of faces per book: {avg}')
+    print(f'Median number of faces per book: {median}')
+    print(f'Standard deviation of faces per book: {std_dev}')
+
+# Show number of bodies per book, with average/median/standard deviation
+def show_bodies_per_book(annotations):
+    bodies_per_book = []
+
+    for annotation in annotations.values():
+        num_bodies = sum([len(page.get('body', [])) for page in annotation['page']])
+        bodies_per_book.append(num_bodies)
+
+    # Calculate statistics
+    bodies_per_book = np.array(bodies_per_book)
+    avg, median, std_dev = calc_avg_median_std_dev(bodies_per_book)
+
+    # Plot bar graph descending order and show average, median, and standard deviation on the graph as horizontal dotted lines
+    sorted_indices = np.argsort(bodies_per_book)[::-1]
+    sorted_bodies_per_book = bodies_per_book[sorted_indices]
+    book_titles = list(annotations.keys())
+    sorted_book_titles = [book_titles[i] for i in sorted_indices]
+
+    plt.figure(figsize=(10, 5))
+    plt.bar(sorted_book_titles, sorted_bodies_per_book)
+    plt.xticks(rotation=90)
+    plt.title('Number of Bodies per Book')
+    plt.xlabel('Book')
+    plt.ylabel('Number of Bodies')
+    plt.grid(axis='y')
+    plt.axhline(y=avg, color='r', linestyle='--', linewidth=2, label=f'Average: {avg:.2f}')
+    plt.axhline(y=median, color='g', linestyle='--', linewidth=2, label=f'Median: {median:.2f}')
+    plt.axhline(y=std_dev, color='b', linestyle='--', linewidth=2, label=f'Std Dev: {std_dev:.2f}')
+    plt.legend()
+    plt.show()
+
+    print(f'Average number of bodies per book: {avg}')
+    print(f'Median number of bodies per book: {median}')
+    print(f'Standard deviation of bodies per book: {std_dev}')
+
+# Show number of texts per book, with average/median/standard deviation
+def show_texts_per_book(annotations):
+    texts_per_book = []
+
+    for annotation in annotations.values():
+        num_texts = sum([len(page.get('text', [])) for page in annotation['page']])
+        texts_per_book.append(num_texts)
+
+    # Calculate statistics
+    texts_per_book = np.array(texts_per_book)
+    avg = np.mean(texts_per_book)
+    median = np.median(texts_per_book)
+    std_dev = np.std(texts_per_book)
+
+    # Plot bar graph descending order and show average, median, and standard deviation on the graph as horizontal dotted lines
+    sorted_indices = np.argsort(texts_per_book)[::-1]
+    sorted_texts_per_book = texts_per_book[sorted_indices]
+    book_titles = list(annotations.keys())
+    sorted_book_titles = [book_titles[i] for i in sorted_indices]
+
+    plt.figure(figsize=(10, 5))
+    plt.bar(sorted_book_titles, sorted_texts_per_book)
+    plt.xticks(rotation=90)
+    plt.title('Number of Texts per Book')
+    plt.xlabel('Book')
+    plt.ylabel('Number of Texts')
+    plt.grid(axis='y')
+    plt.axhline(y=avg, color='r', linestyle='--', linewidth=2, label=f'Average: {avg:.2f}')
+    plt.axhline(y=median, color='g', linestyle='--', linewidth=2, label=f'Median: {median:.2f}')
+    plt.axhline(y=std_dev, color='b', linestyle='--', linewidth=2, label=f'Std Dev: {std_dev:.2f}')
+    plt.legend()
+    plt.show()
+
+    print(f'Average number of texts per book: {avg}')
+    print(f'Median number of texts per book: {median}')
+    print(f'Standard deviation of texts per book: {std_dev}')
+
+# Show number of annotations per book, with average/median/standard deviation as stacked bar graph for frames, faces, bodies, texts
+def show_annotations_per_book(annotations):
+    frames_per_book = []
+    faces_per_book = []
+    bodies_per_book = []
+    texts_per_book = []
+
+    for annotation in annotations.values():
+        num_frames = sum([len(page.get('frame', [])) for page in annotation['page']])
+        num_faces = sum([len(page.get('face', [])) for page in annotation['page']])
+        num_bodies = sum([len(page.get('body', [])) for page in annotation['page']])
+        num_texts = sum([len(page.get('text', [])) for page in annotation['page']])
+
+        frames_per_book.append(num_frames)
+        faces_per_book.append(num_faces)
+        bodies_per_book.append(num_bodies)
+        texts_per_book.append(num_texts)
+
+    # Calculate statistics
+    frames_per_book = np.array(frames_per_book)
+    faces_per_book = np.array(faces_per_book)
+    bodies_per_book = np.array(bodies_per_book)
+    texts_per_book = np.array(texts_per_book)
+
+    # Plot stacked bar graph
+    sorted_indices = np.argsort(frames_per_book)[::-1]
+    sorted_frames_per_book = frames_per_book[sorted_indices]
+    sorted_faces_per_book = faces_per_book[sorted_indices]
+    sorted_bodies_per_book = bodies_per_book[sorted_indices]
+    sorted_texts_per_book = texts_per_book[sorted_indices]
+    book_titles = list(annotations.keys())
+    sorted_book_titles = [book_titles[i] for i in sorted_indices]
+
+    plt.figure(figsize=(10, 5))
+    plt.bar(sorted_book_titles, sorted_frames_per_book, label='Frames')
+    plt.bar(sorted_book_titles, sorted_faces_per_book, bottom=sorted_frames_per_book, label='Faces')
+    plt.bar(sorted_book_titles, sorted_bodies_per_book, bottom=sorted_frames_per_book + sorted_faces_per_book, label='Bodies')
+    plt.bar(sorted_book_titles, sorted_texts_per_book, bottom=sorted_frames_per_book + sorted_faces_per_book + sorted_bodies_per_book, label='Texts')
+    plt.xticks(rotation=90)
+    plt.title('Number of Annotations per Book')
+    plt.xlabel('Book')
+    plt.ylabel('Number of Annotations')
+    plt.grid(axis='y')
+    plt.legend()
+    plt.show()
+
+# TODO: show shapes of all bounding boxes for frames, faces, bodies, texts centered at (0, 0) with width and height normalized to 1 using thickness of lines to show frequency of sizes and create separate graphs for each type of annotation (frame, face, body, text) with different colors for each book and show the average size of bounding boxes for each type of annotation as a thick black line on the graph
+def show_bounding_box_shapes(annotations):
+    for annotation in annotations.values():
+        for page in annotation['page']:
+            for frame in page.get('frame', []):
+                xmin = int(frame.get('xmin'), [])
+                ymin = int(frame.get('ymin'), [])
+                xmax = int(frame.get('xmax'), [])
+                ymax = int(frame.get('ymax'), [])
+
+                x_center = (xmin + xmax) / 2
+                y_center = (ymin + ymax) / 2
+                width = xmax - xmin
+                height = ymax - ymin
+
+                plt.plot([x_center - width / 2, x_center + width / 2, x_center + width / 2, x_center - width / 2, x_center - width / 2],
+                         [y_center - height / 2, y_center - height / 2, y_center + height / 2, y_center + height / 2, y_center - height / 2])
+
+            for face in page.get('face', []):
+                xmin = int(face.get('xmin'))
+                ymin = int(face.get('ymin'))
+                xmax = int(face.get('xmax'))
+                ymax = int(face.get('ymax'))
+
+                x_center = (xmin + xmax) / 2
+                y_center = (ymin + ymax) / 2
+                width = xmax - xmin
+                height = ymax - ymin
+
+                plt.plot([x_center - width / 2, x_center + width / 2, x_center + width / 2, x_center - width / 2, x_center - width / 2],
+                         [y_center - height / 2, y_center - height / 2, y_center + height / 2, y_center + height / 2, y_center - height / 2])
+
+            for body in page.get('body', []):
+                xmin = int(body.get('xmin'))
+                ymin = int(body.get('ymin'))
+                xmax = int(body.get('xmax'))
+                ymax = int(body.get('ymax'))
+
+                x_center = (xmin + xmax) / 2
+                y_center = (ymin + ymax) / 2
+                width = xmax - xmin
+                height = ymax - ymin
+
+                plt.plot([x_center - width / 2, x_center + width / 2, x_center + width / 2, x_center - width / 2, x_center - width / 2],
+                         [y_center - height / 2, y_center - height / 2, y_center + height / 2, y_center + height / 2, y_center - height / 2])
+
+            for text in page.get('text', []):
+                xmin = int(text.get('xmin'))
+                ymin = int(text.get('ymin'))
+                xmax = int(text.get('xmax'))
+                ymax = int(text.get('ymax'))
+
+                x_center = (xmin + xmax) / 2
+                y_center = (ymin + ymax) / 2
+                width = xmax - xmin
+                height = ymax - ymin
+
+                plt.plot([x_center - width / 2, x_center + width / 2, x_center + width / 2, x_center - width / 2, x_center - width / 2],
+                         [y_center - height / 2, y_center - height / 2, y_center + height / 2, y_center + height / 2, y_center - height / 2])
+
+    plt.show()
+
+# TODO: plot distribution of bounding box width, height, aspect ratio, and area for frames, faces, bodies, texts and get average, median, and standard deviation for each type of annotation
+def show_bounding_box_statistics(annotations):
+    for annotation in annotations.values():
+        for page in annotation['page']:
+            width = int(page.get('width'))
+            height = int(page.get('height'))
+
+            for frame in page.get('frame', []):
+                xmin = int(frame.get('xmin'))
+                ymin = int(frame.get('ymin'))
+                xmax = int(frame.get('xmax'))
+                ymax = int(frame.get('ymax'))
+
+                width = xmax - xmin
+                height = ymax - ymin
+                aspect_ratio = width / height
+                area = width * height
+
+            for face in page.get('face', []):
+                xmin = int(face.get('xmin'))
+                ymin = int(face.get('ymin'))
+                xmax = int(face.get('xmax'))
+                ymax = int(face.get('ymax'))
+
+                width = xmax - xmin
+                height = ymax - ymin
+                aspect_ratio = width / height
+                area = width * height
+
+            for body in page.get('body', []):
+                xmin = int(body.get('xmin'))
+                ymin = int(body.get('ymin'))
+                xmax = int(body.get('xmax'))
+                ymax = int(body.get('ymax'))
+
+                width = xmax - xmin
+                height = ymax - ymin
+                aspect_ratio = width / height
+                area = width * height
+
+            for text in page.get('text', []):
+                xmin = int(text.get('xmin'))
+                ymin = int(text.get('ymin'))
+                xmax = int(text.get('xmax'))
+                ymax = int(text.get('ymax'))
+
+                width = xmax - xmin
+                height = ymax - ymin
+                aspect_ratio = width / height
+                area = width * height
+
+    # Calculate statistics
+    width = np.array(width)
+    height = np.array(height)
+    aspect_ratio = np.array(aspect_ratio)
+    area = np.array(area)
+
+    avg_width = np.mean(width)
+    median_width = np.median(width)
+    std_dev_width = np.std(width)
+
+    avg_height = np.mean(height)
+    median_height = np.median(height)
+    std_dev_height = np.std(height)
+
+    avg_aspect_ratio = np.mean(aspect_ratio)
+    median_aspect_ratio = np.median(aspect_ratio)
+    std_dev_aspect_ratio = np.std(aspect_ratio)
+
+    avg_area = np.mean(area)
+    median_area = np.median(area)
+    std_dev_area = np.std(area)
+
+    # Plot bar graph descending order and show average, median, and standard deviation on the graph as horizontal dotted lines
+    sorted_indices = np.argsort(width)[::-1]
+    sorted_width = width[sorted_indices]
+    sorted_height = height[sorted_indices]
+    sorted_aspect_ratio = aspect_ratio[sorted_indices]
+    sorted_area = area[sorted_indices]
+
+    plt.figure(figsize=(10, 5))
+    plt.bar(sorted_indices, sorted_width, label='Width')
+    plt.bar(sorted_indices, sorted_height, label='Height')
+    plt.bar(sorted_indices, sorted_aspect_ratio, label='Aspect Ratio')
+    plt.bar(sorted_indices, sorted_area, label='Area')
+    plt.xticks(rotation=90)
+    plt.title('Bounding Box Statistics')
+    plt.xlabel('Annotation')
+    plt.ylabel('Value')
+    plt.grid(axis='y')
+    plt.axhline(y=avg_width, color='r', linestyle='--', linewidth=2, label=f'Average Width: {avg_width:.2f}')
+    plt.axhline(y=median_width, color='g', linestyle='--', linewidth=2, label=f'Median Width: {median_width:.2f}')
+    plt.axhline(y=std_dev_width, color='b', linestyle='--', linewidth=2, label=f'Std Dev Width: {std_dev_width:.2f}')
+    plt.axhline(y=avg_height, color='r', linestyle='--', linewidth=2, label=f'Average Height: {avg_height:.2f}')
+    plt.axhline(y=median_height, color='g', linestyle='--', linewidth=2, label=f'Median Height: {median_height:.2f}')
+    plt.axhline(y=std_dev_height, color='b', linestyle='--', linewidth=2, label=f'Std Dev Height: {std_dev_height:.2f}')
+    plt.axhline(y=avg_aspect_ratio, color='r', linestyle='--', linewidth=2, label=f'Average Aspect Ratio: {avg_aspect_ratio:.2f}')
+    plt.axhline(y=median_aspect_ratio, color='g', linestyle='--', linewidth=2, label=f'Median Aspect Ratio: {median_aspect_ratio:.2f}')
+    plt.axhline(y=std_dev_aspect_ratio, color='b', linestyle='--', linewidth=2, label=f'Std Dev Aspect Ratio: {std_dev_aspect_ratio:.2f}')
+    plt.axhline(y=avg_area, color='r', linestyle='--', linewidth=2, label=f'Average Area: {avg_area:.2f}')
+    plt.axhline(y=median_area, color='g', linestyle='--', linewidth=2, label=f'Median Area: {median_area:.2f}')
+    plt.axhline(y=std_dev_area, color='b', linestyle='--', linewidth=2, label=f'Std Dev Area: {std_dev_area:.2f}')
+    plt.legend()
+    plt.show()
+
+    print(f'Average width: {avg_width}')
+    print(f'Median width: {median_width}')
+    print(f'Standard deviation of width: {std_dev_width}')
+    print(f'Average height: {avg_height}')
+    print(f'Median height: {median_height}')
+    print(f'Standard deviation of height: {std_dev_height}')
+    print(f'Average aspect ratio: {avg_aspect_ratio}')
+    print(f'Median aspect ratio: {median_aspect_ratio}')
+    print(f'Standard deviation of aspect ratio: {std_dev_aspect_ratio}')
+    print(f'Average area: {avg_area}')
+    print(f'Median area: {median_area}')
+    print(f'Standard deviation of area: {std_dev_area}')
+
+
+
+
 
 
 def main():
-    logging.info("Starting main process...")
-    manga109_root_dir = "../Manga109"
-    output_folder = 'output'
-    os.makedirs(output_folder, exist_ok=True)
+    # Adjust the root_dir path as necessary
+    dataset = manga109api.Parser(root_dir='../Manga109')
+    books = dataset.books
+    annotations_file = 'annotations.json'
 
-    parser = manga109api.Parser(root_dir=manga109_root_dir)
-    books = parser.books
+    if os.path.exists(annotations_file):
+        annotations = load_annotations_from_file(annotations_file)
+    else:
+        annotations = load_annotations(parser=dataset, books=books)
+        save_annotations_to_file(annotations, annotations_file)
 
-    # Load the list of already processed books
-    processed_books = load_processed_books()
-
-    # Load annotations and calculate statistics
-    annotations = load_annotations(parser, books)
-    stats, occurrence_stats, density_stats, inter_object_distances, frame_content_analysis = calculate_statistics(annotations, processed_books)
-
-    summary = calculate_summary_statistics(stats)
-    occurrence_summary = calculate_occurrence_statistics(occurrence_stats)
-    density_summary = calculate_density_statistics(density_stats)
-    distance_summary = calculate_inter_object_distance(inter_object_distances)
-    content_summary = calculate_frame_content_analysis(frame_content_analysis)
-
-    with open(os.path.join(output_folder, 'summary_statistics.json'), 'w') as f:
-        json.dump(summary, f, indent=4)
-
-    with open(os.path.join(output_folder, 'occurrence_statistics.json'), 'w') as f:
-        json.dump(occurrence_summary, f, indent=4)
-
-    with open(os.path.join(output_folder, 'density_statistics.json'), 'w') as f:
-        json.dump(density_summary, f, indent=4)
-
-    with open(os.path.join(output_folder, 'distance_statistics.json'), 'w') as f:
-        json.dump(distance_summary, f, indent=4)
-
-    with open(os.path.join(output_folder, 'frame_content_analysis.json'), 'w') as f:
-        json.dump(content_summary, f, indent=4)
-
-    save_processed_books(processed_books)
-    logging.info("Statistics and graphs have been saved to the output folder.")
-    logging.info("Main process finished.")
-
-    analyze_object_area_distribution(output_folder)
-    analyze_page_density(output_folder)
-    analyze_object_inter_relationships(output_folder)
-    analyze_aspect_ratio(output_folder)
-
+    dataset_statistics(annotations)
+    show_images_per_book(annotations)
+    show_characters_per_book(annotations)
+    show_frames_per_book(annotations)
+    show_faces_per_book(annotations)
+    show_bodies_per_book(annotations)
+    show_texts_per_book(annotations)
+    show_annotations_per_book(annotations)
+    show_bounding_box_shapes(annotations)
 
 
 

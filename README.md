@@ -35,6 +35,8 @@ Output: An HTML file, which acts as an ereader, w/ buttons such as reading aloud
 |YOLOv8|<li>Object detection technique used for identification (class recognition) and localization (bounding box) of objects</li><li>Fast and lightweight</li><li>Lower accuracy for smaller objects</li><li>Less precise localization</li><li>May not generalize on complex scene with overlapping objects</li>|<li>Object Detection</li>|
 |BLIP| <li>Understand and generate relationships between images and text, excelling in tasks like image captioning. <li>Leverages extensive pretraining on large datasets of image-text pairs</li> <li>Generate detailed, context-aware captions that describe key objects, actions, and relationships in an image|<li>Image Caption/Description</li>|
 |DINOv2|<li>Self supervised learning model to extract visual features from images without needing labeled date</li><li>Vision transformers to process images</li><li>Scales with large datasets and often better than CNNs</li><li>Can be used for classification, detection and segmentation</li>|<li>General unlabeled feature extraction for manga panels, characters, and objects</li>|
+|DETR (DEtection TRansformer)| <li>Streamlines object detection by removing anchor boxes and non-maximal suppression</li><li>Uses transformer encoder-decoder architecture for object detection tasks</li><li>Eliminates traditional object detection mechanisms (like region proposals or anchor boxes)</li><li>Achieves accuracy and performance comparable to Faster R-CNN</li> | <li>Object Detection</li>|
+|Magi| <li>Addresses the challenge of making manga accessible to individuals with visual impairments by generating automatic transcriptions of dialogues and identifying who said what (diarisation)</li><li>Detects panels, text boxes, and character boxes</li><li>Clusters characters by identity and associates dialogues to speakers</li><li>Generates dialogue transcription in the correct reading order</li><li>Annotated evaluation benchmarks using publicly available English manga pages</li> | <li>Text Transcription & Dialogue Association</li> <li>Panel Detection and Ordering</li><li>Text detection and OCR</li>|
 
 # Implementation Goals:
 1) Event Drawing Recognizer (Main feature)
@@ -57,6 +59,9 @@ Output: An HTML file, which acts as an ereader, w/ buttons such as reading aloud
 - Associating dialogues to the correct speaker
 - Establishing panels’ correct reading order
 - Caption/Description generation for the panel as a whole
+- In Yolov8, we want to augment our data to match real life scenarios better
+- Difficulties in running and evaluating Magi model
+- Long runtime training data for Mangavision
 
 ## Resources Exploration (Ideas Collection):
 
@@ -122,4 +127,3 @@ Dataset:
 | [Detecting speech bubbles, japanese text, translating](https://www.kaggle.com/datasets/aasimsani/ampd-base) | The dataset creation process gather Japanese dialogue datasets, sourcing manga-style fonts, identifying speech bubble types, and obtaining manga or black-and-white images for panel filling. | At least 337,000 | <li> Free and publicly available </li> <li> Wide data variety </li> <li> Offers the flexibility for users to customize the dataset creation </li> | <li> Artificially generated which may not fully capture the complexity and diversity of real manga panels </li> <li> Limitations in replicating the nuances of hand-drawn manga art </li> <li> Generating a large-scale manga dataset can be resource-intensive </li> | <li> Translating the manga to English </li> <li> Detect Speech Bubbles </li> <li> Create an artificial manga panel dataset </li> 
 | [Image Classifier](https://www.kaggle.com/datasets/ibrahimserouis99/one-piece-image-classifier) | Developing a One Piece character detector following the design of an image classification model. | ≈ 650 | <li> Diversity in appearance, poses, and expressions which can help improve the robustness and generalization of the character detector model. </li> <li> Some images in the dataset have been manually cropped to remove unnecessary noise. </li> <li> Promotes collaboration and knowledge sharing within the community. </li> | <li> Copyright Issues </li> <li> Relatively small data for training a deep learning model </li> <li> Data Quality may vary </li> | <li> Can use this as a reference for character dectection model </li> <li> Can save time and resource by leveraging this dataset </li> <li> Can use it to quickly build and test character detection models as well as to learn some stuff from it </li> |
 
--->

@@ -11,16 +11,10 @@ logs
 /panel_bounder_custom/runs
 /panel_bounder_custom/logs
 /panel_bounder_custom/models
-/bounder_YOLO/runs/detect/train/events.out.tfevents.1726470175.Xtacsy.25836.0
-/bounder_YOLO/runs/detect/train/train_batch0.jpg
-/bounder_YOLO/runs/detect/train/train_batch1.jpg
-/bounder_YOLO/runs/detect/train/train_batch2.jpg
-/bounder_YOLO/runs/detect/train/train_batch22480.jpg
-/bounder_YOLO/runs/detect/train/train_batch22481.jpg
-/bounder_YOLO/runs/detect/train/train_batch22482.jpg
 /bounder_YOLO/runs/detect/train/val_batch0_labels.jpg
 /bounder_YOLO/runs/detect/train/val_batch0_pred.jpg
 /bounder_YOLO/runs/detect/train/val_batch1_labels.jpg
 /bounder_YOLO/runs/detect/train/val_batch1_pred.jpg
 /bounder_YOLO/runs/detect/train/val_batch2_labels.jpg
 /bounder_YOLO/runs/detect/train/val_batch2_pred.jpg
+/Manga109_Details/data_mining.pbix
