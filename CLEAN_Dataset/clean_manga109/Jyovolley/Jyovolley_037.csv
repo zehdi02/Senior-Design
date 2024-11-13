@@ -1,0 +1,6 @@
+id,type,xmin,ymin,xmax,ymax,character_id,character_name,page_number
+0002dc07,face,290,123,486,336,0002d67f,朝倉ツバメ,37
+0002dc08,body,1122,637,1653,1166,0002db02,兜学園A,37
+0002dc09,body,228,1,1235,1162,0002d67f,朝倉ツバメ,37
+0002dc0a,face,1280,684,1373,788,0002db02,兜学園A,37
+0002dc0b,frame,1,0,1650,1163,,,37

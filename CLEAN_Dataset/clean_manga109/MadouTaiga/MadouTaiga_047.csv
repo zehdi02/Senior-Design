@@ -1,0 +1,6 @@
+id,type,xmin,ymin,xmax,ymax,character_id,character_name,text_content,page_number
+0003a0ca,face,137,197,465,534,00039b93,ゼータ,,47
+0003a0cb,frame,0,4,596,1169,,,,47
+0003a0cc,body,1,4,591,1167,00039b93,ゼータ,,47
+0003a0cd,text,699,304,791,426,,,パシャ,47
+0003a0ce,frame,604,6,1651,1169,,,,47

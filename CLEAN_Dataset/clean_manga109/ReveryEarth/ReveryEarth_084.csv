@@ -1,0 +1,6 @@
+id,type,xmin,ymin,xmax,ymax,character_id,character_name,text_content,page_number
+00059f92,frame,1109,2,1311,677,,,,84
+00059f93,body,1350,450,1567,605,0005908d,シオン,,84
+00059f94,frame,0,1,1335,1161,,,,84
+00059f95,text,1171,8,1282,200,,,ぐあっ,84
+00059f96,frame,1069,0,1653,1169,,,,84

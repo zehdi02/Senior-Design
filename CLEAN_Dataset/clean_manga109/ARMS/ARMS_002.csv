@@ -1,0 +1,5 @@
+id,type,xmin,ymin,xmax,ymax,text_content,character_id,character_name,page_number
+00000000,frame,83,86,751,1090,,,,2
+00000001,text,550,660,583,696,あ,,,2
+00000002,body,178,660,548,965,,00000003,女1,2
+00000004,face,406,684,456,764,,00000003,女1,2

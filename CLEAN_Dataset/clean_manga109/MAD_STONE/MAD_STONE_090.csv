@@ -1,0 +1,4 @@
+id,type,xmin,ymin,xmax,ymax,character_id,character_name,page_number
+00039b35,body,16,9,1650,1169,0003907f,キョーヘイ,90
+00039b36,face,1090,261,1426,640,0003907f,キョーヘイ,90
+00039b37,frame,2,0,1653,1169,,,90

@@ -1,0 +1,5 @@
+id,type,xmin,ymin,xmax,ymax,character_id,character_name,page_number
+0003e631,face,579,317,667,402,0003e33a,小松サキ,44
+0003e632,body,332,210,696,786,0003e33a,小松サキ,44
+0003e633,frame,84,723,189,1094,,,44
+0003e634,frame,155,68,1578,1092,,,44

@@ -1,0 +1,6 @@
+id,type,xmin,ymin,xmax,ymax,text_content,character_id,character_name,page_number
+00070d98,text,63,869,131,1005,一本ンン、勝負あり！！,,,56
+00070d99,body,162,667,379,1002,,00070413,Other,56
+00070d9a,text,144,323,196,433,面ンン～～～っ。,,,56
+00070d9b,body,233,369,467,859,,0007040f,押足藤太,56
+00070d9c,frame,0,0,824,1169,,,,56

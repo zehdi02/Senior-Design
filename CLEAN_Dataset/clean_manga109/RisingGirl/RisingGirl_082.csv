@@ -1,0 +1,6 @@
+id,type,xmin,ymin,xmax,ymax,character_id,character_name,text_content,page_number
+0005c808,body,856,291,1474,1161,0005b82a,人見絹枝,,82
+0005c809,text,1486,100,1527,301,,,道を作る！,82
+0005c80a,frame,848,0,1622,1154,,,,82
+0005c80b,text,1394,578,1504,1006,,,後に続く者のためにー!!,82
+0005c80c,face,1009,412,1241,626,0005b82a,人見絹枝,,82

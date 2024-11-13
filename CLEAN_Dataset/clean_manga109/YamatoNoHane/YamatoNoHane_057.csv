@@ -1,0 +1,6 @@
+id,type,xmin,ymin,xmax,ymax,text_content,character_id,character_name,page_number
+0007b0f3,frame,0,0,821,1169,,,,57
+0007b0f4,frame,832,0,1653,1169,,,,57
+0007b0f5,text,1163,200,1421,574,こんなにうまくなるなんて,,,57
+0007b0f6,face,458,88,599,227,,0007a833,鳥羽大和,57
+0007b0f7,body,279,0,1150,1154,,0007a833,鳥羽大和,57

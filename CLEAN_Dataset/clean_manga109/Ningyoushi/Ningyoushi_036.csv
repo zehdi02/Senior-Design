@@ -1,0 +1,5 @@
+id,type,xmin,ymin,xmax,ymax,character_id,character_name,page_number
+0004d00e,body,436,628,645,941,0004ca26,ちぎり,36
+0004d00f,frame,835,2,1588,1169,,,36
+0004d010,body,1357,648,1578,846,0004ca24,せあら,36
+0004d011,frame,78,2,820,1167,,,36

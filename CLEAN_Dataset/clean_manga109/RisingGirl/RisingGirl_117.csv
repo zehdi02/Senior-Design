@@ -1,0 +1,6 @@
+id,type,xmin,ymin,xmax,ymax,character_id,character_name,text_content,page_number
+0005cd2a,face,886,155,1365,638,0005b82a,人見絹枝,,117
+0005cd2b,body,689,0,1621,1161,0005b82a,人見絹枝,,117
+0005cd2c,frame,37,3,822,1169,,,,117
+0005cd2d,frame,832,0,1642,1169,,,,117
+0005cd2e,text,350,88,521,725,,,彼女が命をかけて開拓した道に暁の陽が今も尚燦然と輝いているー,117

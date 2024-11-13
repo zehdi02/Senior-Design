@@ -1,0 +1,5 @@
+id,type,xmin,ymin,xmax,ymax,character_id,character_name,text_content,page_number
+0001601e,frame,0,0,1653,1169,,,,81
+0001601f,body,1308,595,1479,813,000151aa,数明由雁,,81
+00016020,text,1436,112,1513,313,,,ひとりじゃないから,81
+00016021,text,201,808,285,1051,,,こんなにきれいなんだ,81
