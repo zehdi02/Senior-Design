@@ -18,3 +18,4 @@ logs
 /bounder_YOLO/runs/detect/train/val_batch2_labels.jpg
 /bounder_YOLO/runs/detect/train/val_batch2_pred.jpg
 /Manga109_Details/data_mining.pbix
+/MangaVision_API/MangaVision_dataset_sample
