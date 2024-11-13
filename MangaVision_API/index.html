@@ -4,18 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="index.css">
     <title>YOLOv8 Prediction</title>
 </head>
 
 <body>
-    <p>Upload an Image for Prediction</p>
-    <input type="file" id="file-input" accept="image/*">
-    <button onclick="predictImage()">Predict</button>
-
-    <p>Predictions:</p>
-    <ul id="class-counts-list"></ul>
-    <canvas id="image-canvas" style="width:100%"></canvas>
+    <div class="train-div">
+        
+    </div>
+    <div class="predict-div">
+        <p>Upload an Image for Prediction</p>
+        <input type="file" id="file-input" accept="image/*">
+        <button onclick="predictImage()">Predict</button>
+        <p>Predictions:</p>
+        <ul id="class-counts-list"></ul>
+        <canvas id="image-canvas" style="width:100%"></canvas>
+    </div>
 
     <script>
         async function predictImage() {
