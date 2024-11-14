@@ -1,9 +1,13 @@
+import torch
 import os
-import numpy as np
 import networkx as nx
+import numpy as np
 from shapely.geometry import box
 from copy import deepcopy
 from itertools import groupby
+from ultralytics import YOLO
+from PIL import Image 
+from predict_bboxes import get_yolo_labels, get_class_labels
 
 def load_annotations(file_path):
     annotations = []
@@ -209,49 +213,48 @@ def get_text_to_panel_mapping(text_bboxes, sorted_panel_bboxes):
             text_to_panel_mapping.append(min(all_distances, key=lambda x: x[0])[1])
     return text_to_panel_mapping
 
-def save_sorted_annotations(file_path, sorted_indices, annotations):
-    with open(file_path, 'w') as f:
-        for index in sorted_indices:
-            class_id, bbox = annotations[index]
-            x_center = (bbox[0] + bbox[2]) / 2
-            y_center = (bbox[1] + bbox[3]) / 2
-            width = bbox[2] - bbox[0]
-            height = bbox[3] - bbox[1]
-            f.write(f"{class_id} {x_center} {y_center} {width} {height}\n")
-    start_index = file_path.find("annotation")
-    file_name = file_path[start_index :]
-    print(f'Finished sorting for {file_name}')
-
-def sorting_pipeline(manga_file_name):
-    """
-        !! CHANGE PATH !!
-    """
-    detected_panels_folder = "C:/Users/Zed/Desktop/CCNY Classes/2024 FALL/CSC 59867 Senior Project II/Project/Senior-Design/detected_panels/"
+def get_sorted_annotations(sorted_indices, annotations):
+    sorted_annotations = []
+    for index in sorted_indices:
+        class_id, bbox = annotations[index]
+        x_center = (bbox[0] + bbox[2]) / 2
+        y_center = (bbox[1] + bbox[3]) / 2
+        width = bbox[2] - bbox[0]
+        height = bbox[3] - bbox[1]
+        sorted_annotations.append((class_id, x_center, y_center, width, height))
     
-    panels_path = os.path.join(detected_panels_folder, f"panels/{manga_file_name}_panels_annotations.txt")
-    text_boxes_path = os.path.join(detected_panels_folder, f"text_boxes/{manga_file_name}_textboxes_annotations.txt")
+    return sorted_annotations
 
-    panel_annotations = [(class_id, bbox) for class_id, bbox in load_annotations(panels_path) if class_id == 3]
-    text_annotations = [(class_id, bbox) for class_id, bbox in load_annotations(text_boxes_path) if class_id == 2]
+def sorting_pipeline(img_fp):
 
-    # extract bounding boxes
-    panel_bboxes = [bbox for _, bbox in panel_annotations]
-    text_bboxes = [bbox for _, bbox in text_annotations]
+    img = Image.open(img_fp) 
+    width = img.width 
+    height = img.height 
 
-    # sort panels
-    sorted_panel_indices = sort_panels(panel_bboxes)
+    model = YOLO("yolov8n_MangaVision.pt").to('cuda')
+    pred_result = model(img_fp)
 
-    # map text boxes to panels and sort within each panel
-    panel_id_for_text = get_text_to_panel_mapping(text_bboxes, [panel_bboxes[i] for i in sorted_panel_indices])
-    sorted_text_indices = sort_text_boxes_in_reading_order(text_bboxes, [panel_bboxes[i] for i in sorted_panel_indices])
+    # get class_id and bounding boxes for predicted objects in manga page
+    yolo_labels = get_yolo_labels(pred_result, width, height) 
+    face_labels, body_labels, panel_labels, text_box_labels = get_class_labels(yolo_labels)
 
-    save_sorted_annotations(os.path.join(detected_panels_folder, "annotation_sorted_panel.txt"), sorted_panel_indices, panel_annotations)
-    save_sorted_annotations(os.path.join(detected_panels_folder, "annotation_sorted_textboxes.txt"), sorted_text_indices, text_annotations)
+    # convert xyxyn portion of labels into tuples to prepare for sorting
+    panel_label_tuples = [bbox for _, bbox in panel_labels]   
+    text_box_labels_tuples = [bbox for _, bbox in text_box_labels]
 
+    # sort panels and text boxes
+    sorted_panel_indices = sort_panels(panel_label_tuples)
+    print('Finished sorting panels!')
+    sorted_text_indices = sort_text_boxes_in_reading_order(text_box_labels_tuples, [panel_label_tuples[i] for i in sorted_panel_indices])
+    print('Finished sorting text boxes!')
 
-def main():
-    manga_file_name = 'UnbalanceTokyo_061_right'
-    sorting_pipeline(manga_file_name)
-    
-if __name__ == "__main__":
-    main()
+    sorted_panels_list = get_sorted_annotations(sorted_panel_indices, panel_labels)
+    sorted_text_boxes_list = get_sorted_annotations(sorted_text_indices, text_box_labels)
+
+    return sorted_panels_list, sorted_text_boxes_list
+
+# img_fp = "./UnbalanceTokyo_061_right.jpg"
+# sorted_panels_list, sorted_text_boxes_list = sorting_pipeline(img_fp)
+
+# print(sorted_panels_list)
+# print(sorted_text_boxes_list)
