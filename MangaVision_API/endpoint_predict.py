@@ -1,10 +1,9 @@
-# testing /predict endpoint
-
 import requests
 
 url = "http://127.0.0.1:8000/predict"
 
-img_fp = "C:/Users/Zed/Documents/Code/__Senior Design/Senior-Design/MangaVision_API/MangaVision_dataset_sample/test/images/SyabondamaKieta_027_right.jpg"
+# example request data
+img_fp = "./MangaVision_dataset_sample/test/images/YoumaKourin_029_left.jpg"
 
 with open(img_fp, "rb") as image_file:
     files = {"file": image_file}
