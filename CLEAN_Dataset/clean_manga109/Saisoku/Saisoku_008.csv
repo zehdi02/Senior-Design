@@ -1,8 +1,0 @@
-id,type,xmin,ymin,xmax,ymax,text_content,character_id,character_name,page_number
-0005cdc0,frame,0,2,1653,871,,,,8
-0005cdc1,text,1374,838,1608,1127,うおっ…!!,,,8
-0005cdc2,frame,69,793,789,1153,,,,8
-0005cdc3,face,908,916,1379,1149,,0005cd6d,ドライバーA,8
-0005cdc4,body,1113,248,1504,581,,0005cda1,矢ケ崎愛,8
-0005cdc5,frame,863,846,1649,1167,,,,8
-0005cdc6,body,858,846,1394,1153,,0005cd6d,ドライバーA,8

@@ -1,8 +1,0 @@
-id,type,xmin,ymin,xmax,ymax,character_id,character_name,page_number
-0007ace6,frame,441,0,756,606,,,34
-0007ace7,face,91,253,392,559,0007a833,鳥羽大和,34
-0007ace8,frame,0,0,435,603,,,34
-0007ace9,body,2,10,435,600,0007a833,鳥羽大和,34
-0007acea,body,347,605,739,1167,0007a833,鳥羽大和,34
-0007aceb,frame,0,608,825,1167,,,34
-0007acec,face,403,683,501,781,0007a833,鳥羽大和,34

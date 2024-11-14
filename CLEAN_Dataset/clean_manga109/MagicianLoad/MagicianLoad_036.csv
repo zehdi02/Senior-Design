@@ -1,7 +1,0 @@
-id,type,xmin,ymin,xmax,ymax,character_id,character_name,text_content,page_number
-0003ba6a,frame,823,4,1643,1169,,,,36
-0003ba6b,body,834,293,1522,1124,0003b589,リュー・トラウド,,36
-0003ba6c,text,265,297,291,447,,,なんだ これは？,36
-0003ba6d,frame,76,4,817,1167,,,,36
-0003ba6e,text,1258,125,1312,279,,,なにか巨大な塊が同化した,36
-0003ba6f,face,1170,507,1353,678,0003b589,リュー・トラウド,,36

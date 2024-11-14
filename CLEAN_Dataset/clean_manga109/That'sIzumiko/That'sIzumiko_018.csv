@@ -1,6 +1,0 @@
-id,type,xmin,ymin,xmax,ymax,character_id,character_name,text_content,page_number
-0006df7f,body,335,708,539,892,0006df6e,動物学者,,18
-0006df80,text,482,360,506,408,,,悪魔,18
-0006df81,face,406,716,440,761,0006df6e,動物学者,,18
-0006df82,frame,0,0,1650,1168,,,,18
-0006df83,body,568,632,651,883,0006dd1f,極楽院 和泉子,,18
