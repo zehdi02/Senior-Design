@@ -96,11 +96,29 @@ async def evaluate_model():
 
     try:
         evaluation_metrics = {
+            # model_state.training_results.
+
             "results_dict": model_state.training_results.results_dict,
-            "precision": model_state.training_results.box.mp,
-            "recall": model_state.training_results.box.mr,
+
+            "ap": model_state.training_results.box.ap.tolist(),
+            "ap50": model_state.training_results.box.ap50.tolist(),
+
+            "f1": model_state.training_results.box.f1.tolist(),
+
+            "map": model_state.training_results.box.map,
+            "map50": model_state.training_results.box.map50,
+            "map75": model_state.training_results.box.map75,
+            "map_iou_thres": model_state.training_results.box.maps.tolist(),
+
+            "mean_precision": model_state.training_results.box.mp,
+            "mean_recall": model_state.training_results.box.mr,
+
+            "precision": model_state.training_results.box.p.tolist(),
+            "recall": model_state.training_results.box.r.tolist(),
+
             "speed": model_state.training_results.speed,
-            "curves": model_state.training_results.curves
+
+            "cm": model_state.training_results.confusion_matrix.matrix.tolist(),
         }
         return JSONResponse(content=evaluation_metrics)
     except Exception as e:
