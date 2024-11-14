@@ -7,7 +7,8 @@ from copy import deepcopy
 from itertools import groupby
 from ultralytics import YOLO
 from PIL import Image 
-from predict_bboxes import get_yolo_labels, get_class_labels
+
+from yolo_labels import *
 
 def load_annotations(file_path):
     annotations = []
@@ -225,8 +226,10 @@ def get_sorted_annotations(sorted_indices, annotations):
     
     return sorted_annotations
 
-def sorting_pipeline(img_fp):
+def get_sorted_confidences(sorted_indices, confidences):
+    return [confidences[i] for i in sorted_indices]
 
+def sorting_pipeline(img_fp):
     img = Image.open(img_fp) 
     width = img.width 
     height = img.height 
@@ -236,13 +239,15 @@ def sorting_pipeline(img_fp):
     print('Object detection completed!')
 
     # get class_id and bounding boxes for predicted objects in manga page
-    yolo_labels = get_yolo_labels(pred_result, width, height) 
-    face_labels, body_labels, panel_labels, text_box_labels = get_class_labels(yolo_labels)
-    # print(f'face:{len(face_labels)}, body:{len(body_labels)}, panel:{len(panel_labels)}, text:{len(text_box_labels)}')
+    yolo_labels, confidences = get_yolo_labels(pred_result, width, height) 
+    face_labels, body_labels, text_box_labels, panel_labels = get_class_labels(yolo_labels)
 
-    # convert xyxyn portion of labels into tuples to prepare for sorting
-    panel_label_tuples = [bbox for _, bbox in panel_labels]   
     text_box_labels_tuples = [bbox for _, bbox in text_box_labels]
+    panel_label_tuples = [bbox for _, bbox in panel_labels]
+
+    # get confidence scores for panels and text boxes
+    text_box_confidences = [confidences[i] for i, label in enumerate(yolo_labels) if label[0] == 2]
+    panel_confidences = [confidences[i] for i, label in enumerate(yolo_labels) if label[0] == 3]
 
     # sort panels and text boxes
     sorted_panel_indices = sort_panels(panel_label_tuples)
@@ -250,13 +255,17 @@ def sorting_pipeline(img_fp):
     sorted_text_indices = sort_text_boxes_in_reading_order(text_box_labels_tuples, [panel_label_tuples[i] for i in sorted_panel_indices])
     print('Sorting text boxes completed!')
 
-    sorted_panels_list = get_sorted_annotations(sorted_panel_indices, panel_labels)
+    # get sorted annotations and confidences
     sorted_text_boxes_list = get_sorted_annotations(sorted_text_indices, text_box_labels)
+    sorted_panels_list = get_sorted_annotations(sorted_panel_indices, panel_labels)
+    sorted_text_boxes_conf_list = get_sorted_confidences(sorted_text_indices, text_box_confidences)
+    sorted_panels_conf_list = get_sorted_confidences(sorted_panel_indices, panel_confidences)
 
-    return sorted_panels_list, sorted_text_boxes_list
+    return sorted_text_boxes_list, sorted_panels_list, sorted_text_boxes_conf_list, sorted_panels_conf_list
 
-# img_fp = "./UnbalanceTokyo_061_right.jpg"
-# sorted_panels_list, sorted_text_boxes_list = sorting_pipeline(img_fp)
+# img_fp = 'YamatoNoHane_097_right.jpg'
+# sorted_text_boxes_list, sorted_panels_list, sorted_text_boxes_conf_list, sorted_panels_conf_list = sorting_pipeline(img_fp)
+# print(sorted_panels_conf_list)
 
 # print(sorted_panels_list)
 # print(sorted_text_boxes_list)

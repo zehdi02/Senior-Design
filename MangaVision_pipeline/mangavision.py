@@ -57,9 +57,9 @@ def generate_transcript(img_fp, sorted_text_boxes_list):
 
     print(f"OCR extraction completed!\nTranscript saved to {output_txt_file}")
 
-img_fp = 'download.png'
+img_fp = '155.png'
 
-sorted_panels_list, sorted_text_boxes_list = sorting_pipeline(img_fp)
+sorted_text_boxes_list, sorted_panels_list, sorted_text_boxes_conf_list, sorted_panels_conf_list = sorting_pipeline(img_fp)
 
 generate_transcript(img_fp, sorted_text_boxes_list)
-draw_bounding_boxes(img_fp, sorted_panels_list, sorted_text_boxes_list)
+draw_bounding_boxes(img_fp, sorted_panels_list, sorted_text_boxes_list, sorted_panels_conf_list, sorted_text_boxes_conf_list)

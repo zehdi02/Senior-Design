@@ -1,0 +1,6 @@
+Textbox 1: 怪人協会なんて目じゃない
+Textbox 2: どんなヒーローも敵わない！
+Textbox 3: 最強の怪人が！！
+Textbox 4: 怪人協会なんて目じゃない
+Textbox 5: どんなヒーローも敵わない！
+Textbox 6: 最強の怪人が！！

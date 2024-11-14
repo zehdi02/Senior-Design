@@ -1,0 +1,6 @@
+Textbox 1: よく見とけ！
+Textbox 2: 怪人が勝瞬間を！！
+Textbox 3: 怪人が勝つ瞬間を！！！
+Textbox 4: よく見とけ！
+Textbox 5: 怪人が勝瞬間を！！
+Textbox 6: 怪人が勝つ瞬間を！！！
