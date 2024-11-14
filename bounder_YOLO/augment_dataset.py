@@ -124,7 +124,7 @@ def test_augmentation():
     Test augmentation function on sample images, creating output directories as needed.
     """
     # Load or define augmentation settings
-    yaml_path = 'yaml/augmentations.yaml'
+    yaml_path = 'yaml_files/augmentations.yaml'
     with open(yaml_path, 'r') as file:
         augmentation_settings = yaml.safe_load(file)
 

@@ -14,7 +14,7 @@ class manga109_YOLO_trainer:
         # 16 epochs on clean dataset starting with high image using hyperparameters from tuning
         model = YOLO("YOLOv8m.pt").to('cuda')
         model.train(
-            data='manga109.yaml',
+            data='yaml_files/manga109.yaml',
             # epochs=16, # default
             epochs=1,  # for testing
             fraction=.0001,  # for testing
@@ -30,7 +30,7 @@ class manga109_YOLO_trainer:
         # 16 epochs on clean dataset at lower image size
         model = YOLO("runs/detect/train/weights/last.pt").to('cuda')
         model.train(
-            data='manga109.yaml',
+            data='yaml_files/manga109.yaml',
             # epochs=16, # default
             epochs=1,  # for testing
             fraction=.0001,  # for testing
@@ -53,7 +53,7 @@ class manga109_YOLO_trainer:
             # get new model / update path to model
             model = YOLO(f"runs/detect/train{i + 1}/weights/last.pt").to('cuda')
             model.train(
-                data='manga109_aug.yaml',  # used augmented dataset
+                data='yaml_files/manga109_aug.yaml',  # used augmented dataset
                 # epochs=2,  # default
                 epochs=1,  # for testing
                 fraction=.0001,  # for testing
@@ -81,7 +81,7 @@ class manga109_YOLO_trainer:
             # get new model / update path to model
             model = YOLO(f"runs/detect/train{i + 5}/weights/last.pt").to('cuda')
             model.train(
-                data='manga109_aug.yaml',  # used augmented dataset
+                data='yaml_files/manga109_aug.yaml',  # used augmented dataset
                 # epochs=2, # default
                 epochs=1,  # for testing
                 fraction=.0001,  # for testing
@@ -107,7 +107,7 @@ class manga109_YOLO_trainer:
             # get new model / update path to model
             model = YOLO(f"runs/detect/train{i + 13}/weights/last.pt").to('cuda')
             model.train(
-                data='manga109.yaml',  # used clean dataset
+                data='yaml_files/manga109.yaml',  # used clean dataset
                 # epochs=2, # default
                 epochs=1,  # for testing
                 fraction=.0001,  # for testing
@@ -130,7 +130,7 @@ class manga109_YOLO_trainer:
             # get new model / update path to model
             model = YOLO(f"runs/detect/train{i + 21}/weights/last.pt").to('cuda')
             model.train(
-                data='manga109.yaml',  # used clean dataset
+                data='yaml_files/manga109.yaml',  # used clean dataset
                 # epochs=2, # default
                 epochs=1,  # for testing
                 fraction=.0001,  # for testing
@@ -146,7 +146,7 @@ class manga109_YOLO_trainer:
         # train model for 8 epochs using augmented dataset and manga109 best hyperparameters
         model = YOLO("runs/detect/train29/weights/last.pt").to('cuda')
         model.train(
-            data='manga109_aug.yaml',
+            data='yaml_files/manga109_aug.yaml',
             # epochs=8, # default
             epochs=1,  # for testing
             fraction=.0001,  # for testing
@@ -162,7 +162,7 @@ class manga109_YOLO_trainer:
         # train model with clean dataset for 8 epochs using default yolo
         model = YOLO("runs/detect/train30/weights/last.pt").to('cuda')
         model.train(
-            data='manga109.yaml',
+            data='yaml_files/manga109.yaml',
             # epochs=8, # default
             epochs=1,  # for testing
             fraction=.0001,  # for testing
@@ -176,13 +176,13 @@ class manga109_YOLO_trainer:
         Custom training loop for fine-tuning YOLOv8n model on manga109 dataset with class weight adjustment and pyramid scheduled dataset augmentation overlapping with pyramid scheduled incremental frozen layers and dropout starting at peak of dataset augmentation and ending with clean dataset training.
         """
 
-        with open('yaml/hyperparameters.yaml') as file:
+        with open('yaml_files/hyperparameters.yaml') as file:
             self.hyperparameters = load(file, Loader=FullLoader)
         # self.__train0__()
         # self.__train1__()
 
         # augmentation settings
-        with open('yaml/augmentations.yaml') as file:
+        with open('yaml_files/augmentations.yaml') as file:
             self.augmentations = load(file, Loader=FullLoader)
         self.p = .25
         # augment_dataset(self.augmentations, p)
@@ -200,11 +200,11 @@ class manga109_YOLO_trainer:
         self.__train5__()
 
         # best
-        with open('yaml/augmentations_best.yaml') as file:
+        with open('yaml_files/augmentations_best.yaml') as file:
             self.augmentations = load(file, Loader=FullLoader)
         p = .5
         augment_dataset(self.augmentations, p)
-        with open('yaml/manga109_best.yaml') as file:
+        with open('yaml_files/manga109_best.yaml') as file:
             self.hyperparameters = load(file, Loader=FullLoader)
         self.__train6__()
 

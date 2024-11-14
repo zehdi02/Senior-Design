@@ -39,7 +39,7 @@ def tune_yolo_manga109():
 
     # Execute model tuning
     result_grid = model.tune(
-        data="C:\\Users\\mehed\\Documents\\School\\MangaVision\\bounder_YOLO\\manga109_tune.yaml",
+        data="C:\\Users\\mehed\\Documents\\School\\MangaVision\\bounder_YOLO\\yaml_files\\manga109.yaml",
         epochs=8,
         fraction=0.5,  # Fraction of dataset to speed up tuning
         patience=4,  # Early stopping if no improvement
@@ -58,7 +58,7 @@ def tune_yolo_manga109():
         best_hyperparameters = yaml.safe_load(file)
 
     # Save best hyperparameters to a specified location for easy access
-    best_hyperparameters_output_path = "best_hyperparameters.yaml"
+    best_hyperparameters_output_path = "yaml_files/best_hyperparameters.yaml"
     with open(best_hyperparameters_output_path, 'w') as file:
         yaml.dump(best_hyperparameters, file)
 
