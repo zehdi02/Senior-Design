@@ -1,13 +1,14 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException, Depends
+from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 from ultralytics import YOLO
-import os
+from pydantic import BaseModel
 from PIL import Image
-import io
-import numpy as np
 from typing import Optional
+from datetime import datetime
+import numpy as np
+import os
+import io
 
 # to avoid library error
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
@@ -22,10 +23,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# global variables
 class ModelState:
     model: Optional[YOLO] = None
     training_results: Optional[dict] = None
+    last_trained: Optional[datetime] = None
+    uptime: Optional[datetime] = None
+    metrics: Optional[dict] = None
 
 model_state = ModelState()
 
@@ -35,6 +38,7 @@ async def load_model():
     try:
         mangavision_model = "yolov8n_MangaVision.pt"
         model_state.model = YOLO(mangavision_model)
+        model_state.uptime = datetime.now()
         print(f"{mangavision_model} loaded successfully.")
     except Exception as e:
         print(f"Error loading {mangavision_model}: {str(e)}")
@@ -46,7 +50,6 @@ async def close_model():
     model_state.model = None
     print("Model unloaded.")
 
-# training parameters 
 class TrainingParams(BaseModel):
     data: str
     epochs: int = 100
@@ -83,8 +86,9 @@ async def start_training(params: TrainingParams):
             val=params.val,
             plots=params.plots,
         )
-        model_state.training_results = result   # store training results to 'model_state.training_results'
-        return {"message": "Training was successful!"}
+        model_state.training_results = result
+        model_state.last_trained = datetime.now()
+        return {f'"message": "Training was successful!, "parameters": {params}'}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during training: {str(e)}")
 
@@ -96,8 +100,6 @@ async def evaluate_model():
 
     try:
         evaluation_metrics = {
-            # model_state.training_results.
-
             "results_dict": model_state.training_results.results_dict,
 
             "ap": model_state.training_results.box.ap.tolist(),
@@ -124,7 +126,6 @@ async def evaluate_model():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during evaluation: {str(e)}")
 
-
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
     """Endpoint to perform prediction on an uploaded image."""
@@ -133,7 +134,8 @@ async def predict(file: UploadFile = File(...)):
     
     image_bytes = await file.read()
     try:
-        image = Image.open(io.BytesIO(image_bytes))
+        image = Image.open(io.BytesIO(image_bytes)) 
+        # do prediction
         result = model_state.model(image)
 
         # extract bounding boxes, class names, and confidence scores
@@ -146,12 +148,13 @@ async def predict(file: UploadFile = File(...)):
             xmin, ymin, xmax, ymax = box.tolist()
             class_name = model_state.model.names[int(class_id)]
             annotations.append({
+                "class": class_name,
+                "class_id": int(class_id),
+                "confidence": float(confidence),
+                "y_max": ymax,
                 "x_min": xmin,
                 "y_min": ymin,
-                "x_max": xmax,
-                "y_max": ymax,
-                "class": class_name,
-                "confidence": float(confidence)
+                "x_max": xmax
             })
 
         return {"annotations": annotations}
@@ -159,8 +162,25 @@ async def predict(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=f"Error during prediction: {str(e)}")
 
 @app.get("/")
-async def model_init():
-    """Endpoint to check if MangaVision model exists."""
+async def get_status():
+    """Enhanced endpoint to check model status and metadata."""
     if model_state.model:
-        return {"status": "Model is ready for use!"}
-    return {"status": "Model not loaded."}
+        current_time = datetime.now()
+        uptime = str(current_time - model_state.uptime) if model_state.uptime else "N/A"
+        
+        response = {
+            "status": "Model is ready for use!",
+            "model_version": "1.0.0",
+            "last_trained": model_state.last_trained.strftime("%Y-%m-%d %H:%M:%S") if model_state.last_trained else "N/A",
+            "uptime": uptime,
+        }
+    else:
+        response = {
+            "status": "Model not loaded.",
+            "model_version": "N/A",
+            "last_trained": "N/A",
+            "uptime": "N/A",
+        }
+    
+    return response
+
