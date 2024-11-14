@@ -1,7 +1,0 @@
-1 character_name: ただいまボス
-2 character_name: あ．．．あんまり見ないでください
-3 character_name: ハズカシーじゃありませんか
-4 character_name: あんた誰？
-5 character_name: だから．．．ケチャップですよボス
-6 character_name: 人の家に勝手にあがりこんでケチャップの名を騙るってあたりがヌケてて似てなくもないが
-7 character_name: ス！わたくしですケチャップですってばよく見てくださいよ～

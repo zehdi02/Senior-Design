@@ -233,10 +233,12 @@ def sorting_pipeline(img_fp):
 
     model = YOLO("yolov8n_MangaVision.pt").to('cuda')
     pred_result = model(img_fp)
+    print('Object detection completed!')
 
     # get class_id and bounding boxes for predicted objects in manga page
     yolo_labels = get_yolo_labels(pred_result, width, height) 
     face_labels, body_labels, panel_labels, text_box_labels = get_class_labels(yolo_labels)
+    # print(f'face:{len(face_labels)}, body:{len(body_labels)}, panel:{len(panel_labels)}, text:{len(text_box_labels)}')
 
     # convert xyxyn portion of labels into tuples to prepare for sorting
     panel_label_tuples = [bbox for _, bbox in panel_labels]   
@@ -244,9 +246,9 @@ def sorting_pipeline(img_fp):
 
     # sort panels and text boxes
     sorted_panel_indices = sort_panels(panel_label_tuples)
-    print('Finished sorting panels!')
+    print('Sorting panels completed!')
     sorted_text_indices = sort_text_boxes_in_reading_order(text_box_labels_tuples, [panel_label_tuples[i] for i in sorted_panel_indices])
-    print('Finished sorting text boxes!')
+    print('Sorting text boxes completed!')
 
     sorted_panels_list = get_sorted_annotations(sorted_panel_indices, panel_labels)
     sorted_text_boxes_list = get_sorted_annotations(sorted_text_indices, text_box_labels)
