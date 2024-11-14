@@ -176,13 +176,13 @@ class manga109_YOLO_trainer:
         Custom training loop for fine-tuning YOLOv8n model on manga109 dataset with class weight adjustment and pyramid scheduled dataset augmentation overlapping with pyramid scheduled incremental frozen layers and dropout starting at peak of dataset augmentation and ending with clean dataset training.
         """
 
-        with open('hyperparameters.yaml') as file:
+        with open('yaml/hyperparameters.yaml') as file:
             self.hyperparameters = load(file, Loader=FullLoader)
         # self.__train0__()
         # self.__train1__()
 
         # augmentation settings
-        with open('augmentations.yaml') as file:
+        with open('yaml/augmentations.yaml') as file:
             self.augmentations = load(file, Loader=FullLoader)
         self.p = .25
         # augment_dataset(self.augmentations, p)
@@ -200,11 +200,11 @@ class manga109_YOLO_trainer:
         self.__train5__()
 
         # best
-        with open('augmentations_best.yaml') as file:
+        with open('yaml/augmentations_best.yaml') as file:
             self.augmentations = load(file, Loader=FullLoader)
         p = .5
         augment_dataset(self.augmentations, p)
-        with open('manga109_best.yaml') as file:
+        with open('yaml/manga109_best.yaml') as file:
             self.hyperparameters = load(file, Loader=FullLoader)
         self.__train6__()
 
