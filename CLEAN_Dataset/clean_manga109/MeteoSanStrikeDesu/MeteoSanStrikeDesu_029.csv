@@ -1,7 +1,0 @@
-id,type,xmin,ymin,xmax,ymax,text_content,character_id,character_name,page_number
-0003f2d0,text,71,925,131,1087,かくして地球の平和は守られた,,,29
-0003f2d1,frame,352,0,1648,1168,,,,29
-0003f2d2,frame,1,1,425,1167,,,,29
-0003f2d3,body,424,0,1646,1083,,0003ef84,山田メテオ,29
-0003f2d4,face,1460,765,1572,894,,0003ef84,山田メテオ,29
-0003f2d5,text,1365,5,1623,671,キーック,,,29

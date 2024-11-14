@@ -1,6 +1,0 @@
-id,type,xmin,ymin,xmax,ymax,character_id,character_name,page_number
-00039b77,body,73,822,440,1053,00039b78,リージェ,2
-00039b79,frame,2,819,445,1059,,,2
-00039b7a,frame,55,56,748,1102,,,2
-00039b7b,face,127,822,240,907,00039b78,リージェ,2
-00039b7c,frame,392,6,811,205,,,2

@@ -1,9 +1,0 @@
-id,type,xmin,ymin,xmax,ymax,text_content,character_id,character_name,page_number
-00018a99,frame,78,937,414,1084,,,,2
-00018a9a,frame,75,746,756,964,,,,2
-00018a9b,text,402,776,441,841,大人しいな…,,,2
-00018a9c,frame,73,0,755,720,,,,2
-00018a9d,text,376,986,388,1033,フン！,,,2
-00018a9e,face,647,1036,688,1069,,00018a9f,警備員A,2
-00018aa0,body,625,1022,734,1169,,00018a9f,警備員A,2
-00018aa1,frame,427,959,757,1169,,,,2

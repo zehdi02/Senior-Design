@@ -1,7 +1,0 @@
-id,type,xmin,ymin,xmax,ymax,character_id,character_name,page_number
-00055aae,body,2049,175,2436,469,00054bfa,高千穂,94
-00055aaf,body,1802,897,2786,1887,00054bfa,高千穂,94
-00055ab0,face,2236,175,2307,225,00054bfa,高千穂,94
-00055ab1,frame,1584,714,2808,2002,,,94
-00055ab2,frame,1597,168,2811,685,,,94
-00055ab3,face,2261,976,2440,1162,00054bfa,高千穂,94

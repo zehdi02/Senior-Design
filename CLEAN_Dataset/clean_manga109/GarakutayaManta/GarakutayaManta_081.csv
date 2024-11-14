@@ -1,9 +1,0 @@
-id,type,xmin,ymin,xmax,ymax,character_id,character_name,text_content,page_number
-0001afab,face,969,132,1032,214,0001aeef,暗殺部隊,,81
-0001afac,body,1165,1,1512,234,0001aeef,暗殺部隊,,81
-0001afad,face,1368,15,1478,147,0001aeef,暗殺部隊,,81
-0001afae,frame,887,0,1585,239,,,,81
-0001afaf,frame,887,854,1584,1169,,,,81
-0001afb0,text,1494,64,1560,226,,,機関全速針路１－３－２,81
-0001afb1,body,960,68,1160,230,0001aeef,暗殺部隊,,81
-0001afb2,frame,885,244,1583,831,,,,81

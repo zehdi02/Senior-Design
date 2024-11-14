@@ -1,6 +1,0 @@
-id,type,xmin,ymin,xmax,ymax,character_id,character_name,page_number
-0007fbb2,frame,80,747,765,1100,,,1
-0007fbb3,body,257,106,763,543,0007fbb4,宮沢真理,1
-0007fbb5,frame,77,72,765,547,,,1
-0007fbb6,face,463,174,605,330,0007fbb4,宮沢真理,1
-0007fbb7,body,369,859,485,1098,0007fbb4,宮沢真理,1
