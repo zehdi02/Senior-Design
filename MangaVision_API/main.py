@@ -1,12 +1,16 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+
 from ultralytics import YOLO
 from pydantic import BaseModel
 from PIL import Image
+
 from typing import Optional
 from datetime import datetime
+
 import numpy as np
+import base64
 import io
 import sys
 import os
@@ -144,13 +148,22 @@ async def predict(file: UploadFile = File(...)):
     try:
         image = Image.open(io.BytesIO(image_bytes)) 
 
-        sorted_text_boxes_list, sorted_panels_list, sorted_text_boxes_conf_list, sorted_panels_conf_list = sorting_pipeline(image)
+        # do prediction via 'yolo_prediction' function from 'sort_panel_text_boxes.py' file
+        result, width, height = yolo_prediction(image, model_state.model)
 
-        extracted_text = generate_transcript(image_bytes, sorted_text_boxes_list)
-        # sorted_image = draw_sorted_bounding_boxes(img_fp, sorted_panels_list, sorted_text_boxes_list, sorted_panels_conf_list, sorted_text_boxes_conf_list)
+        # get sorted bb and conf of panels and text boxes
+        sorted_text_boxes_list, sorted_panels_list, \
+            sorted_text_boxes_conf_list, sorted_panels_conf_list = sorting_pipeline(image, 1, result, width, height)  
         
-        # do prediction
-        result = model_state.model(image)
+        # perform ocr
+        extracted_text = generate_transcript(image_bytes, sorted_text_boxes_list)
+        
+        # get image (in bytes) with bounding boxes drawn
+        sorted_image_bytes = draw_sorted_bounding_boxes(image_bytes, \
+            sorted_panels_list, sorted_text_boxes_list, sorted_panels_conf_list, sorted_text_boxes_conf_list)
+
+        # convert image bytes to base64
+        encoded_image = base64.b64encode(sorted_image_bytes).decode('utf-8')
 
         # extract bounding boxes, class names, and confidence scores
         boxes = result[0].boxes.xyxy
@@ -171,19 +184,43 @@ async def predict(file: UploadFile = File(...)):
                 "x_max": xmax
             })
 
-        return {"annotations": annotations, 
-                "mangavision": { 
-                    'sorted_text_boxes': {
-                        'tb_ocr': extracted_text, 
-                        'tb_bb': sorted_text_boxes_list,
-                        'tb_conf': sorted_text_boxes_conf_list,
-                        }, 
-                    'sorted_panels': {
-                        'p_bb': sorted_panels_list,
-                        'p_conf': sorted_panels_conf_list,
-                        }
-                    }
-                }
+        response_data = {
+            "annotations": annotations,
+            "mangavision": {
+                "text_boxes_sorted": [
+                    {
+                        "annotation": {
+                            'class_id': bb[0],
+                            'x_center': bb[1],
+                            'y_center': bb[2],
+                            'width': bb[3],
+                            'height': bb[4],
+                        },
+                        "confidence": conf,
+                        "extracted_text": text
+                    } for bb, conf, text in zip(
+                        sorted_text_boxes_list, sorted_text_boxes_conf_list, extracted_text
+                    )
+                ],
+                "panels_sorted": [
+                    {
+                        "annotation": {
+                            'class_id': bb[0],
+                            'x_center': bb[1],
+                            'y_center': bb[2],
+                            'width': bb[3],
+                            'height': bb[4],
+                        },
+                        "confidence": conf
+                    } for bb, conf in zip(
+                        sorted_panels_list, sorted_panels_conf_list
+                    )
+                ]
+            },
+            "image": f"data:image/jpeg;base64,{encoded_image}"
+        }
+
+        return JSONResponse(content=response_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during prediction: {str(e)}")
 

@@ -229,9 +229,9 @@ def get_sorted_annotations(sorted_indices, annotations):
 def get_sorted_confidences(sorted_indices, confidences):
     return [confidences[i] for i in sorted_indices]
 
-def sorting_pipeline(img_fp):
+def yolo_prediction(img_fp, model:None):
     if isinstance(img_fp, Image.Image):
-        print("The image is already opened.")
+        print("Image already opened.")
         img = img_fp
     else:
         img = Image.open(img_fp) 
@@ -239,9 +239,25 @@ def sorting_pipeline(img_fp):
     width = img.width 
     height = img.height 
 
-    model = YOLO("yolov8n_MangaVision.pt").to('cuda')
-    pred_result = model(img_fp)
+    # check if YOLO model has already been loaded
+    if type(model) is YOLO:
+        print('YOLO model already loaded. Doing predictions now...')
+        pred_result = model(img_fp) 
+        print('Predictions completed!')
+    else:
+        yolo_pt = "yolov8n_MangaVision.pt"
+        print(f'Loading YOLO model {yolo_pt}')
+        model_YOLO = YOLO(yolo_pt).to('cuda')
+        pred_result = model_YOLO(img_fp)
+
     print('Object detection completed!')
+
+    return pred_result, width, height
+
+def sorting_pipeline(img_fp, is_api: bool, pred_result=None, width=None, height=None):
+
+    if is_api == 0:
+        pred_result, width, height = yolo_prediction(img_fp)
 
     # get class_id and bounding boxes for predicted objects in manga page
     yolo_labels, confidences = get_yolo_labels(pred_result, width, height) 
