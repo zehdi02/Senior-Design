@@ -1,3 +1,4 @@
+import gc
 import os
 import yaml
 import random
@@ -143,16 +144,14 @@ def test_augmentation():
     augment_yolo("Manga109_YOLO/train/images/AisazuNihaIrarenai_020_right.jpg", augmentation_settings, p=1)
 
 
-def augment_dataset(augmentation_settings, p=1):
+def augment_dataset(augmentation_settings, p=1, batch_size=8, max_workers=8):
     """
-    Apply augmentations to all images in the 'train' and 'val' directories, saving results concurrently.
+    Apply augmentations to all images in the 'train' and 'val' directories, saving results to train_aug and val_aug.
 
     Args:
         augmentation_settings (dict): Dictionary of settings for various augmentations.
         p (float): Probability of applying each transformation.
-
-    Returns:
-        None
+        batch_size (int): Number of images to process in each batch.
     """
     # Ensure directories for augmented images and labels exist
     for dataset_type in ['train', 'val']:
@@ -164,21 +163,30 @@ def augment_dataset(augmentation_settings, p=1):
         image_dir = f'{utils.OUTPUT_DIR}/{dataset_type}/images'
         image_paths = [os.path.join(image_dir, img) for img in os.listdir(image_dir)]
 
-        # Use ThreadPoolExecutor to apply augmentations concurrently, improving speed
-        with ThreadPoolExecutor(max_workers=2) as image_executor, tqdm(total=len(image_paths), desc=f"Processing {dataset_type} images") as pbar:
-            futures = [image_executor.submit(augment_yolo, path, augmentation_settings, p) for path in image_paths]
+        # Initialize progress bar for the total number of images
+        with tqdm(total=len(image_paths), desc=f"Processing {dataset_type} images") as pbar:
+            # Process images in batches
+            for i in range(0, len(image_paths), batch_size):
+                batch_paths = image_paths[i:i + batch_size]
 
-            # Progress bar updates after each image completes augmentation
-            for future in as_completed(futures):
-                future.result()  # Retrieve result to handle exceptions in concurrent execution
-                pbar.update(1)  # Update progress bar by one unit per completed future
+                # Use ThreadPoolExecutor to apply augmentations concurrently, improving speed
+                with ThreadPoolExecutor(max_workers=max_workers) as image_executor:
+                    futures = [image_executor.submit(augment_yolo, path, augmentation_settings, p) for path in batch_paths]
 
+                    # Progress bar updates after each image completes augmentation
+                    for future in as_completed(futures):
+                        future.result()  # Retrieve result to handle exceptions in concurrent execution
+                        pbar.update(1)  # Update progress bar by one unit per completed future
+
+                # Clear variables and call garbage collector to free up memory
+                del batch_paths, futures
+                gc.collect()
 
 def main():
     """
     Main function to either test sample augmentations or apply augmentations to the full dataset.
     """
-    test_augmentation()  # Run sample test augmentations
+    # test_augmentation()  # Run sample test augmentations
 
     augmentation_settings = {
         'flipud': 1,
