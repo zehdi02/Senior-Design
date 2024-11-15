@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from ultralytics import YOLO
+from manga_ocr import MangaOcr
 from pydantic import BaseModel
 from PIL import Image
 
@@ -37,12 +38,14 @@ app.add_middleware(
 
 class ModelState:
     model: Optional[YOLO] = None
+    ocr_model: Optional[MangaOcr] = None
     training_results: Optional[dict] = None
     last_trained: Optional[datetime] = None
     uptime: Optional[datetime] = None
     metrics: Optional[dict] = None
 
 model_state = ModelState()
+ocr_state = ModelState()
 
 # init model on startup
 @app.on_event("startup")
@@ -55,6 +58,13 @@ async def load_model():
     except Exception as e:
         print(f"Error loading {mangavision_model}: {str(e)}")
         raise RuntimeError(f"{mangavision_model} loading failed!")
+    try:
+        ocr_state.ocr_model = MangaOcr()
+        ocr_state.uptime = datetime.now()
+        print(f"MangaOcr loaded successfully.")
+    except Exception as e:
+        print(f"Error loading MangaOcr: {str(e)}")
+        raise RuntimeError(f"MangaOcr loading failed!")
 
 # close model on shutdown
 @app.on_event("shutdown")
@@ -156,7 +166,7 @@ async def predict(file: UploadFile = File(...)):
             sorted_text_boxes_conf_list, sorted_panels_conf_list = sorting_pipeline(image, 1, result, width, height)  
         
         # perform ocr
-        extracted_text = generate_transcript(image_bytes, sorted_text_boxes_list)
+        extracted_text = generate_transcript(image_bytes, sorted_text_boxes_list, 1, ocr_state.ocr_model)
         
         # get image (in bytes) with bounding boxes drawn
         sorted_image_bytes = draw_sorted_bounding_boxes(image_bytes, \

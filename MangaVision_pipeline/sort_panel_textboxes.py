@@ -229,7 +229,7 @@ def get_sorted_annotations(sorted_indices, annotations):
 def get_sorted_confidences(sorted_indices, confidences):
     return [confidences[i] for i in sorted_indices]
 
-def yolo_prediction(img_fp, model:None):
+def yolo_prediction(img_fp, model = None):
     if isinstance(img_fp, Image.Image):
         print("Image already opened.")
         img = img_fp

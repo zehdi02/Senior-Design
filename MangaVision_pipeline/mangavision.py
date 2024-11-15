@@ -32,7 +32,7 @@ def yolo_to_xyxy(center_x, center_y, width, height, image_height, image_width):
 
     return x1, y1, x2, y2
 
-def generate_transcript(img_fp, sorted_text_boxes_list):
+def generate_transcript(img_fp, sorted_text_boxes_list, is_api = False, mocr = None):
     """
     1. crops the sorted text boxes from an image.
     2. apply OCR on each sorted cropped region.
@@ -45,14 +45,13 @@ def generate_transcript(img_fp, sorted_text_boxes_list):
         is_api = 1
         image = convert_image_bytes_to_cv2(img_fp)
     else:
+        mocr = MangaOcr()
         image = cv2.imread(img_fp)
         if image is None:
             print(f"Error: Unable to load image from {img_fp}")
             return
 
     image_height, image_width = image.shape[:2]
-    
-    mocr = MangaOcr()
     
     if is_api == 0:
         transcript_dir = "./transcripts"
