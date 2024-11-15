@@ -16,7 +16,7 @@ def box_label(image, box, label='', color=(128, 128, 128), txt_color=(255, 255, 
         cv2.putText(image, label, (p1[0], p1[1] - 2 if outside else p1[1] + h + 2),
                     0, lw / 6, txt_color, thickness=tf, lineType=cv2.LINE_AA)
 
-def draw_bounding_boxes(image_path, panels_list, text_boxes_list, panels_conf, text_boxes_conf):
+def draw_sorted_bounding_boxes(image_path, panels_list, text_boxes_list, panels_conf, text_boxes_conf):
     image = cv2.imread(image_path)
     if image is None:
         raise FileNotFoundError(f"Image not found: {image_path}")
@@ -76,3 +76,5 @@ def draw_bounding_boxes(image_path, panels_list, text_boxes_list, panels_conf, t
     # cv2.imshow('MangaVision', image)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
+
+    return image

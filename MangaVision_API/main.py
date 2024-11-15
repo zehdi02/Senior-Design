@@ -7,8 +7,16 @@ from PIL import Image
 from typing import Optional
 from datetime import datetime
 import numpy as np
-import os
 import io
+import sys
+import os
+
+pipeline_folder = os.path.join(os.path.dirname(__file__), '..', 'MangaVision_pipeline')
+sys.path.append(pipeline_folder)
+
+from display_sorted_panels_textboxes import *
+from sort_panel_textboxes import *
+from mangavision import *
 
 # to avoid library error
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
@@ -135,6 +143,12 @@ async def predict(file: UploadFile = File(...)):
     image_bytes = await file.read()
     try:
         image = Image.open(io.BytesIO(image_bytes)) 
+
+        sorted_text_boxes_list, sorted_panels_list, sorted_text_boxes_conf_list, sorted_panels_conf_list = sorting_pipeline(image)
+
+        extracted_text = generate_transcript(image_bytes, sorted_text_boxes_list)
+        # sorted_image = draw_sorted_bounding_boxes(img_fp, sorted_panels_list, sorted_text_boxes_list, sorted_panels_conf_list, sorted_text_boxes_conf_list)
+        
         # do prediction
         result = model_state.model(image)
 
@@ -157,7 +171,19 @@ async def predict(file: UploadFile = File(...)):
                 "x_max": xmax
             })
 
-        return {"annotations": annotations}
+        return {"annotations": annotations, 
+                "mangavision": { 
+                    'sorted_text_boxes': {
+                        'tb_ocr': extracted_text, 
+                        'tb_bb': sorted_text_boxes_list,
+                        'tb_conf': sorted_text_boxes_conf_list,
+                        }, 
+                    'sorted_panels': {
+                        'p_bb': sorted_panels_list,
+                        'p_conf': sorted_panels_conf_list,
+                        }
+                    }
+                }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during prediction: {str(e)}")
 

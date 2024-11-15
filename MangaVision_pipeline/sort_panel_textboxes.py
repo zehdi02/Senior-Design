@@ -230,7 +230,12 @@ def get_sorted_confidences(sorted_indices, confidences):
     return [confidences[i] for i in sorted_indices]
 
 def sorting_pipeline(img_fp):
-    img = Image.open(img_fp) 
+    if isinstance(img_fp, Image.Image):
+        print("The image is already opened.")
+        img = img_fp
+    else:
+        img = Image.open(img_fp) 
+        
     width = img.width 
     height = img.height 
 
