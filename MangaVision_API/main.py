@@ -40,18 +40,19 @@ class ModelState:
     model: Optional[YOLO] = None
     ocr_model: Optional[MangaOcr] = None
     training_results: Optional[dict] = None
+    evaluation_results: Optional[dict] = None
     last_trained: Optional[datetime] = None
     uptime: Optional[datetime] = None
     metrics: Optional[dict] = None
 
-model_state = ModelState()
-ocr_state = ModelState()
+mangavision_model = "yolov8n_MangaVision.pt"
+model_state = ModelState()  # our model
+ocr_state = ModelState()  # manga-ocr API
 
 # init model on startup
 @app.on_event("startup")
 async def load_model():
     try:
-        mangavision_model = "yolov8n_MangaVision.pt"
         model_state.model = YOLO(mangavision_model)
         model_state.uptime = datetime.now()
         print(f"{mangavision_model} loaded successfully.")
@@ -70,90 +71,89 @@ async def load_model():
 @app.on_event("shutdown")
 async def close_model():
     model_state.model = None
-    print("Model unloaded.")
+    print(f"{mangavision_model} unloaded.")
+    ocr_state.model = None
+    print(f"MangaOcr unloaded.")
 
 class TrainingParams(BaseModel):
+  data: str
+  epochs: int = 100
+  batch: int = -1
+  imgsz: int = 640
+  save: bool = True
+  device: str = 'cpu'
+  amp: bool = True
+  verbose: bool = False
+  dropout: float = 0.0
+  val: bool = True
+  plots: bool = False
+  workers: int = 8
+  optimizer: bool = 'auto'
+
+class EvaluationParam(BaseModel):
     data: str
-    epochs: int = 100
-    batch: int = -1
-    imgsz: int = 640
-    save: bool = True
-    device: str
-    amp: bool = True
-    verbose: bool = False
-    dropout: float = 0.0
-    val: bool = True
-    plots: bool = False
 
 @app.post("/train_model")
 async def start_training(params: TrainingParams):
-    """Endpoint to start training the YOLO model with given parameters."""
+    """Endpoint to start training our MangaVision model with given parameters."""
     if not model_state.model:
-        raise HTTPException(status_code=500, detail="Model is not loaded.")
-
+        raise HTTPException(status_code=500, detail=f"{mangavision_model} is not loaded.")
     try:
-        print(f"Starting YOLOv8 training with parameters: {params}")
+        print(f"Starting MangaVision training with parameters: {params}")
         # start training 
         model_state.model.to(params.device)
-        result = model_state.model.train(
-            data=params.data,
-            epochs=params.epochs,
-            batch=params.batch,
-            imgsz=params.imgsz,
-            save=params.save,
-            device=params.device,
-            verbose=params.verbose,
-            amp=params.amp,
-            dropout=params.dropout,
-            val=params.val,
-            plots=params.plots,
-        )
-        model_state.training_results = result
+        model_state.training_results = model_state.model.train(
+          data=params.data,
+          epochs=params.epochs,
+          batch=params.batch,
+          imgsz=params.imgsz,
+          save=params.save,
+          device=params.device,
+          verbose=params.verbose,
+          amp=params.amp,
+          dropout=params.dropout,
+          val=params.val,
+          plots=params.plots,
+          workers=params.workers,
+          optimizer=params.optimizer
+          )
         model_state.last_trained = datetime.now()
-        return {f'"message": "Training was successful!, "parameters": {params}'}
+        return { "message": "Training was successful!" }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during training: {str(e)}")
 
 @app.post("/evaluate")
-async def evaluate_model():
-    """Endpoint to evaluate the model after training."""
-    if not model_state.training_results:
-        raise HTTPException(status_code=404, detail="No training results available.")
-
+async def evaluate_model(params: EvaluationParam):
+    """Endpoint to evaluate our model after training."""
+    if not model_state.model:
+      raise HTTPException(status_code=500, detail=f"{mangavision_model} is not loaded.")
     try:
-        evaluation_metrics = {
-            "results_dict": model_state.training_results.results_dict,
-
-            "ap": model_state.training_results.box.ap.tolist(),
-            "ap50": model_state.training_results.box.ap50.tolist(),
-
-            "f1": model_state.training_results.box.f1.tolist(),
-
-            "map": model_state.training_results.box.map,
-            "map50": model_state.training_results.box.map50,
-            "map75": model_state.training_results.box.map75,
-            "map_iou_thres": model_state.training_results.box.maps.tolist(),
-
-            "mean_precision": model_state.training_results.box.mp,
-            "mean_recall": model_state.training_results.box.mr,
-
-            "precision": model_state.training_results.box.p.tolist(),
-            "recall": model_state.training_results.box.r.tolist(),
-
-            "speed": model_state.training_results.speed,
-
-            "cm": model_state.training_results.confusion_matrix.matrix.tolist(),
-        }
-        return JSONResponse(content=evaluation_metrics)
+      model_state.evaluation_results = model_state.model.val(data=params.data)
+      evaluation_metrics = {
+          "results_dict": model_state.evaluation_results.results_dict,
+          "ap": model_state.evaluation_results.box.ap.tolist(),
+          "ap50": model_state.evaluation_results.box.ap50.tolist(),
+          "f1": model_state.evaluation_results.box.f1.tolist(),
+          "map": model_state.evaluation_results.box.map,
+          "map50": model_state.evaluation_results.box.map50,
+          "map75": model_state.evaluation_results.box.map75,
+          "maps_thres": model_state.evaluation_results.box.maps.tolist(),
+          "mean_precision": model_state.evaluation_results.box.mp,
+          "mean_recall": model_state.evaluation_results.box.mr,
+          "precision": model_state.evaluation_results.box.p.tolist(),
+          "recall": model_state.evaluation_results.box.r.tolist(),
+          "speed": model_state.evaluation_results.speed,
+          "cm": model_state.evaluation_results.confusion_matrix.matrix.tolist(),
+      }
+      return JSONResponse(content=evaluation_metrics)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error during evaluation: {str(e)}")
+      raise HTTPException(status_code=500, detail=f"Error during evaluation: {str(e)}")
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
     """Endpoint to perform prediction on an uploaded image."""
     if not model_state.model:
         raise HTTPException(status_code=500, detail="Model is not loaded.")
-    
     image_bytes = await file.read()
     try:
         image = Image.open(io.BytesIO(image_bytes)) 
@@ -193,7 +193,6 @@ async def predict(file: UploadFile = File(...)):
                 "y_min": ymin,
                 "x_max": xmax
             })
-
         response_data = {
             "annotations": annotations,
             "mangavision": {
@@ -229,31 +228,36 @@ async def predict(file: UploadFile = File(...)):
             },
             "image": f"data:image/jpeg;base64,{encoded_image}"
         }
-
         return JSONResponse(content=response_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during prediction: {str(e)}")
 
 @app.get("/")
 async def get_status():
-    """Enhanced endpoint to check model status and metadata."""
+    """Endpoint to check model status and metadata."""
     if model_state.model:
         current_time = datetime.now()
         uptime = str(current_time - model_state.uptime) if model_state.uptime else "N/A"
-        
+        metrics = {
+            "ap": model_state.evaluation_results.box.ap.tolist(),
+            "map": model_state.evaluation_results.box.map,
+            "precision": model_state.evaluation_results.box.p.tolist(),
+            "recall": model_state.evaluation_results.box.r.tolist(),
+            "f1": model_state.evaluation_results.box.f1.tolist()
+        } if model_state.evaluation_results else "N/A"
         response = {
             "status": "Model is ready for use!",
             "model_version": "1.0.0",
             "last_trained": model_state.last_trained.strftime("%Y-%m-%d %H:%M:%S") if model_state.last_trained else "N/A",
             "uptime": uptime,
+            "metrics": metrics
         }
     else:
         response = {
             "status": "Model not loaded.",
-            "model_version": "N/A",
+            "model_version": "1.0.0",
             "last_trained": "N/A",
             "uptime": "N/A",
+            "metrics": "N/A"
         }
-    
     return response
-

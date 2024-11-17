@@ -9,3 +9,4 @@ with open(img_fp, "rb") as image_file:
     response = requests.post(url, files=files)
 
 print(response.json())
+
