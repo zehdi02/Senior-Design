@@ -1,0 +1,12 @@
+path: ../Manga109_YOLO  # Dataset root directory
+
+train: train_aug
+val: val_aug
+test: test
+
+nc: 4
+names:
+  0: face
+  1: body
+  2: text
+  3: frame

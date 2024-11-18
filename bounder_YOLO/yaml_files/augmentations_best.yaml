@@ -1,0 +1,11 @@
+# Data augmentation
+degrees: 0.1
+fliplr: 0.5
+flipud: 0.5
+hsv_h: 0.05
+hsv_s: 0.5
+hsv_v: 0.5
+perspective: 0.001
+scale: 0.35
+shear: 0.1
+translate: 0.1
