@@ -42,7 +42,7 @@ With MangaVision, we strive to break barriers and foster inclusivity within the 
 
 | Technique | Summary | Element |
 |---------|---------|---------|
-|Manga_OCR (kha-white)|<li>Specialized OCR for Japanese manga text using a custom Vision Encoder Decoder model.</li><li>Handles vertical, horizontal text, furigana, diverse fonts, and low-quality images.</li><li>Processes multi-line text in a single pass, ideal for manga bubbles.</li><li>Also works for general Japanese printed text (e.g., novels, games).</li>|<li>Text Extraction</li>|
+|Manga_OCR ([kha-white](https://github.com/kha-white/manga-ocr))|<li>Specialized OCR for Japanese manga text using a custom Vision Encoder Decoder model.</li><li>Handles vertical, horizontal text, furigana, diverse fonts, and low-quality images.</li><li>Processes multi-line text in a single pass, ideal for manga bubbles.</li><li>Also works for general Japanese printed text (e.g., novels, games).</li>|<li>Text Extraction</li>|
 
 Finalized Goals:
 1) [x] Object Detection:
