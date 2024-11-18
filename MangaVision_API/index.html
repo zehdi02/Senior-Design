@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MangaVision</title>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="predict-div mb-4 h-full flex flex-col items-center text-center">
+        <div class="Prompt pb-4 w-full bg-gray-200 shadow-md">
+            <div class="text-3xl font-bold">MangaVision</div>
+            <input type="file" id="file-input" accept="image/*">
+            <button class="border border-black bg-gray-400 rounded-md px-2 py-1"
+                onclick="predictImage()">Predict!</button>
+        </div>
+
+        <div class="Predictions hidden px-4 py-2">
+            <div class="pred-results w-full flex justify-center space-x-2">
+                <img id="result-image" class="object-contain border-2 h-screen border-black rounded-md shadow-lg"
+                    style="">
+                <div class="pred-details w-1/2 space-y-2">
+                    <div id="ocr-text-container"
+                        class="border border-black rounded-md text-left bg-gray-200 p-4 shadow-lg">
+                        <p class="font-bold text-lg">Sorted speech dialogues:</p>
+                        <div id="extracted-text" class="whitespace-break-spaces text-sm"></div>
+                    </div>
+                    <div class="border border-black rounded-md text-left bg-gray-200 p-4 shadow-lg ">
+                        <p class="font-bold text-lg">Objects detected:</p>
+                        <ul id="class-counts-list" class="flex justify-evenly"></ul>
+                    </div>
+                    <!-- <div class="border border-black rounded-md text-left bg-gray-200 p-4 shadow-lg ">
+                        <p class="font-bold text-lg">Detected annotations:</p>
+                        <ul id="all-annotations-list" class="flex justify-evenly"></ul>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        async function predictImage() {
+            const formData = new FormData();
+            const fileInput = document.getElementById('file-input');
+            const file = fileInput.files[0];
+            formData.append("file", file);
+
+            try {
+                const response = await fetch("http://localhost:8000/predict", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                console.log(data);
+
+                document.querySelector('.Predictions').classList.remove('hidden');
+
+                // display image
+                if (data.image) {
+                    const imgElement = document.getElementById('result-image');
+                    imgElement.src = data.image;
+                    imgElement.style.display = 'block';
+                }
+
+                // display text_boxes_sorted
+                if (data && data.mangavision && Array.isArray(data.mangavision.text_boxes_sorted)) {
+                    // console.log('Number of items in text_boxes_sorted:', data.mangavision.text_boxes_sorted.length);
+
+                    data.mangavision.text_boxes_sorted.forEach(item => {
+                        // console.log(item); 
+                        if (item.extracted_text && item.extracted_text.trim() !== "") {
+                            // console.log("Extracted Text: " + item.extracted_text);
+                            displayExtractedText([item.extracted_text]);
+                        } else {
+                            console.log("Empty or null extracted_text for this item");
+                        }
+                    }
+                    );
+                }
+
+                // display class counts
+                if (data && Array.isArray(data.annotations)) {
+                    displayClassCounts(data.annotations);
+                } else {
+                    console.error('Invalid response format, "annotations" is missing or not an array.');
+                }
+
+
+            } catch (error) {
+                console.error('Error during fetch:', error);
+            }
+        }
+
+        function displayClassCounts(predictions) {
+            const classCounts = {};
+            predictions.forEach(pred => {
+                const className = pred.class;
+                classCounts[className] = (classCounts[className] || 0) + 1;
+            });
+
+            const classCountsList = document.getElementById('class-counts-list');
+            classCountsList.innerHTML = '';
+
+            for (const [className, count] of Object.entries(classCounts)) {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<strong>${className}:</strong> ${count}`;
+                classCountsList.appendChild(listItem);
+            }
+        }
+
+        function displayAllAnnotations(predictions) {
+            const allAnnotationsList = document.getElementById('all-annotations-list');
+            allAnnotationsList.innerHTML = '';
+
+            predictions.forEach(pred => {
+                const listItem = document.createElement('li');
+
+                const annotationText = `Class: ${pred.class}, Confidence: ${pred.confidence}, Bounding Box: [${pred.bbox.join(', ')}]`;
+
+                listItem.textContent = annotationText;
+                allAnnotationsList.appendChild(listItem);
+            });
+        }
+
+        let textBubbleCounter = 1;
+        function displayExtractedText(ocrTextArray) {
+            const extractedTextContainer = document.getElementById('extracted-text');
+
+            ocrTextArray.forEach((text) => {
+                const textElement = document.createElement('p');
+
+                textElement.innerHTML = `<strong>Text bubble ${textBubbleCounter}:</strong> ${text}`;
+                extractedTextContainer.appendChild(textElement);
+
+                textBubbleCounter++;
+            });
+        }
+
+    </script>
+</body>
+
+</html>

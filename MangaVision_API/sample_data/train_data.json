@@ -1,0 +1,13 @@
+{
+    "data": "MangaVision_dataset_sample/data.yaml",
+    "epochs": 1,
+    "batch": -1,
+    "imgsz": 640,
+    "save": true,
+    "device": "cuda",
+    "verbose": true,
+    "amp": false,
+    "dropout": 0.05,
+    "val": true,
+    "plots": true
+}

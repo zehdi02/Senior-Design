@@ -1,8 +1,0 @@
-.gitignore
-/venv
-/Manga109
-.ipynb_checkpoints
-/bounder_YOLO/Manga109_YOLO
-/Research
-.idea
-/Manga109_Details/data_mining.pbix
