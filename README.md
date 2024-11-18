@@ -49,9 +49,9 @@ Finalized Goals:
 2) [x] Sorting:
     - [x] All Panels in a Single Page
     - [x] All Text Bubbles in a Single Panel
-3) [ ] Japanese text OCR
+3) [x] Japanese text OCR
     - [ ] Text to Character Association (OPTIONAL)
-4) [ ] Transcript of correctly sorted texts
+4) [x] Transcript of correctly sorted texts
 
 <!--- # Implementation Goals:
 1) Event Drawing Recognizer (Main feature)
@@ -81,6 +81,8 @@ Finalized Goals:
 - In Yolov8, we want to augment our data to match real life scenarios better
 - Difficulties in running and evaluating Magi model
 - Long runtime training data for Mangavision
+- Model sometimes detects a single object multiple times (overlapping)
+- Different certain manga styles make it harder to detect panels and text boxes
 
 ## Resources Exploration (Ideas Collection):
 Ideas that we've found and researched: [click here](ideas.md).
