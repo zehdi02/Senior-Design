@@ -20,9 +20,9 @@ MangaVision was created by passionate manga readers with the goal of spreading t
 With MangaVision, we strive to break barriers and foster inclusivity within the manga community and expand outward. 
 
 ## Additional Project Information:
-Input: A folder consisting of images of each manga page.
-
-Output: An HTML file, which acts as an ereader, w/ buttons such as reading aloud the images and speech bubbles to the reader.
+Input: A single image of a manga page 
+Output: A transcript of sorted speech bubble texts
+OPTIONAL output: a Transcript of sorted speech bubble text, along with the associated character names.
 
 | Dataset | Summary | Element |
 |---------|---------|---------|
@@ -41,7 +41,19 @@ Output: An HTML file, which acts as an ereader, w/ buttons such as reading aloud
 |DETR (DEtection TRansformer)| <li>Streamlines object detection by removing anchor boxes and non-maximal suppression</li><li>Uses transformer encoder-decoder architecture for object detection tasks</li><li>Eliminates traditional object detection mechanisms (like region proposals or anchor boxes)</li><li>Achieves accuracy and performance comparable to Faster R-CNN</li> | <li>Object Detection</li>|
 |Magi| <li>Addresses the challenge of making manga accessible to individuals with visual impairments by generating automatic transcriptions of dialogues and identifying who said what (diarisation)</li><li>Detects panels, text boxes, and character boxes</li><li>Clusters characters by identity and associates dialogues to speakers</li><li>Generates dialogue transcription in the correct reading order</li><li>Annotated evaluation benchmarks using publicly available English manga pages</li> | <li>Text Transcription & Dialogue Association</li> <li>Panel Detection and Ordering</li><li>Text detection and OCR</li>|
 
-# Implementation Goals:
+Finalized Goals:
+1) [x] Object Detection:
+    - [x] Character Face and Body
+    - [x] Panels
+    - [x] Text Bubbles
+2) [x] Sorting:
+    - [x] All Panels in a Single Page
+    - [x] All Text Bubbles in a Single Panel
+3) [ ] Japanese text OCR
+    - [ ] Text to Character Association (OPTIONAL)
+4) [ ]Transcript of correctly sorted texts
+
+<!--- # Implementation Goals:
 1) Event Drawing Recognizer (Main feature)
 - [x] Detect the panel frames on a page
 - [x] Detect the text boxes on a page
@@ -56,6 +68,7 @@ Output: An HTML file, which acts as an ereader, w/ buttons such as reading aloud
 - [ ] Translate extracted speech bubbles texts to audio                                    
 3) JP to EN Translation (Additional Optional Feature)
 - [ ] Manga109 dataset is in JP. we need to translate them to EN.
+--->
 
 # MangaVision Pipeline
 ![pipeline](pipeline.png)
