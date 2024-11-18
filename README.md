@@ -57,6 +57,9 @@ Output: An HTML file, which acts as an ereader, w/ buttons such as reading aloud
 3) JP to EN Translation (Additional Optional Feature)
 - [ ] Manga109 dataset is in JP. we need to translate them to EN.
 
+# MangaVision Pipeline
+![pipeline](pipeline.png)
+
 # Challenges:
 - Developing zero-shot face recognition model
 - Associating dialogues to the correct speaker
