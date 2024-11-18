@@ -40,6 +40,10 @@ With MangaVision, we strive to break barriers and foster inclusivity within the 
 |DETR (DEtection TRansformer) | <li>Streamlines object detection by removing anchor boxes and non-maximal suppression</li><li>Uses transformer encoder-decoder architecture for object detection tasks</li><li>Eliminates traditional object detection mechanisms (like region proposals or anchor boxes)</li><li>Achieves accuracy and performance comparable to Faster R-CNN</li> | <li>Object Detection</li> <li>Decided to abandon the DETR model due to its slow convergence rate and taking a long time to train. We'll be sticking to our initial object detection model choice of YOLOv8.</li>|
 |SSD300-fork (Single Shot Multibox Detector)| <li>Employs default boxes (anchors) at multiple scales for multi-scale detection.</li><li>Leverages convolutional layers to predict both bounding boxes and class probabilities.</li><li>Suitable for real-time detection tasks, particularly when computational resources are limited.</li> | <li>Object Detection</li>|
 
+| Technique | Summary | Element |
+|---------|---------|---------|
+|Manga_OCR (kha-white)|<li>Specialized OCR for Japanese manga text using a custom Vision Encoder Decoder model.</li><li>Handles vertical, horizontal text, furigana, diverse fonts, and low-quality images.</li><li>Processes multi-line text in a single pass, ideal for manga bubbles.</li><li>Also works for general Japanese printed text (e.g., novels, games).</li>|<li>Text Extraction</li>|
+
 Finalized Goals:
 1) [x] Object Detection:
     - [x] Character Face and Body
