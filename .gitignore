@@ -1,0 +1,16 @@
+.gitignore
+.ipynb_checkpoints
+.idea
+
+models
+logs
+
+/venv
+/Research
+/Manga109
+
+/MangaVision_API/runs
+/MangaVision_API/__pycache__
+/MangaVision_API/MangaVision_dataset_sample
+
+/MangaVision_pipeline/__pycache__
