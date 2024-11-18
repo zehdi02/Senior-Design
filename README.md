@@ -38,7 +38,7 @@ With MangaVision, we strive to break barriers and foster inclusivity within the 
 | Comparison Models | Summary | Element |
 |---------|---------|---------|
 |DETR (DEtection TRansformer) | <li>Streamlines object detection by removing anchor boxes and non-maximal suppression</li><li>Uses transformer encoder-decoder architecture for object detection tasks</li><li>Eliminates traditional object detection mechanisms (like region proposals or anchor boxes)</li><li>Achieves accuracy and performance comparable to Faster R-CNN</li> | <li>Object Detection</li> <li>Decided to abandon the DETR model due to its slow convergence rate and taking a long time to train. We'll be sticking to our initial object detection model choice of YOLOv8.</li>|
-|SDD300-fork| <li>Addresses the challenge of making manga accessible to individuals with visual impairments by generating automatic transcriptions of dialogues and identifying who said what (diarisation)</li><li>Detects panels, text boxes, and character boxes</li><li>Clusters characters by identity and associates dialogues to speakers</li><li>Generates dialogue transcription in the correct reading order</li><li>Annotated evaluation benchmarks using publicly available English manga pages</li> | <li>Text Transcription & Dialogue Association</li> <li>Panel Detection and Ordering</li><li>Text detection and OCR</li>|
+|SSD300-fork (Single Shot Multibox Detector)| <li>Employs default boxes (anchors) at multiple scales for multi-scale detection.</li><li>Leverages convolutional layers to predict both bounding boxes and class probabilities.</li><li>Suitable for real-time detection tasks, particularly when computational resources are limited.</li> | <li><li>Object Detection</li>|
 
 Finalized Goals:
 1) [x] Object Detection:
