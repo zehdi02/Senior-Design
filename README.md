@@ -20,9 +20,9 @@ MangaVision was created by passionate manga readers with the goal of spreading t
 With MangaVision, we strive to break barriers and foster inclusivity within the manga community and expand outward. 
 
 ## Additional Project Information:
-Input: A single image of a manga page 
-Output: A transcript of sorted speech bubble texts
-OPTIONAL output: a Transcript of sorted speech bubble text, along with the associated character names.
+- Input: A single image of a manga page 
+- Output: A transcript of sorted speech bubble texts
+- OPTIONAL output: a Transcript of sorted speech bubble text, along with the associated character names.
 
 | Dataset | Summary | Element |
 |---------|---------|---------|
