@@ -51,7 +51,7 @@ Finalized Goals:
     - [x] All Text Bubbles in a Single Panel
 3) [ ] Japanese text OCR
     - [ ] Text to Character Association (OPTIONAL)
-4) [ ]Transcript of correctly sorted texts
+4) [ ] Transcript of correctly sorted texts
 
 <!--- # Implementation Goals:
 1) Event Drawing Recognizer (Main feature)
