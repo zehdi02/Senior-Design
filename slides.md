@@ -11,7 +11,6 @@ Proposal Slides: [Link](https://docs.google.com/presentation/d/1zArYUqKdJbiIPmc5
 Proposal Report (1st Edition): [Link](https://docs.google.com/document/d/1QfcjTj-ExAPZTSlLyOmJJY3YGCVtEkN1_HLgqfZvfNk/edit)
 
 ## Fall 2024:
-Team Planning Builder: [Link](https://docs.google.com/spreadsheets/d/1_CTNEVaTbUeiSTDD4i7zU3mf360-n2xHzTq5874sA4o/edit?gid=246428048#gid=246428048)
 
 Week 4 Dataset, Goals, and Challenges Slide: [Link](https://docs.google.com/presentation/d/1xuqTP2Wi31BHHp3mqW-A4Ctthh78NiviNjwB4_1PLaQ/edit?usp=sharing)
 
