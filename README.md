@@ -19,6 +19,9 @@ MangaVision was created by passionate manga readers with the goal of spreading t
 
 With MangaVision, we strive to break barriers and foster inclusivity within the manga community and expand outward. 
 
+## MangaVision Roadmap
+Team Planning Builder: [Link](https://docs.google.com/spreadsheets/d/1_CTNEVaTbUeiSTDD4i7zU3mf360-n2xHzTq5874sA4o/edit?gid=246428048#gid=246428048)
+
 ## Additional Project Information:
 - Input: A single image of a manga page 
 - Output: A transcript of sorted speech bubble texts
