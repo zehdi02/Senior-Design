@@ -85,7 +85,6 @@ Finalized Goals:
 - Establishing panels’ correct reading order
 - Caption/Description generation for the panel as a whole
 - In Yolov8, we want to augment our data to match real life scenarios better
-- Difficulties in running and evaluating Magi model
 - Long runtime training data for Mangavision
 - Model sometimes detects a single object multiple times (overlapping)
 - Different certain manga styles make it harder to detect panels and text boxes
