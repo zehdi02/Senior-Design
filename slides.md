@@ -21,3 +21,7 @@ Week 7 Progress: [Link](https://docs.google.com/presentation/d/1EOxthrQbYR-rn1FQ
 Midterm Presentation: [Link](https://docs.google.com/presentation/d/12cN93l-Sxsp75AHON7D7vjieD5rbmLZg9E3k0lsPq-0/edit#slide=id.g309f7c9ba66_0_0)
 
 API Model Presentation: [Link](https://docs.google.com/presentation/d/16cphk1gKy7syfgauz4h9aCuSUKAGSur_xta8g0HFsGM/edit#slide=id.g309f7c9ba66_0_0)
+
+Poster: [Link](https://docs.google.com/presentation/d/1_uCDjrnp7QT0865U1xrRUosy4ccdwZVCzI0WwQMLh0M/edit?usp=sharing)
+
+Final Presentation: [Link](https://docs.google.com/presentation/d/1IWxI4tXIGXOfgUBOTRpXop-biiWICdNAQjZRE5_FzeY/edit?usp=sharing)
