@@ -17,7 +17,7 @@ For a full list of other slides/docx, [click here](slides.md).
 ## Project Summary:
 Japanese comic books called Manga are enjoyed by many all around the world. Manga are made of panels with images in them where the reader would read from right to left in a traditional Japanese way. Their wide variety of genres and stories captures the attention and hearts of many readers. However, there are individuals who aren’t able to enjoy these graphic novels because of visual impairments. 
 
-The MangaVision project aims to make Japanese manga accessible to visually impaired readers by converting visual storytelling into an understandable audio or text-based format. Our approach centers on the development of MangaVision, an Object Detection and Optical Character Recognition (OCR) based application which allows the reader to input or upload an image of a manga page, and in return receive a generated transcript of all of the speech dialogues in the manga page.
+The MangaVision project aims to make Japanese manga accessible to visually impaired readers by converting visual storytelling into an understandable audio or text-based format. Our approach centers on the development Object Detection and Optical Character Recognition (OCR) based application which allows the reader to input or upload an image of a manga page, and in return receive a generated transcript of all of the speech dialogues in the manga page.
 
 MangaVision represents a significant step toward accessible manga, bridging a gap in accessibility technology for visually impaired users. While the system requires further improvement for comprehensive adoption, our work lays a robust foundation for future advancements in multimodal content accessibility.
 
