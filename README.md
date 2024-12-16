@@ -9,8 +9,10 @@ Github repository of team **MangaVision** for the CCNY Senior Design II (CSC 598
 | Mahmud Hasan   | Techsmith   | [QuodFinis](https://github.com/QuodFinis)   |  
 | Ayon Kumar Das   | Quality Assurance   | [lastMinuteGuy](https://github.com/lastMinuteGuy)  |
 
-## Slides
-For a full list of slides/docx, [click here](slides.md).
+## Documents & Slides
+Final Report: [Link](https://docs.google.com/document/d/1D7FpB0Cgo0Z5ozTIefFOsBJ1Wxv8887rcwiHW25GgnQ/edit?usp=sharing)
+
+For a full list of other slides/docx, [click here](slides.md).
 
 ## Project Summary:
 Japanese comic books called Manga are enjoyed by many all around the world. Manga are made of panels with images in them where the reader would read from right to left in a traditional Japanese way. Their wide variety of genres and stories captures the attention and hearts of many readers. However, there are individuals who aren’t able to enjoy these graphic novels because of visual impairments. 
