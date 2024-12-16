@@ -83,14 +83,23 @@ Finalized Goals:
 ![pipeline](pipeline.png)
 
 # Challenges:
-- Developing zero-shot face recognition model
-- Associating dialogues to the correct speaker
-- Establishing panels’ correct reading order
-- Caption/Description generation for the panel as a whole
-- In Yolov8, we want to augment our data to match real life scenarios better
-- Long runtime training data for Mangavision
-- Model sometimes detects a single object multiple times (overlapping)
-- Different certain manga styles make it harder to detect panels and text boxes
+- **Artistic Conventions and Trends**:  
+  - The Manga109 dataset consists of older manga, which may not fully capture the artistic styles and conventions of more recent manga.  
+  - The model struggles with detecting panels that have diagonal shapes (e.g., trapezoids or triangles), leading to overlapping panel detections.  
+  - Issues arise when manga pages contain text bubbles that are outside of panels or not enclosed in speech bubbles.  
+  - Pages with a single panel or full-body characters drawn outside panels may result in overlapping detections or misclassifications.  
+
+- **Smaller Faces**:  
+  - The model struggles with detecting smaller faces, though this is not a major concern for the project, as faces are not a primary focus.  
+  - If facial emotion recognition were implemented, this issue could become more significant.  
+
+- **Unconventional Text Styling**:  
+  - The model struggles with detecting text that has unconventional fonts or styling, which can affect text extraction accuracy.  
+
+- **Overlapping Panels and Text Bubbles**:  
+  - Overlapping panel and text bubble detections can result in duplicate detections, causing repetition in the generated transcript.  
+  - This repetition can break the flow of reading and highlights the importance of addressing overlapping panels and text bubbles in the sorting pipeline.
+
 
 ## Resources Exploration (Ideas Collection):
 Ideas that we've found and researched: [click here](ideas.md).
